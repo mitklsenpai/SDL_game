@@ -1,3 +1,29 @@
 # depslib dependency file v1.0
-1739370349 source:c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.cpp
+1739422635 source:c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.cpp
+
+1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
+	"graphic.h"
+
+1739454775 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+	<iostream>
+	<SDL.h>
+	<SDL_image.h>
+	"graphic.h"
+	"logic.h"
+
+1739455303 c:\users\dell_pc\desktop\dev\sdl_game\graphic.h
+	<SDL.h>
+	<SDL_image.h>
+	"commonFunc.h"
+	"logic.h"
+
+1739456408 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
+	<iostream>
+	<string>
+	<SDl.h>
+	<SDl_image.h>
+
+1739454342 c:\users\dell_pc\desktop\dev\sdl_game\logic.h
+
+1739454167 source:c:\users\dell_pc\desktop\dev\sdl_game\logic.cpp
 
