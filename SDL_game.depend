@@ -1,15 +1,13 @@
 # depslib dependency file v1.0
-1739422635 source:c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.cpp
+1739456434 source:c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.cpp
+	"commonFunc.h"
 
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1739454775 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
-	<iostream>
-	<SDL.h>
-	<SDL_image.h>
-	"graphic.h"
-	"logic.h"
+1739628743 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+	"commonFunc.h"
+	"Player.h"
 
 1739455303 c:\users\dell_pc\desktop\dev\sdl_game\graphic.h
 	<SDL.h>
@@ -17,13 +15,20 @@
 	"commonFunc.h"
 	"logic.h"
 
-1739456408 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
+1739629662 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
 	<iostream>
 	<string>
-	<SDl.h>
-	<SDl_image.h>
+	<SDL.h>
+	<SDL_image.h>
 
 1739454342 c:\users\dell_pc\desktop\dev\sdl_game\logic.h
 
 1739454167 source:c:\users\dell_pc\desktop\dev\sdl_game\logic.cpp
+
+1739629245 c:\users\dell_pc\desktop\dev\sdl_game\player.h
+	"commonFunc.h"
+
+1739629357 source:c:\users\dell_pc\desktop\dev\sdl_game\player.cpp
+	"commonFunc.h"
+	"Player.h"
 

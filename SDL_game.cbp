@@ -32,6 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Player.cpp" />
+		<Unit filename="Player.h" />
 		<Unit filename="commonFunc.cpp" />
 		<Unit filename="commonFunc.h" />
 		<Unit filename="graphic.cpp" />

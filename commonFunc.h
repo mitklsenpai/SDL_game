@@ -1,14 +1,14 @@
 #ifndef _COMMON_FUNCTION_H_
-#define _COMMON_FUNTION_H_
+#define _COMMON_FUNCTION_H_
 
 #include <iostream>
 #include <string>
-#include <SDl.h>
-#include <SDl_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 static SDL_Window* g_window = NULL;
 static SDL_Renderer* g_screen = NULL;
-static SDL_Event* g_event;
+static SDL_Event g_event;
 
 // Thiet lap man hinh
 const int SCREEN_WIDTH = 1280;

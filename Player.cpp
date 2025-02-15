@@ -1,4 +1,4 @@
-
+#include "commonFunc.h"
 #include "Player.h"
 
 Player::Player()
@@ -12,7 +12,7 @@ Player::Player()
 
 Player::~Player()
 {
-
+    Free();
 }
 // ham nay se co nhiem vu load anh
 bool Player::LoadImg(std::string path, SDL_Renderer* screen)
@@ -22,7 +22,7 @@ bool Player::LoadImg(std::string path, SDL_Renderer* screen)
     SDL_Surface* load_surface = IMG_Load(path.c_str());         // tao anh tu duong dan
     if(load_surface != NULL)
     {
-        SDL_SetColorKey(load_surface, SDL_MapRGB(load_surface->format, COLOR_KEY_B,COLOR_KEY_G,COLOR_KEY_R)); //xoa phong buc anh
+        SDL_SetColorKey(load_surface,SDL_TRUE ,SDL_MapRGB(load_surface->format, 167, 175, 180)); //xoa phong buc anh
         new_texture = SDL_CreateTextureFromSurface(screen, load_surface);
         if (new_texture != NULL)
         {
@@ -32,6 +32,28 @@ bool Player::LoadImg(std::string path, SDL_Renderer* screen)
 
         SDL_FreeSurface(load_surface); // xoa anh cu
     }
-    p_object_ = new_texture; //
+    p_object_ = new_texture; // lay anh moi sau chinh sua
     return p_object_ != NULL;
+}
+
+void Player::Render(SDL_Renderer* des, const SDL_Rect* clip)
+{
+    SDL_Rect renderquad;
+    renderquad.x = rect_.x;
+    renderquad.y = rect_.y;
+    renderquad.w = rect_.w;
+    renderquad.h = rect_.h;
+
+    SDL_RenderCopy(des, p_object_, clip, &renderquad);
+}
+
+void Player::Free()
+{
+    if(p_object_!=NULL)
+    {
+        SDL_DestroyTexture(p_object_);
+        p_object_ = NULL;
+        rect_.w = 0;
+        rect_.h = 0;
+    }
 }

@@ -1,5 +1,5 @@
-#ifndef PLAYER_H_
-#define PLAYER_H_
+//#ifndef PLAYER_H_
+//#define PLAYER_H_
 
 #include "commonFunc.h"
 
@@ -22,7 +22,7 @@ public:
     bool LoadImg(std::string path, SDL_Renderer* screen);
 // ham render anh
     void Render(SDL_Renderer* des, const SDL_Rect* clip = NULL);
-
+    void Free();
 
 private:
     SDL_Texture* p_object_;
@@ -30,4 +30,4 @@ private:
 };
 
 
-#endif // PLAYER_H_
+//#endif // PLAYER_H_
