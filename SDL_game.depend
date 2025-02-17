@@ -5,9 +5,11 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1739628743 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1739800717 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+	<iostream>
 	"commonFunc.h"
 	"Player.h"
+	"MainObject.h"
 
 1739455303 c:\users\dell_pc\desktop\dev\sdl_game\graphic.h
 	<SDL.h>
@@ -15,7 +17,7 @@
 	"commonFunc.h"
 	"logic.h"
 
-1739629662 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
+1739799324 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
 	<iostream>
 	<string>
 	<SDL.h>
@@ -25,10 +27,17 @@
 
 1739454167 source:c:\users\dell_pc\desktop\dev\sdl_game\logic.cpp
 
-1739629245 c:\users\dell_pc\desktop\dev\sdl_game\player.h
+1739799820 c:\users\dell_pc\desktop\dev\sdl_game\player.h
 	"commonFunc.h"
 
-1739629357 source:c:\users\dell_pc\desktop\dev\sdl_game\player.cpp
+1739711637 source:c:\users\dell_pc\desktop\dev\sdl_game\player.cpp
 	"commonFunc.h"
 	"Player.h"
+
+1739799557 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+	"commonFunc.h"
+	"Player.h"
+
+1739801569 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+	"MainObject.h"
 

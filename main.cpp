@@ -1,6 +1,7 @@
-
+#include <iostream>
 #include "commonFunc.h"
 #include "Player.h"
+#include "MainObject.h"
 
 Player g_background;
 
@@ -15,7 +16,7 @@ bool InitData()
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
-    g_window = SDL_CreateWindow("Game SDL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    g_window = SDL_CreateWindow("MITKL'S SDL2 GAME", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
     if(g_window == NULL)
     {
@@ -41,7 +42,7 @@ bool InitData()
 
 bool LoadBackground()
 {
-    bool ret = g_background.LoadImg("images//Spongebob", g_screen);
+    bool ret = g_background.LoadImg("images//dark_space_background" ,g_screen);
     if(ret = false)
         return false;
     return true;
@@ -69,6 +70,14 @@ int main(int argc, char* argv[])
     if(LoadBackground() == false)
         return -1;
 
+
+
+    MainObject p_player;
+    p_player.LoadImg("images//player_right.png", g_screen);
+    p_player.set_clips();
+
+
+
     bool is_quit = false;
     while(!is_quit)
     {
@@ -78,12 +87,18 @@ int main(int argc, char* argv[])
             {
                 is_quit = true;
             }
+
+            p_player.HandleInputAction(g_event,g_screen);
         }
 
         SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
         SDL_RenderClear(g_screen);
 
         g_background.Render(g_screen, NULL);
+
+
+        p_player.Show(g_screen);
+
 
         SDL_RenderPresent(g_screen);
     }

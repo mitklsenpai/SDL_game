@@ -20,4 +20,13 @@ const int COLOR_KEY_R = 167;
 const int COLOR_KEY_G = 175;
 const int COLOR_KEY_B = 180;
 
+typedef struct Input
+{
+    int left_;
+    int rigth_;
+    int up_;
+    int down_;
+    int jump_;
+};
+
 #endif
