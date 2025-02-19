@@ -13,7 +13,6 @@ MainObject::MainObject()
     status_ = -1;
     input_type_.left_ = 0;
     input_type_.rigth_ = 0;
-    input_type_.jump_ = 0;
     input_type_.down_ = 0;
     input_type_.up_ = 0;
 }
@@ -31,7 +30,7 @@ bool MainObject::LoadImg(std::string path, SDL_Renderer* screen)
 
     if(ret == true)
     {
-        width_frame_ = rect_.w/8;
+        width_frame_ = rect_.w/8;   // thông tin về 1 frame nhân vật
         height_frame_ = rect_.h;
     }
     return ret;
@@ -59,7 +58,7 @@ void MainObject::set_clips()
         frame_clip_[3].x = 3*width_frame_;
         frame_clip_[3].y = 0;
         frame_clip_[3].h = height_frame_;
-        frame_clip_[3].w = width_frame_;
+        frame_clip_[3].w = width_frame_;       // xét animation cho các khung hình
 
         frame_clip_[4].x = 4*width_frame_;
         frame_clip_[4].y = 0;
@@ -87,14 +86,14 @@ void MainObject::Show(SDL_Renderer* des)
 {
     if(status_ == WALK_LEFT)
     {
-        LoadImg("images//player_left.png", des);
+        LoadImg("images//main_walk.png", des);
     }
     else
     {
-        LoadImg("images//player_right.png", des);
+        LoadImg("images//main_walk.png", des);
     }
 
-    if(input_type_.left_ == 1 || input_type_.rigth_ == 1)
+    if(input_type_.left_ == 1 || input_type_.rigth_ == 1 || input_type_.down_ == 1 || input_type_.up_ == 1)
     {
         frame_++;
     }
@@ -111,15 +110,15 @@ void MainObject::Show(SDL_Renderer* des)
     rect_.x = x_pos_;
     rect_.y = y_pos_;
 
-    SDL_Rect* current_clip = &frame_clip_[frame_];
+    SDL_Rect* current_clip = &frame_clip_[frame_];  // hàm lấy thông tin của frame hiện tại
 
-    SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};
+    SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};  // hàm lấy thông tin của frame (vị trí frame, kích thước)
 
-    SDL_RenderCopy(des, p_object_, current_clip, &renderQuad);
+    SDL_RenderCopy(des, p_object_, current_clip, &renderQuad);  // hàm chạy animation
 }
 
 
-void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
+void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // hàm sử lý sự kiện từ bàn phím, di chuyển cho nhân vật
 {
     if(events.type == SDL_KEYDOWN)
     {
@@ -137,6 +136,18 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
                 status_ = WALK_LEFT;
                 input_type_.left_ = 1;
                 input_type_.rigth_ = 0;
+            }
+            break;
+        case SDLK_UP:
+            {
+                status_ = GO_UP;
+                input_type_.up_ = 1;
+            }
+            break;
+        case SDLK_DOWN:
+            {
+                status_ = GO_DOWN;
+                input_type_.down_ = 1;
             }
             break;
         }
@@ -158,6 +169,39 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
                 input_type_.left_ = 0;
             }
             break;
+        case SDLK_UP:
+            {
+                status_ = GO_UP;
+                input_type_.up_ = 0;
+            }
+            break;
+        case SDLK_DOWN:
+            {
+                status_ = GO_DOWN;
+                input_type_.down_ = 0;
+            }
+            break;
         }
+    }
+}
+
+// sử lý chuyển động
+void MainObject::Move()
+{
+    if(input_type_.left_ == 1)
+    {
+        x_val_ -= PLAYER_SPEED;
+    }
+    else if(input_type_.rigth_ == 1)
+    {
+        x_val_ += PLAYER_SPEED;
+    }
+    else if(input_type_.up_ == 1)
+    {
+        y_val_ += PLAYER_SPEED;
+    }
+    else
+    {
+        y_val_ -= PLAYER_SPEED;
     }
 }

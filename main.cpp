@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 
 
     MainObject p_player;
-    p_player.LoadImg("images//player_right.png", g_screen);
+    p_player.LoadImg("images//main_walk.png", g_screen);
     p_player.set_clips();
 
 
