@@ -124,27 +124,25 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // h
     {
         switch(events.key.keysym.sym)
         {
-        case SDLK_RIGHT:
+        case SDLK_d:
             {
                 status_ = WALK_RIGHT;
                 input_type_.rigth_ = 1;
-                input_type_.left_ = 0;
             }
             break;
-        case SDLK_LEFT:
+        case SDLK_a:
             {
                 status_ = WALK_LEFT;
                 input_type_.left_ = 1;
-                input_type_.rigth_ = 0;
             }
             break;
-        case SDLK_UP:
+        case SDLK_w:
             {
                 status_ = GO_UP;
                 input_type_.up_ = 1;
             }
             break;
-        case SDLK_DOWN:
+        case SDLK_s:
             {
                 status_ = GO_DOWN;
                 input_type_.down_ = 1;
@@ -157,25 +155,25 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // h
     {
         switch(events.key.keysym.sym)
         {
-        case SDLK_RIGHT:
+        case SDLK_d:
             {
                 status_ = WALK_RIGHT;
                 input_type_.rigth_ = 0;
             }
             break;
-        case SDLK_LEFT:
+        case SDLK_a:
             {
                 status_ = WALK_LEFT;
                 input_type_.left_ = 0;
             }
             break;
-        case SDLK_UP:
+        case SDLK_w:
             {
                 status_ = GO_UP;
                 input_type_.up_ = 0;
             }
             break;
-        case SDLK_DOWN:
+        case SDLK_s:
             {
                 status_ = GO_DOWN;
                 input_type_.down_ = 0;
