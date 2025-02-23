@@ -23,8 +23,7 @@ public:
     void Show(SDL_Renderer* des);
     void HandleInputAction(SDL_Event svents, SDL_Renderer* screen); // hàm xử lý sự kiện
     void set_clips(); // hàm xử lý animation
-
-    void Move();
+    void DoPlayer(Map& map_data); // ham xu ly di chuyen
 private:
     float x_val_;  // vị trí thực
     float y_val_;
