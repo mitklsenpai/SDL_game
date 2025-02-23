@@ -5,7 +5,7 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1740317909 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1740320889 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	<iostream>
 	"commonFunc.h"
 	"Player.h"
@@ -18,7 +18,7 @@
 	"commonFunc.h"
 	"logic.h"
 
-1740316299 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
+1740321093 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
 	<iostream>
 	<string>
 	<SDL.h>
@@ -35,7 +35,7 @@
 	"commonFunc.h"
 	"Player.h"
 
-1740319925 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+1740320906 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
 	"commonFunc.h"
 	"Player.h"
 
@@ -45,7 +45,7 @@
 1740315823 source:c:\users\dell_pc\desktop\dev\sdl_game\map.cpp
 	"Map.h"
 
-1740319925 c:\users\dell_pc\desktop\dev\sdl_game\map.h
+1740320889 c:\users\dell_pc\desktop\dev\sdl_game\map.h
 	"commonFunc.h"
 	"Player.h"
 

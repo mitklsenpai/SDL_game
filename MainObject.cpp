@@ -186,7 +186,7 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // h
 }
 
 // sử lý chuyển động
-void MainObject::DoPlayer(Map& map_data)
+void MainObject::DoPlayer()
 {
     x_val_ = 0;
     y_val_ = 0;
@@ -199,29 +199,14 @@ void MainObject::DoPlayer(Map& map_data)
     {
         x_val_ += PLAYER_SPEED;
     }
-
-
-    int x1 = 0;
-    int x2 = 0;
-
-    int y1 = 0;
-    int y2 = 0;
-
-
-    int height_min = height_frame_ < TILE_SIZE ? height_frame_ : TILE_SIZE;
-    x1 = (x_pos_ + x_val_)/TILE_SIZE;
-    x2 = (x_pos_ + x_val_ + width_frame_ - 1)/TILE_SIZE;
-
-    y1 = (y_pos_ + y_val_)/TILE_SIZE;
-    y2 = (y_pos_ + y_val_ + height_frame_ - 1)/TILE_SIZE;
-
-    int width_min = width_frame_ < TILE_SIZE ? width_frame_ : TILE_SIZE;
-    x1 = (x_pos_)/TILE_SIZE;
-    x2 = (x_pos_ + width_frame_)/TILE_SIZE;
-
-    y1 = (y_pos_ + y_val_)/TILE_SIZE;
-    y2 = (y_pos_ + y_val_ + height_frame_ - 1)/TILE_SIZE;
-
+    else if(input_type_.up_ == 1)
+    {
+        y_val_ -= PLAYER_SPEED;
+    }
+    else if (input_type_.down_ == 1)
+    {
+        y_val_ += PLAYER_SPEED;
+    }
 
     x_pos_ += x_val_;
     y_pos_ += y_val_;
@@ -230,8 +215,16 @@ void MainObject::DoPlayer(Map& map_data)
     {
         x_pos_ = 0;
     }
-    else if(x_pos_ + width_frame_ > map_data.max_x_)
+    else if(x_pos_ + width_frame_ > SCREEN_WIDTH)
     {
-        x_pos_ = map_data.max_x_ - width_frame_ - 1;
+        x_pos_ = SCREEN_WIDTH - width_frame_ - 1;
+    }
+    else if (y_pos_ < 0)
+    {
+        y_pos_ = 0;
+    }
+    else if(y_pos_ + height_frame_ > SCREEN_HEIGHT)
+    {
+        y_pos_ = SCREEN_HEIGHT - width_frame_ - 1;
     }
 }

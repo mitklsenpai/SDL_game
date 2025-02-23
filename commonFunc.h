@@ -45,7 +45,6 @@ typedef struct Input
     int rigth_;
     int up_;
     int down_;
-    int jump_;
 };
 
 #endif
