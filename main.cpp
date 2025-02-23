@@ -2,6 +2,7 @@
 #include "commonFunc.h"
 #include "Player.h"
 #include "MainObject.h"
+#include "Map.h"
 
 Player g_background;
 
@@ -77,6 +78,9 @@ int main(int argc, char* argv[])
     p_player.set_clips();
 
 
+    GameMap game_map;
+    game_map.LoadMap("map/map01.dat");
+    game_map.LoadTiles(g_screen);
 
     bool is_quit = false;
     while(!is_quit)
@@ -96,11 +100,15 @@ int main(int argc, char* argv[])
 
         g_background.Render(g_screen, NULL);
 
+        game_map.DrawMap(g_screen);
+
 
         p_player.Show(g_screen);
 
 
         SDL_RenderPresent(g_screen);
+
+
     }
 
     close();
