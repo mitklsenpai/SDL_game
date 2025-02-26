@@ -4,7 +4,7 @@
 #include "commonFunc.h"
 #include "Player.h"
 
-#define PLAYER_SPEED 0.8
+#define PLAYER_SPEED 5
 
 class MainObject : public Player // tái sử dụng hàm class Player
 {
@@ -25,19 +25,19 @@ public:
     void set_clips(); // hàm xử lý animation
     void DoPlayer(); // ham xu ly di chuyen
 private:
-    float x_val_;  // vị trí thực
+    float x_val_;  // vị trí de thuc hien tinh toan cho x,y_pos_
     float y_val_;
 
-    float x_pos_;  // vị trí sau xử lý
+    float x_pos_;  // vị trí tren ban do
     float y_pos_;
 
     int width_frame_;   // thông tin dãy frame nhân vật
     int height_frame_;
 
-    SDL_Rect frame_clip_[8];
+    SDL_Rect frame_clip_[4]; // mang luu thong tin cua animation
     Input input_type_;
     int frame_;
-    int status_;
+    int status_;   // trang thai chuyen dong
 };
 
 

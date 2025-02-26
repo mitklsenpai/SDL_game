@@ -1,13 +1,14 @@
 
 #include "MainObject.h"
+#include "commonFunc.h"
 
 MainObject::MainObject()
 {
     frame_ = 0;
-    x_pos_ = 0;
-    y_pos_ = 0;
+    x_pos_ = 570;
+    y_pos_ = 270;
     x_val_ = 0;
-    y_val_ = 0;
+    y_val_ = 0;                     // thong so cua Nhan Vat chinh
     width_frame_ = 0;
     height_frame_ = 0;
     status_ = -1;
@@ -30,7 +31,7 @@ bool MainObject::LoadImg(std::string path, SDL_Renderer* screen)
 
     if(ret == true)
     {
-        width_frame_ = rect_.w/8;   // thông tin về 1 frame nhân vật
+        width_frame_ = rect_.w/4;   // thông tin về 1 frame nhân vật
         height_frame_ = rect_.h;
     }
     return ret;
@@ -60,38 +61,20 @@ void MainObject::set_clips()
         frame_clip_[3].h = height_frame_;
         frame_clip_[3].w = width_frame_;       // xét animation cho các khung hình
 
-        frame_clip_[4].x = 4*width_frame_;
-        frame_clip_[4].y = 0;
-        frame_clip_[4].h = height_frame_;
-        frame_clip_[4].w = width_frame_;
-
-        frame_clip_[5].x = 5*width_frame_;
-        frame_clip_[5].y = 0;
-        frame_clip_[5].h = height_frame_;
-        frame_clip_[5].w = width_frame_;
-
-        frame_clip_[6].x = 6*width_frame_;
-        frame_clip_[6].y = 0;
-        frame_clip_[6].h = height_frame_;
-        frame_clip_[6].w = width_frame_;
-
-        frame_clip_[7].x = 7*width_frame_;
-        frame_clip_[7].y = 0;
-        frame_clip_[7].h = height_frame_;
-        frame_clip_[7].w = width_frame_;
     }
 }
 
-void MainObject::Show(SDL_Renderer* des)
+void MainObject::Show(SDL_Renderer* des)   // ham dua hinh anh ra main
 {
-    if(status_ == WALK_LEFT)
+    if(status_ == WALK_LEFT || status_ == WALK_RIGHT)
     {
-        LoadImg("images//main_walk.png", des);
+        LoadImg("images//right_left.png", des);
     }
-    else
+    else if (status_ == GO_DOWN || status_ == GO_UP)
     {
-        LoadImg("images//main_walk.png", des);
+        LoadImg("images//up_down.png", des);
     }
+
 
     if(input_type_.left_ == 1 || input_type_.rigth_ == 1 || input_type_.down_ == 1 || input_type_.up_ == 1)
     {
@@ -102,7 +85,7 @@ void MainObject::Show(SDL_Renderer* des)
         frame_ = 0;
     }
 
-    if(frame_>=8)
+    if(frame_>=4)
     {
         frame_ = 0;
     }
@@ -120,7 +103,7 @@ void MainObject::Show(SDL_Renderer* des)
 
 void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // hàm sử lý sự kiện từ bàn phím, di chuyển cho nhân vật
 {
-    if(events.type == SDL_KEYDOWN)
+    if(events.type == SDL_KEYDOWN) //khi phim nhan
     {
         switch(events.key.keysym.sym)
         {
@@ -151,7 +134,7 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // h
         }
 
     }
-    else if(events.type == SDL_KEYUP)
+    else if(events.type == SDL_KEYUP) // khi phim ko nhan
     {
         switch(events.key.keysym.sym)
         {

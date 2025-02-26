@@ -18,8 +18,8 @@ public:
     GameMap(){;}
     ~GameMap(){;}
 
-    void LoadMap(char* name);
-    void LoadTiles(SDL_Renderer* screen);
+    void LoadMap(char* name);  // doc cai file chua map
+    void LoadTiles(SDL_Renderer* screen); // load tile cua map
     void DrawMap(SDL_Renderer* screen);
 
 private:

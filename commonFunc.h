@@ -20,9 +20,14 @@ const int COLOR_KEY_R = 167;
 const int COLOR_KEY_G = 175;
 const int COLOR_KEY_B = 180;
 
+// set timer, fps, ...
+const int FRAME_PER_SECOND =35;
 
+
+
+// set thong so map
 #define TILE_SIZE 64
-#define MAX_MAP_X 400
+#define MAX_MAP_X 43
 #define MAX_MAP_Y 10
 typedef struct Map
 {

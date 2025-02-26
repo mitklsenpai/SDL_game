@@ -34,6 +34,7 @@ void GameMap::LoadMap(char* name)
         }
     }
 
+
     game_map_.max_x_ = (game_map_.max_x_ + 1)*TILE_SIZE;
     game_map_.max_y_ = (game_map_.max_y_ + 1)*TILE_SIZE;
 
@@ -76,6 +77,7 @@ void GameMap::DrawMap(SDL_Renderer* screen)
     int map_x = 0;
     int map_y = 0;
 
+    // xu ly de render anh chinh xac
     map_x = game_map_.start_x_/TILE_SIZE;
     x1 = (game_map_.start_x_%TILE_SIZE)*(-1);
     x2 = x1 + SCREEN_WIDTH + (x1 == 0 ? 0 : TILE_SIZE);
