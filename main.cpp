@@ -4,6 +4,7 @@
 #include "MainObject.h"
 #include "Map.h"
 #include "Timer.h"
+#include "SmallEnemy.h"
 
 Player g_background;
 
@@ -80,6 +81,11 @@ int main(int argc, char* argv[])
     p_player.LoadImg("images//right_left.png", g_screen);
     p_player.set_clips();
 
+// Load animation cho Quai nho
+    SmallEnemy small_mod;
+    small_mod.LoadImg("images//Run_Left.png", g_screen);
+    small_mod.set_clips();
+
 // Load map anh
     GameMap game_map;
     game_map.LoadMap("map/map01.dat");
@@ -113,6 +119,7 @@ int main(int argc, char* argv[])
         // chay chuyen dong
         p_player.DoPlayer();
         p_player.Show(g_screen);
+        small_mod.Show(g_screen);
 
 
         SDL_RenderPresent(g_screen);

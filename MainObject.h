@@ -20,7 +20,7 @@ public:
         GO_DOWN = 3
     };
     bool LoadImg(std::string path, SDL_Renderer* screen);
-    void Show(SDL_Renderer* des);
+    void Show(SDL_Renderer* des);// ham trinh chieu animation
     void HandleInputAction(SDL_Event svents, SDL_Renderer* screen); // hàm xử lý sự kiện
     void set_clips(); // hàm xử lý animation
     void DoPlayer(); // ham xu ly di chuyen

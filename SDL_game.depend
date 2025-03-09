@@ -5,13 +5,14 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1740380857 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1741527728 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	<iostream>
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
 	"Map.h"
 	"Timer.h"
+	"SmallEnemy.h"
 
 1739455303 c:\users\dell_pc\desktop\dev\sdl_game\graphic.h
 	<SDL.h>
@@ -19,9 +20,10 @@
 	"commonFunc.h"
 	"logic.h"
 
-1740577392 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
+1741318750 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
 	<iostream>
 	<string>
+	<cmath>
 	<SDL.h>
 	<SDL_image.h>
 
@@ -36,15 +38,15 @@
 	"commonFunc.h"
 	"Player.h"
 
-1740380859 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+1740890994 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
 	"commonFunc.h"
 	"Player.h"
 
-1740380859 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+1741528008 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
 	"MainObject.h"
 	"commonFunc.h"
 
-1740382513 source:c:\users\dell_pc\desktop\dev\sdl_game\map.cpp
+1740578140 source:c:\users\dell_pc\desktop\dev\sdl_game\map.cpp
 	"Map.h"
 
 1740380859 c:\users\dell_pc\desktop\dev\sdl_game\map.h
@@ -56,4 +58,16 @@
 1740380859 source:c:\users\dell_pc\desktop\dev\sdl_game\timer.cpp
 	"Timer.h"
 	"commonFunc.h"
+
+1741314498 c:\users\dell_pc\desktop\dev\sdl_game\small_enemy.h
+	"commonFunc.h"
+
+1741528016 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
+	"SmallEnemy.h"
+	"commonFunc.h"
+	"MainObject.h"
+
+1741527625 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
+	"commonFunc.h"
+	"Player.h"
 

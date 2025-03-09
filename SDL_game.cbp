@@ -38,6 +38,8 @@
 		<Unit filename="Map.h" />
 		<Unit filename="Player.cpp" />
 		<Unit filename="Player.h" />
+		<Unit filename="SmallEnemy.cpp" />
+		<Unit filename="SmallEnemy.h" />
 		<Unit filename="Timer.cpp" />
 		<Unit filename="Timer.h" />
 		<Unit filename="commonFunc.cpp" />

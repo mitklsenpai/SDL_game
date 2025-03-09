@@ -198,7 +198,7 @@ void MainObject::DoPlayer()
     }
     else if(x_pos_ + width_frame_ > SCREEN_WIDTH)
     {
-        x_pos_ = SCREEN_WIDTH - width_frame_ - 1;
+        x_pos_ = SCREEN_WIDTH;
     }
     else if (y_pos_ < 0)
     {
@@ -206,6 +206,6 @@ void MainObject::DoPlayer()
     }
     else if(y_pos_ + height_frame_ > SCREEN_HEIGHT)
     {
-        y_pos_ = SCREEN_HEIGHT - width_frame_ - 1;
+        y_pos_ = SCREEN_HEIGHT;
     }
 }
