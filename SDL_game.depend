@@ -5,7 +5,7 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1741527728 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1741536329 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	<iostream>
 	"commonFunc.h"
 	"Player.h"
@@ -38,11 +38,11 @@
 	"commonFunc.h"
 	"Player.h"
 
-1740890994 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+1741534392 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
 	"commonFunc.h"
 	"Player.h"
 
-1741528008 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+1741529502 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
 	"MainObject.h"
 	"commonFunc.h"
 
@@ -62,12 +62,13 @@
 1741314498 c:\users\dell_pc\desktop\dev\sdl_game\small_enemy.h
 	"commonFunc.h"
 
-1741528016 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
+1741536320 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
 	"SmallEnemy.h"
 	"commonFunc.h"
 	"MainObject.h"
 
-1741527625 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
+1741536396 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
 	"commonFunc.h"
 	"Player.h"
+	"MainObject.h"
 

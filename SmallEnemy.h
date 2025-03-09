@@ -4,8 +4,9 @@
 
 #include "commonFunc.h"
 #include "Player.h"
+#include "MainObject.h"
 
-#define SMALL_ENEMY_SPEED 1
+#define SMALL_ENEMY_SPEED 2
 
 class SmallEnemy : public Player
 {
@@ -24,15 +25,13 @@ public:
     void set_clips();
     void Show(SDL_Renderer *des);
 
-    void Moving();
-    void MovingToPlayer();
-
+    void Follow(MainObject &player);
 private:
-    int x_pos;
-    int y_pos;
+    float x_pos;
+    float y_pos;
 
-    int x_val;
-    int y_val;
+    float x_val;
+    float y_val;
 
     int frame_;
     int height_frame_;

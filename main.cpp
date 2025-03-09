@@ -119,6 +119,8 @@ int main(int argc, char* argv[])
         // chay chuyen dong
         p_player.DoPlayer();
         p_player.Show(g_screen);
+
+        small_mod.Follow(p_player);
         small_mod.Show(g_screen);
 
 

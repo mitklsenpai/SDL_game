@@ -56,12 +56,11 @@ void SmallEnemy::Show(SDL_Renderer* des)
         LoadImg("images//Run_Right.png", des);
     }
     else
-
     {
         LoadImg("images//Run_left.png", des);
     }
 
-    if(input_type.rigth_ == 1 || input_type.left_ == 1)
+    if(input_type.rigth_ == 1 || input_type.left_ == 1 || input_type.up_ == 1 || input_type.down_ == 1)
     {
         frame_++;
     }
@@ -82,46 +81,52 @@ void SmallEnemy::Show(SDL_Renderer* des)
     SDL_RenderCopy(des, p_object_, current_clip, &renderQuad);  // hàm chạy animation
 }
 
-void SmallEnemy::Moving()
+void SmallEnemy::Follow(MainObject &player)
 {
-    x_val = 0;
-    y_val = 0;
+    int player_x_ = player.Get_x_pos();
+    int player_y_ = player.Get_y_pos();
+    float diff_x,diff_y,distance,normalize_x,normalize_y,enemy_move_x,enemy_move_y;
+// quai chay theo nhan vat
+    diff_x = player_x_ - x_pos;
+    diff_y = player_y_ - y_pos;
 
-    if(input_type.rigth_ == 1)
+    distance = sqrt((diff_x*diff_x + diff_y*diff_y));
+
+    if(distance != 0)
     {
-        x_val += SMALL_ENEMY_SPEED;
-    }
-    else if(input_type.left_ == 1)
-    {
-        x_val -= SMALL_ENEMY_SPEED;
+        normalize_x = diff_x/distance;
+        normalize_y = diff_y/distance;
+
+        enemy_move_x = normalize_x * SMALL_ENEMY_SPEED;
+        enemy_move_y = normalize_y * SMALL_ENEMY_SPEED;
     }
 
-    x_pos+=x_val;
-    y_pos+=y_val;
+    if(x_pos+=enemy_move_x)
+    {
+        status = Right;
+        input_type.rigth_ = 1;
+    }
+    if(y_pos+=enemy_move_y)
+    {
+        status = Up;
+        input_type.up_ = 1;
+    }
 
-    if(x_pos < 0)
-    {
-        x_pos = 0;
-    }
-    else if(y_pos < 0)
-    {
-        y_pos = 0;
-    }
-    else if(x_pos + width_frame_ > SCREEN_WIDTH)
-    {
-        x_pos = SCREEN_WIDTH - width_frame_;
-    }
-    else if(y_pos + height_frame_ > SCREEN_HEIGHT)
-    {
-        y_pos = SCREEN_HEIGHT - width_frame_;
-    }
+//// check va cham voi man hinh
+//    if(x_pos < 0)
+//    {
+//        x_pos = 0;
+//    }
+//    else if(y_pos < 0)
+//    {
+//        y_pos = 0;
+//    }
+//    else if(x_pos + width_frame_ > SCREEN_WIDTH)
+//    {
+//        x_pos = SCREEN_WIDTH - width_frame_;
+//    }
+//    else if(y_pos + height_frame_ > SCREEN_HEIGHT)
+//    {
+//        y_pos = SCREEN_HEIGHT - width_frame_;
+//    }
 }
-
-//void SmallEnemy::MovingToPlayer(MainObject &p_object)
-//{
-//    double distance;
-//    int player_x_pos = p_object.x_pos_;
-//    int player_y_pos = p_object.y_pos_;
-//
-//    distance = pow((x_pos - player_x_pos),2) + pow()
-//}

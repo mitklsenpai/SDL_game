@@ -132,7 +132,6 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // h
             }
             break;
         }
-
     }
     else if(events.type == SDL_KEYUP) // khi phim ko nhan
     {
@@ -140,25 +139,21 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // h
         {
         case SDLK_d:
             {
-                status_ = WALK_RIGHT;
                 input_type_.rigth_ = 0;
             }
             break;
         case SDLK_a:
             {
-                status_ = WALK_LEFT;
                 input_type_.left_ = 0;
             }
             break;
         case SDLK_w:
             {
-                status_ = GO_UP;
                 input_type_.up_ = 0;
             }
             break;
         case SDLK_s:
             {
-                status_ = GO_DOWN;
                 input_type_.down_ = 0;
             }
             break;
@@ -188,6 +183,26 @@ void MainObject::DoPlayer()
     {
         y_val_ += PLAYER_SPEED;
     }
+    else if (input_type_.left_ == 1 && input_type_.up_ == 1)
+    {
+        x_val_ -= PLAYER_SPEED;
+        y_val_ -= PLAYER_SPEED;
+    }
+    else if (input_type_.rigth_== 1 && input_type_.up_ == 1)
+    {
+        x_val_ += PLAYER_SPEED;
+        y_val_ -= PLAYER_SPEED;
+    }
+    else if (input_type_.rigth_ == 1 && input_type_.down_ == 1)
+    {
+        x_val_ += PLAYER_SPEED;
+        y_val_ += PLAYER_SPEED;
+    }
+    else if (input_type_.left_ == 1 && input_type_.down_ == 1)
+    {
+        x_val_ -= PLAYER_SPEED;
+        y_val_ += PLAYER_SPEED;
+    }
 
     x_pos_ += x_val_;
     y_pos_ += y_val_;
@@ -198,7 +213,7 @@ void MainObject::DoPlayer()
     }
     else if(x_pos_ + width_frame_ > SCREEN_WIDTH)
     {
-        x_pos_ = SCREEN_WIDTH;
+        x_pos_ = SCREEN_WIDTH - width_frame_;
     }
     else if (y_pos_ < 0)
     {
@@ -206,6 +221,6 @@ void MainObject::DoPlayer()
     }
     else if(y_pos_ + height_frame_ > SCREEN_HEIGHT)
     {
-        y_pos_ = SCREEN_HEIGHT;
+        y_pos_ = SCREEN_HEIGHT - width_frame_;
     }
 }
