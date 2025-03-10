@@ -23,6 +23,12 @@ SmallEnemy::~SmallEnemy()
 
 }
 
+void SmallEnemy::SetSpawnPoint(float &x, float &y)
+{
+    x_pos = x;
+    y_pos = y;
+}
+
 bool SmallEnemy::LoadImg(std::string path, SDL_Renderer* screen)
 {
     bool ret = Player::LoadImg(path, screen);

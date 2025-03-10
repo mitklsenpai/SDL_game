@@ -24,8 +24,9 @@ public:
     bool LoadImg(std::string path, SDL_Renderer *screen);
     void set_clips();
     void Show(SDL_Renderer *des);
-
     void Follow(MainObject &player);
+
+    void SetSpawnPoint(float &X, float &Y);
 private:
     float x_pos;
     float y_pos;

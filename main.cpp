@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 #include "commonFunc.h"
 #include "Player.h"
 #include "MainObject.h"
@@ -65,6 +66,32 @@ void close()
     SDL_QUIT;
 }
 
+// Load animation + Vi tri spawn SMALL_ENEMY
+std::vector<SmallEnemy*> SmallEnemySpawner()
+{
+    std::vector<SmallEnemy*> SmallSpawner;
+
+    SmallEnemy* smallenemy = new SmallEnemy[100];
+    for(int i=0;i<100;i++)
+    {
+        SmallEnemy* object = smallenemy + i;
+        if(object != NULL)
+        {
+            object->LoadImg("images//Run_Left.png", g_screen);
+            object->set_clips();
+            float rand_x = rand()%1280;
+            float rand_y = rand()%640;
+            object->SetSpawnPoint(rand_x,rand_y);
+//            object->spawnpoint_x(20*i);
+//            object->spawnpoint_y(i);
+
+            SmallSpawner.push_back(object);
+        }
+    }
+    return SmallSpawner;
+}
+
+//Ham main
 int main(int argc, char* argv[])
 {
     ImpTimer fps_timer;
@@ -76,23 +103,20 @@ int main(int argc, char* argv[])
         return -1;
 
 
-// Load animation cho Nhan vat
+    // Load animation cho Nhan vat
     MainObject p_player;
     p_player.LoadImg("images//4_direct_move.png", g_screen);
     p_player.set_clips();
 
-// Load animation cho Quai nho
-    SmallEnemy small_mod;
-    small_mod.LoadImg("images//Run_Left.png", g_screen);
-    small_mod.set_clips();
+    // Spawn Small_enemy
+    std::vector<SmallEnemy*> SmallSpawner = SmallEnemySpawner();
 
-// Load map anh
+    // Load map anh
     GameMap game_map;
     game_map.LoadMap("map/map01.dat");
     game_map.LoadTiles(g_screen);
 
-
-// Vong lap game
+    // Vong lap game
     bool is_quit = false;
     while(!is_quit)
     {
@@ -116,13 +140,20 @@ int main(int argc, char* argv[])
         // ve map
         game_map.DrawMap(g_screen);
 
-        // chay chuyen dong
+        //chuyen dong + show animation cho SmallEnemy
+        for(int i=0;i<(int)SmallSpawner.size();i++)
+        {
+            SmallEnemy* smallenemy = SmallSpawner.at(i);
+            if(smallenemy!=NULL)
+            {
+                smallenemy->Follow(p_player);
+                smallenemy->Show(g_screen);
+            }
+        }
+
+        // chay chuyen dong cho nhan vat
         p_player.DoPlayer();
         p_player.Show(g_screen);
-
-        small_mod.Follow(p_player);
-        small_mod.Show(g_screen);
-
 
         SDL_RenderPresent(g_screen);
 
