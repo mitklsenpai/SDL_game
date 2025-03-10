@@ -25,6 +25,16 @@ MainObject::~MainObject()
 
 }
 
+void MainObject::Normalize_Motion(float &x_val, float &y_val)
+{
+    float distance = sqrt(x_val_*x_val_ + y_val_*y_val_);
+    float normal_x = (x_val_/distance)*PLAYER_SPEED;
+    float normal_y = (y_val_/distance)*PLAYER_SPEED;
+
+    x_pos_ += normal_x;
+    y_pos_ += normal_y;
+}
+
 bool MainObject::LoadImg(std::string path, SDL_Renderer* screen)
 {
     bool ret = Player::LoadImg(path, screen);
@@ -64,15 +74,16 @@ void MainObject::set_clips()
     }
 }
 
-void MainObject::Show(SDL_Renderer* des)   // ham dua hinh anh ra main
+// ham dua hinh anh ra main
+void MainObject::Show(SDL_Renderer* des)
 {
     if(status_ == WALK_LEFT || status_ == WALK_RIGHT)
     {
-        LoadImg("images//right_left.png", des);
+        LoadImg("images//4_direct_move.png", des);
     }
     else if (status_ == GO_DOWN || status_ == GO_UP)
     {
-        LoadImg("images//up_down.png", des);
+        LoadImg("images//4_direct_move.png", des);
     }
 
 
@@ -139,21 +150,25 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // h
         {
         case SDLK_d:
             {
+                status_ = WALK_RIGHT;
                 input_type_.rigth_ = 0;
             }
             break;
         case SDLK_a:
             {
+                status_ = WALK_LEFT;
                 input_type_.left_ = 0;
             }
             break;
         case SDLK_w:
             {
+                status_ = GO_UP;
                 input_type_.up_ = 0;
             }
             break;
         case SDLK_s:
             {
+                status_ = GO_DOWN;
                 input_type_.down_ = 0;
             }
             break;
@@ -167,46 +182,58 @@ void MainObject::DoPlayer()
     x_val_ = 0;
     y_val_ = 0;
 
-    if(input_type_.left_ == 1)
+// di chuyen thang
+    if(input_type_.left_ == 1 && input_type_.rigth_ == 0 && input_type_.down_ == 0 && input_type_.up_ == 0)
     {
         x_val_ -= PLAYER_SPEED;
+        x_pos_ += x_val_;
     }
-    else if(input_type_.rigth_ == 1)
+    else if(input_type_.rigth_ == 1 && input_type_.left_ == 0 && input_type_.down_ == 0 && input_type_.up_ == 0)
     {
         x_val_ += PLAYER_SPEED;
+        x_pos_ += x_val_;
     }
-    else if(input_type_.up_ == 1)
+    else if(input_type_.up_ == 1 && input_type_.down_ == 0 && input_type_.rigth_ == 0 && input_type_.left_ == 0)
     {
         y_val_ -= PLAYER_SPEED;
+        y_pos_ += y_val_;
     }
-    else if (input_type_.down_ == 1)
+    else if (input_type_.down_ == 1 && input_type_.up_ == 0 && input_type_.rigth_ == 0 && input_type_.left_ == 0)
     {
         y_val_ += PLAYER_SPEED;
+        y_pos_ += y_val_;
     }
-    else if (input_type_.left_ == 1 && input_type_.up_ == 1)
+// di chuyen cheo
+    else if (input_type_.left_ == 1 && input_type_.up_ == 1 && input_type_.down_ == 0 && input_type_.rigth_ == 0)
     {
         x_val_ -= PLAYER_SPEED;
         y_val_ -= PLAYER_SPEED;
+
+        Normalize_Motion(x_val_,y_val_);
     }
-    else if (input_type_.rigth_== 1 && input_type_.up_ == 1)
+    else if (input_type_.rigth_== 1 && input_type_.up_ == 1 && input_type_.down_ == 0 && input_type_.left_ == 0)
     {
         x_val_ += PLAYER_SPEED;
         y_val_ -= PLAYER_SPEED;
+
+        Normalize_Motion(x_val_,y_val_);
     }
-    else if (input_type_.rigth_ == 1 && input_type_.down_ == 1)
+    else if (input_type_.rigth_ == 1 && input_type_.down_ == 1 && input_type_.left_ == 0 && input_type_.up_ == 0)
     {
         x_val_ += PLAYER_SPEED;
         y_val_ += PLAYER_SPEED;
+
+        Normalize_Motion(x_val_,y_val_);
     }
-    else if (input_type_.left_ == 1 && input_type_.down_ == 1)
+    else if (input_type_.left_ == 1 && input_type_.down_ == 1 && input_type_.rigth_ == 0 && input_type_.up_ == 0)
     {
         x_val_ -= PLAYER_SPEED;
         y_val_ += PLAYER_SPEED;
+
+        Normalize_Motion(x_val_,y_val_);
     }
 
-    x_pos_ += x_val_;
-    y_pos_ += y_val_;
-
+// va cham voi man hinh
     if(x_pos_ < 0)
     {
         x_pos_ = 0;

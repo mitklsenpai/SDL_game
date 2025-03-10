@@ -24,9 +24,11 @@ public:
     void HandleInputAction(SDL_Event svents, SDL_Renderer* screen); // hàm xử lý sự kiện
     void set_clips(); // hàm xử lý animation
     void DoPlayer(); // ham xu ly di chuyen
+    void Normalize_Motion(float &x_val_, float &y_val_);
 
     float Get_x_pos(){return x_pos_;}
     float Get_y_pos(){return y_pos_;}
+
 private:
     float x_val_;  // vị trí de thuc hien tinh toan cho x,y_pos_
     float y_val_;
@@ -41,6 +43,8 @@ private:
     Input input_type_;
     int frame_;
     int status_;   // trang thai chuyen dong
+
+
 };
 
 

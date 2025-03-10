@@ -111,22 +111,4 @@ void SmallEnemy::Follow(MainObject &player)
         status = Up;
         input_type.up_ = 1;
     }
-
-//// check va cham voi man hinh
-//    if(x_pos < 0)
-//    {
-//        x_pos = 0;
-//    }
-//    else if(y_pos < 0)
-//    {
-//        y_pos = 0;
-//    }
-//    else if(x_pos + width_frame_ > SCREEN_WIDTH)
-//    {
-//        x_pos = SCREEN_WIDTH - width_frame_;
-//    }
-//    else if(y_pos + height_frame_ > SCREEN_HEIGHT)
-//    {
-//        y_pos = SCREEN_HEIGHT - width_frame_;
-//    }
 }

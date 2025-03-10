@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 
 // Load animation cho Nhan vat
     MainObject p_player;
-    p_player.LoadImg("images//right_left.png", g_screen);
+    p_player.LoadImg("images//4_direct_move.png", g_screen);
     p_player.set_clips();
 
 // Load animation cho Quai nho
