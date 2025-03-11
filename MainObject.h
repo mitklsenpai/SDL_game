@@ -28,6 +28,8 @@ public:
 
     float Get_x_pos(){return x_pos_;}
     float Get_y_pos(){return y_pos_;}
+    float Get_height_frame() {return height_frame_;}
+    float Get_width_frame() {return width_frame_;}
 
 private:
     float x_val_;  // vị trí de thuc hien tinh toan cho x,y_pos_

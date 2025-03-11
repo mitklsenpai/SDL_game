@@ -75,7 +75,10 @@ void SmallEnemy::Show(SDL_Renderer* des)
         frame_ = 0;
     }
 
-    if(frame_ > 6){frame_ = 0;}
+    if(frame_ > 6)
+    {
+        frame_ = 0;
+    }
 
     rect_.x = x_pos;
     rect_.y = y_pos;

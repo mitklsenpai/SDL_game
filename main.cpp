@@ -6,6 +6,7 @@
 #include "Map.h"
 #include "Timer.h"
 #include "SmallEnemy.h"
+#include "Gun.h"
 
 Player g_background;
 
@@ -71,8 +72,8 @@ std::vector<SmallEnemy*> SmallEnemySpawner()
 {
     std::vector<SmallEnemy*> SmallSpawner;
 
-    SmallEnemy* smallenemy = new SmallEnemy[100];
-    for(int i=0;i<100;i++)
+    SmallEnemy* smallenemy = new SmallEnemy[10];
+    for(int i=0;i<10;i++)
     {
         SmallEnemy* object = smallenemy + i;
         if(object != NULL)
@@ -82,8 +83,6 @@ std::vector<SmallEnemy*> SmallEnemySpawner()
             float rand_x = rand()%1280;
             float rand_y = rand()%640;
             object->SetSpawnPoint(rand_x,rand_y);
-//            object->spawnpoint_x(20*i);
-//            object->spawnpoint_y(i);
 
             SmallSpawner.push_back(object);
         }
@@ -108,6 +107,10 @@ int main(int argc, char* argv[])
     p_player.LoadImg("images//4_direct_move.png", g_screen);
     p_player.set_clips();
 
+    //Load sung
+    Gun gun;
+    gun.LoadImg("images//shot_gun.png", g_screen);
+
     // Spawn Small_enemy
     std::vector<SmallEnemy*> SmallSpawner = SmallEnemySpawner();
 
@@ -121,14 +124,16 @@ int main(int argc, char* argv[])
     while(!is_quit)
     {
         fps_timer.start(); // chay dong ho
+
+
         while (SDL_PollEvent(&g_event)!=0)
         {
             if(g_event.type == SDL_QUIT)
             {
                 is_quit = true;
             }
-
             p_player.HandleInputAction(g_event,g_screen);
+            gun.HandleMouseEvents(g_event, g_screen);
         }
 
         SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
@@ -141,19 +146,22 @@ int main(int argc, char* argv[])
         game_map.DrawMap(g_screen);
 
         //chuyen dong + show animation cho SmallEnemy
-        for(int i=0;i<(int)SmallSpawner.size();i++)
-        {
-            SmallEnemy* smallenemy = SmallSpawner.at(i);
-            if(smallenemy!=NULL)
-            {
-                smallenemy->Follow(p_player);
-                smallenemy->Show(g_screen);
-            }
-        }
+//        for(int i=0;i<(int)SmallSpawner.size();i++)
+//        {
+//            SmallEnemy* smallenemy = SmallSpawner.at(i);
+//            if(smallenemy!=NULL)
+//            {
+//                smallenemy->Follow(p_player)d;
+//                smallenemy->Show(g_screen);
+//            }
+//        }
+
 
         // chay chuyen dong cho nhan vat
         p_player.DoPlayer();
         p_player.Show(g_screen);
+
+        gun.Rotation(p_player,g_screen);
 
         SDL_RenderPresent(g_screen);
 
