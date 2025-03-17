@@ -4,8 +4,7 @@
 
 #include "commonFunc.h"
 #include "MainObject.h"
-
-#define MAX_BULLETS 3
+#include "BulletBase.h"
 
 class Gun : public Player
 {
@@ -15,17 +14,19 @@ public:
 
     void Rotation(MainObject &player, SDL_Renderer* des);
     void HandleMouseEvents(SDL_Event events, SDL_Renderer* screen);
-    void SetPosition();
-    bool LoadImg(std::string path, SDL_Renderer* screen);
+    void SetBullet();
+    void ShowBullet(SDL_Renderer *des);
 
-private:
+    bool is_shot;
     float x_pos;
     float y_pos;
 
     int x_target;
     int y_target;
+    SDL_Texture *bullet_texture;
 
-    bool is_shot;
+    std::vector<BulletBase*> bullets;
+    SDL_Rect BulletRect_;
 };
 
 

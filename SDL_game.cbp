@@ -32,14 +32,16 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="BulletBase.cpp" />
+		<Unit filename="BulletBase.h" />
+		<Unit filename="Gun.cpp" />
+		<Unit filename="Gun.h" />
 		<Unit filename="MainObject.cpp" />
 		<Unit filename="MainObject.h" />
 		<Unit filename="Map.cpp" />
 		<Unit filename="Map.h" />
 		<Unit filename="Player.cpp" />
 		<Unit filename="Player.h" />
-		<Unit filename="ShotGun.cpp" />
-		<Unit filename="ShotGun.h" />
 		<Unit filename="SmallEnemy.cpp" />
 		<Unit filename="SmallEnemy.h" />
 		<Unit filename="Timer.cpp" />

@@ -5,7 +5,7 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1741685965 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1742221773 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	<iostream>
 	<stdlib.h>
 	"commonFunc.h"
@@ -15,6 +15,7 @@
 	"Timer.h"
 	"SmallEnemy.h"
 	"Gun.h"
+	"BulletBase.h"
 
 1739455303 c:\users\dell_pc\desktop\dev\sdl_game\graphic.h
 	<SDL.h>
@@ -22,7 +23,7 @@
 	"commonFunc.h"
 	"logic.h"
 
-1741683802 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
+1741919296 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
 	<iostream>
 	<string>
 	<cmath>
@@ -37,15 +38,15 @@
 1739799820 c:\users\dell_pc\desktop\dev\sdl_game\player.h
 	"commonFunc.h"
 
-1740379433 source:c:\users\dell_pc\desktop\dev\sdl_game\player.cpp
+1742181645 source:c:\users\dell_pc\desktop\dev\sdl_game\player.cpp
 	"commonFunc.h"
 	"Player.h"
 
-1741680325 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+1742199267 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
 	"commonFunc.h"
 	"Player.h"
 
-1741599696 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+1742199267 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
 	"MainObject.h"
 	"commonFunc.h"
 
@@ -65,21 +66,27 @@
 1741314498 c:\users\dell_pc\desktop\dev\sdl_game\small_enemy.h
 	"commonFunc.h"
 
-1741677987 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
+1741921762 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
 	"SmallEnemy.h"
 	"commonFunc.h"
-	"MainObject.h"
 
-1741616072 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
+1742181676 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
 
-1741687302 source:c:\users\dell_pc\desktop\dev\sdl_game\gun.cpp
+1742221686 source:c:\users\dell_pc\desktop\dev\sdl_game\gun.cpp
 	"Gun.h"
 	"commonFunc.h"
 
-1741684018 c:\users\dell_pc\desktop\dev\sdl_game\gun.h
+1742221679 c:\users\dell_pc\desktop\dev\sdl_game\gun.h
 	"commonFunc.h"
 	"MainObject.h"
+	"BulletBase.h"
+
+1742220491 source:c:\users\dell_pc\desktop\dev\sdl_game\bulletbase.cpp
+	"BulletBase.h"
+
+1742220532 c:\users\dell_pc\desktop\dev\sdl_game\bulletbase.h
+	"Player.h"
 

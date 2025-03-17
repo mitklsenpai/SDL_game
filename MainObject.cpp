@@ -28,11 +28,14 @@ MainObject::~MainObject()
 void MainObject::Normalize_Motion(float &x_val, float &y_val)
 {
     float distance = sqrt(x_val_*x_val_ + y_val_*y_val_);
-    float normal_x = (x_val_/distance)*PLAYER_SPEED;
-    float normal_y = (y_val_/distance)*PLAYER_SPEED;
+    if(distance!=0)
+    {
+        float normal_x = (x_val_/distance)*PLAYER_SPEED;
+        float normal_y = (y_val_/distance)*PLAYER_SPEED;
 
-    x_pos_ += normal_x;
-    y_pos_ += normal_y;
+        x_pos_ += normal_x;
+        y_pos_ += normal_y;
+    }
 }
 
 bool MainObject::LoadImg(std::string path, SDL_Renderer* screen)
@@ -70,7 +73,6 @@ void MainObject::set_clips()
         frame_clip_[3].y = 0;
         frame_clip_[3].h = height_frame_;
         frame_clip_[3].w = width_frame_;       // xét animation cho các khung hình
-
     }
 }
 
@@ -176,13 +178,13 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // h
     }
 }
 
-// sử lý chuyển động
+// xử lý chuyển động
 void MainObject::DoPlayer()
 {
     x_val_ = 0;
     y_val_ = 0;
 
-// di chuyen thang
+    // di chuyen thang
     if(input_type_.left_ == 1 && input_type_.rigth_ == 0 && input_type_.down_ == 0 && input_type_.up_ == 0)
     {
         x_val_ -= PLAYER_SPEED;
@@ -203,7 +205,7 @@ void MainObject::DoPlayer()
         y_val_ += PLAYER_SPEED;
         y_pos_ += y_val_;
     }
-// di chuyen cheo
+    // di chuyen cheo
     else if (input_type_.left_ == 1 && input_type_.up_ == 1 && input_type_.down_ == 0 && input_type_.rigth_ == 0)
     {
         x_val_ -= PLAYER_SPEED;
@@ -233,7 +235,7 @@ void MainObject::DoPlayer()
         Normalize_Motion(x_val_,y_val_);
     }
 
-// va cham voi man hinh
+    // va cham voi man hinh
     if(x_pos_ < 0)
     {
         x_pos_ = 0;
@@ -251,3 +253,4 @@ void MainObject::DoPlayer()
         y_pos_ = SCREEN_HEIGHT - width_frame_;
     }
 }
+

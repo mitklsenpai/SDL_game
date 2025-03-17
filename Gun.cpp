@@ -11,42 +11,24 @@ Gun::Gun()
 
 Gun::~Gun()
 {
-
 }
 
 void Gun::HandleMouseEvents(SDL_Event event, SDL_Renderer* screen)
 {
-    switch(event.type)
-    {
-    case SDL_MOUSEMOTION:
+    if(event.type == SDL_MOUSEMOTION)
         {
             int x,y;
             SDL_GetMouseState(&x, &y);
             x_target = x; y_target = y;
-            break;
         }
-    case SDL_MOUSEBUTTONDOWN:
+    else if(event.type == SDL_MOUSEBUTTONDOWN)
         {
-            is_shot = true;
-            break;
+                is_shot = true;
         }
-    case SDL_MOUSEBUTTONUP:
+    else if(event.type == SDL_MOUSEBUTTONUP)
         {
             is_shot = false;
-            break;
         }
-    }
-}
-
-void Gun::SetPosition()
-{
-
-}
-
-bool Gun::LoadImg(std::string path, SDL_Renderer* screen)
-{
-    bool ret = Player::LoadImg(path, screen);
-    return ret;
 }
 
 void Gun::Rotation(MainObject& player, SDL_Renderer* des)
@@ -72,4 +54,45 @@ void Gun::Rotation(MainObject& player, SDL_Renderer* des)
     SDL_Rect renderQuad = {rect_.x, rect_.y, 48, 48};
 
     SDL_RenderCopyEx(des,p_object_,NULL,&renderQuad,angle,NULL,SDL_FLIP_NONE);
+}
+
+void Gun::SetBullet()
+{
+    float diff_x = x_target - x_pos;
+    float diff_y = y_target - y_pos;
+
+    if(is_shot)
+    {
+        BulletBase *bullet = new BulletBase();
+        bullet->angle = atan2(diff_y,diff_x)*180 / M_PI;
+        bullet->x_pos = x_pos * cos(bullet->angle);
+        bullet->y_pos = y_pos * sin(bullet->angle);
+
+        bullets.push_back(bullet);
+    }
+}
+
+void Gun::ShowBullet(SDL_Renderer *des)
+{
+    for(int i=0;i<(int) bullets.size();i++)
+    {
+        BulletBase* bullet = bullets.at(i);
+        if(bullet != NULL)
+        {
+            bullet_texture = IMG_LoadTexture(des,"images//bullet.png");
+            bullet->x_pos += FIRERATE * cos(bullet->angle);
+            bullet->y_pos += FIRERATE * sin(bullet->angle);
+
+            BulletRect_.x = bullet->x_pos;
+            BulletRect_.y = bullet->y_pos;
+            BulletRect_.w = 10;
+            BulletRect_.h = 10;
+            SDL_RenderCopy(des,bullet_texture,NULL,&BulletRect_);
+
+            if(bullet->x_pos < 0 || bullet->y_pos < 0 || bullet->x_pos > SCREEN_WIDTH || bullet->y_pos > SCREEN_HEIGHT)
+            {
+                SDL_DestroyTexture(bullet_texture);
+            }
+        }
+    }
 }

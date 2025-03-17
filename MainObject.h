@@ -46,7 +46,6 @@ private:
     int frame_;
     int status_;   // trang thai chuyen dong
 
-
 };
 
 

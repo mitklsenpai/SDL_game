@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "SmallEnemy.h"
 #include "Gun.h"
+#include "BulletBase.h"
 
 Player g_background;
 
@@ -72,8 +73,8 @@ std::vector<SmallEnemy*> SmallEnemySpawner()
 {
     std::vector<SmallEnemy*> SmallSpawner;
 
-    SmallEnemy* smallenemy = new SmallEnemy[10];
-    for(int i=0;i<10;i++)
+    SmallEnemy* smallenemy = new SmallEnemy[MAX_SMALL_ENEMIES];
+    for(int i=0;i<MAX_SMALL_ENEMIES;i++)
     {
         SmallEnemy* object = smallenemy + i;
         if(object != NULL)
@@ -90,6 +91,7 @@ std::vector<SmallEnemy*> SmallEnemySpawner()
     return SmallSpawner;
 }
 
+
 //Ham main
 int main(int argc, char* argv[])
 {
@@ -101,6 +103,8 @@ int main(int argc, char* argv[])
     if(LoadBackground() == false)
         return -1;
 
+    //
+    commonFunc checkCollider;
 
     // Load animation cho Nhan vat
     MainObject p_player;
@@ -111,8 +115,9 @@ int main(int argc, char* argv[])
     Gun gun;
     gun.LoadImg("images//shot_gun.png", g_screen);
 
-    // Spawn Small_enemy
+    // Spawn Small_enemy + rect quai
     std::vector<SmallEnemy*> SmallSpawner = SmallEnemySpawner();
+
 
     // Load map anh
     GameMap game_map;
@@ -141,27 +146,29 @@ int main(int argc, char* argv[])
 
         g_background.Render(g_screen, NULL);
 
-
         // ve map
         game_map.DrawMap(g_screen);
 
         //chuyen dong + show animation cho SmallEnemy
-//        for(int i=0;i<(int)SmallSpawner.size();i++)
-//        {
-//            SmallEnemy* smallenemy = SmallSpawner.at(i);
-//            if(smallenemy!=NULL)
-//            {
-//                smallenemy->Follow(p_player)d;
-//                smallenemy->Show(g_screen);
-//            }
-//        }
+        for(int i=0;i<(int)SmallSpawner.size();i++)
+        {
+            SmallEnemy* smallenemy = SmallSpawner.at(i);
+            if(smallenemy!=NULL)
+            {
+                smallenemy->Follow(p_player);
+                smallenemy->Show(g_screen);
+            }
+        }
 
 
         // chay chuyen dong cho nhan vat
         p_player.DoPlayer();
         p_player.Show(g_screen);
 
+        //sung
         gun.Rotation(p_player,g_screen);
+        gun.SetBullet();
+        gun.ShowBullet(g_screen);
 
         SDL_RenderPresent(g_screen);
 

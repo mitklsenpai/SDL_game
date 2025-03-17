@@ -1,21 +1,17 @@
 
 #include "SmallEnemy.h";
 #include "commonFunc.h"
-#include "MainObject.h"
 
 SmallEnemy::SmallEnemy()
 {
     x_pos = 0;
     y_pos = 0;
 
-    x_val = 0;
-    y_val = 0;
-
     frame_ = 0;
     width_frame_ = 0;
     height_frame_ = 0;
 
-    status = -1;
+    is_move = false;
 }
 
 SmallEnemy::~SmallEnemy()
@@ -57,16 +53,12 @@ void SmallEnemy::set_clips()
 
 void SmallEnemy::Show(SDL_Renderer* des)
 {
-    if(status == Right)
+    if(is_move)
     {
         LoadImg("images//Run_Right.png", des);
     }
-    else
-    {
-        LoadImg("images//Run_left.png", des);
-    }
 
-    if(input_type.rigth_ == 1 || input_type.left_ == 1 || input_type.up_ == 1 || input_type.down_ == 1)
+    if(is_move)
     {
         frame_++;
     }
@@ -92,10 +84,11 @@ void SmallEnemy::Show(SDL_Renderer* des)
 
 void SmallEnemy::Follow(MainObject &player)
 {
+    // set vi tri cua nguoi choi
     int player_x_ = player.Get_x_pos();
     int player_y_ = player.Get_y_pos();
     float diff_x,diff_y,distance,normalize_x,normalize_y,enemy_move_x,enemy_move_y;
-// quai chay theo nhan vat
+    // quai chay theo nhan vat
     diff_x = player_x_ - x_pos;
     diff_y = player_y_ - y_pos;
 
@@ -108,16 +101,13 @@ void SmallEnemy::Follow(MainObject &player)
 
         enemy_move_x = normalize_x * SMALL_ENEMY_SPEED;
         enemy_move_y = normalize_y * SMALL_ENEMY_SPEED;
-    }
-
-    if(x_pos+=enemy_move_x)
-    {
-        status = Right;
-        input_type.rigth_ = 1;
-    }
-    if(y_pos+=enemy_move_y)
-    {
-        status = Up;
-        input_type.up_ = 1;
+        if(x_pos+=enemy_move_x)
+        {
+            is_move = true;
+        }
+        if(y_pos += enemy_move_y)
+        {
+            is_move = true;
+        }
     }
 }
