@@ -23,8 +23,8 @@ public:
 
     int x_target;
     int y_target;
-    SDL_Texture *bullet_texture;
 
+    SDL_Texture *bullet_texture;
     std::vector<BulletBase*> bullets;
     SDL_Rect BulletRect_;
 };

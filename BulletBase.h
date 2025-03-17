@@ -3,7 +3,6 @@
 #define BULLET_BASE_H_
 #include "Player.h"
 
-#define MAX_BULLETS 10
 #define FIRERATE 20
 
 class BulletBase : public Player

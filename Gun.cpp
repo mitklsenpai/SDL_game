@@ -11,24 +11,23 @@ Gun::Gun()
 
 Gun::~Gun()
 {
+    Free();
 }
 
 void Gun::HandleMouseEvents(SDL_Event event, SDL_Renderer* screen)
 {
-    if(event.type == SDL_MOUSEMOTION)
-        {
-            int x,y;
-            SDL_GetMouseState(&x, &y);
-            x_target = x; y_target = y;
-        }
-    else if(event.type == SDL_MOUSEBUTTONDOWN)
-        {
-                is_shot = true;
-        }
+    if(event.type == SDL_MOUSEBUTTONDOWN)
+    {
+        int x,y;
+        SDL_GetMouseState(&x, &y);
+        x_target = x; y_target = y;
+        is_shot = true;
+    }
     else if(event.type == SDL_MOUSEBUTTONUP)
-        {
-            is_shot = false;
-        }
+    {
+        is_shot = false;
+    }
+
 }
 
 void Gun::Rotation(MainObject& player, SDL_Renderer* des)
@@ -58,41 +57,41 @@ void Gun::Rotation(MainObject& player, SDL_Renderer* des)
 
 void Gun::SetBullet()
 {
-    float diff_x = x_target - x_pos;
-    float diff_y = y_target - y_pos;
-
+    BulletBase *bullet = new BulletBase();
     if(is_shot)
     {
-        BulletBase *bullet = new BulletBase();
-        bullet->angle = atan2(diff_y,diff_x)*180 / M_PI;
-        bullet->x_pos = x_pos * cos(bullet->angle);
-        bullet->y_pos = y_pos * sin(bullet->angle);
+        float diff_x = x_target - x_pos;
+        float diff_y = y_target - y_pos;
+        bullet->angle = atan2(diff_y,diff_x);
+        float gun_offset = 20; //chieu dai cay sung
+        bullet->x_pos = x_pos + gun_offset + cos(bullet->angle);
+        bullet->y_pos = y_pos + gun_offset + sin(bullet->angle);
 
         bullets.push_back(bullet);
+    }
+    else if(is_shot == false)
+    {
+        delete bullet;
+        bullet = NULL;
     }
 }
 
 void Gun::ShowBullet(SDL_Renderer *des)
 {
+    bullet_texture = IMG_LoadTexture(des,"images//bullet.png");
     for(int i=0;i<(int) bullets.size();i++)
     {
         BulletBase* bullet = bullets.at(i);
         if(bullet != NULL)
         {
-            bullet_texture = IMG_LoadTexture(des,"images//bullet.png");
-            bullet->x_pos += FIRERATE * cos(bullet->angle);
-            bullet->y_pos += FIRERATE * sin(bullet->angle);
+            bullet->x_pos += cos(bullet->angle) * FIRERATE;
+            bullet->y_pos += sin(bullet->angle) * FIRERATE;
 
             BulletRect_.x = bullet->x_pos;
             BulletRect_.y = bullet->y_pos;
             BulletRect_.w = 10;
             BulletRect_.h = 10;
             SDL_RenderCopy(des,bullet_texture,NULL,&BulletRect_);
-
-            if(bullet->x_pos < 0 || bullet->y_pos < 0 || bullet->x_pos > SCREEN_WIDTH || bullet->y_pos > SCREEN_HEIGHT)
-            {
-                SDL_DestroyTexture(bullet_texture);
-            }
         }
     }
 }
