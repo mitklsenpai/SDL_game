@@ -6,6 +6,9 @@
 #include "MainObject.h"
 #include "BulletBase.h"
 
+#define GUN_OFFSET 20
+#define BULLET_DAME 2
+
 class Gun : public Player
 {
 public:
@@ -16,7 +19,11 @@ public:
     void HandleMouseEvents(SDL_Event events, SDL_Renderer* screen);
     void SetBullet();
     void ShowBullet(SDL_Renderer *des);
+    std::vector<BulletBase*> Get_Bullets() {return bullets;}
+    void RemoveBullet(const int &index);
+    SDL_Rect GetRect() {return BulletRect_;}
 
+private:
     bool is_shot;
     float x_pos;
     float y_pos;

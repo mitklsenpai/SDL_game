@@ -34,6 +34,8 @@
 		</Compiler>
 		<Unit filename="BulletBase.cpp" />
 		<Unit filename="BulletBase.h" />
+		<Unit filename="Collision.cpp" />
+		<Unit filename="Collision.h" />
 		<Unit filename="Gun.cpp" />
 		<Unit filename="Gun.h" />
 		<Unit filename="MainObject.cpp" />

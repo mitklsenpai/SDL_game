@@ -15,7 +15,6 @@ public:
         rect_.x = x;
         rect_.y = y;
     }
-    SDL_Rect GetRect() const {return rect_;} // lay kich thuoc anh
     SDL_Texture* GetObject() const {return p_object_;} // ham lay ra p_object
 
 // ham load anh

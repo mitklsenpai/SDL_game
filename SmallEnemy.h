@@ -20,6 +20,10 @@ public:
     void Show(SDL_Renderer *des);
     void Follow(MainObject &player);
     void SetSpawnPoint(float &X, float &Y);
+    float Get_X_Pos() {return x_pos;}
+    float Get_Y_Pos() {return y_pos;}
+    int Get_Height_Frame() {return height_frame_;}
+    int Get_Width_Frame() {return width_frame_;}
 
 private:
     float x_pos;
@@ -31,6 +35,7 @@ private:
     SDL_Rect frame_clips[6];
 
     bool is_move;
+    int hp;
 
 };
 

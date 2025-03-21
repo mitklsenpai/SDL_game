@@ -12,11 +12,11 @@ SmallEnemy::SmallEnemy()
     height_frame_ = 0;
 
     is_move = false;
+    hp = 50;
 }
 
 SmallEnemy::~SmallEnemy()
 {
-
 }
 
 void SmallEnemy::SetSpawnPoint(float &x, float &y)

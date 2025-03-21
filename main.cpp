@@ -8,6 +8,7 @@
 #include "SmallEnemy.h"
 #include "Gun.h"
 #include "BulletBase.h"
+#include "Collision.h"
 
 Player g_background;
 
@@ -79,10 +80,10 @@ std::vector<SmallEnemy*> SmallEnemySpawner()
         SmallEnemy* object = smallenemy + i;
         if(object != NULL)
         {
-            object->LoadImg("images//Run_Left.png", g_screen);
-            object->set_clips();
             float rand_x = rand()%1280;
             float rand_y = rand()%640;
+            object->LoadImg("images//Run_Left.png", g_screen);
+            object->set_clips();
             object->SetSpawnPoint(rand_x,rand_y);
 
             SmallSpawner.push_back(object);
@@ -103,8 +104,6 @@ int main(int argc, char* argv[])
     if(LoadBackground() == false)
         return -1;
 
-    //
-    commonFunc checkCollider;
 
     // Load animation cho Nhan vat
     MainObject p_player;
@@ -117,6 +116,9 @@ int main(int argc, char* argv[])
 
     // Spawn Small_enemy + rect quai
     std::vector<SmallEnemy*> SmallSpawner = SmallEnemySpawner();
+
+    //Check va cham
+    Collision collision;
 
 
     // Load map anh
@@ -149,26 +151,57 @@ int main(int argc, char* argv[])
         // ve map
         game_map.DrawMap(g_screen);
 
+
+        // chay chuyen dong cho nhan vat
+        p_player.DoPlayer();
+        p_player.Show(g_screen);
+        p_player.ShowHPBar(g_screen);
+
+        //sung
+        gun.Rotation(p_player,g_screen);
+        gun.SetBullet();
+        gun.ShowBullet(g_screen);
+
         //chuyen dong + show animation cho SmallEnemy
         for(int i=0;i<(int)SmallSpawner.size();i++)
         {
             SmallEnemy* smallenemy = SmallSpawner.at(i);
             if(smallenemy!=NULL)
             {
-                smallenemy->Follow(p_player);
                 smallenemy->Show(g_screen);
+                smallenemy->Follow(p_player);
             }
         }
 
+        std::vector<BulletBase*> bullet_list = gun.Get_Bullets();
+        for(int index=0;index<(int) bullet_list.size(); index++)
+        {
+            BulletBase *bullet = bullet_list[index];
+            if(bullet != NULL)
+            {
+                for(int j=0;j<SmallSpawner.size();j++)
+                {
+                    SmallEnemy* smallenemy = SmallSpawner[j];
+                    SDL_Rect r_bullet, r_small_enemy;
 
-        // chay chuyen dong cho nhan vat
-        p_player.DoPlayer();
-        p_player.Show(g_screen);
+                    r_small_enemy.x = smallenemy->Get_X_Pos();
+                    r_small_enemy.y = smallenemy->Get_Y_Pos();
+                    r_small_enemy.w = smallenemy->Get_Width_Frame();
+                    r_small_enemy.h = smallenemy->Get_Height_Frame();
 
-        //sung
-        gun.Rotation(p_player,g_screen);
-        gun.SetBullet();
-        gun.ShowBullet(g_screen);
+                    r_bullet = {bullet->x_pos, bullet->y_pos, 10, 10};
+
+                    bool col = collision.CheckCollision(r_small_enemy,r_bullet);
+                    if(col)
+                    {
+                        gun.RemoveBullet(index);
+                        smallenemy->Free();
+                        SmallSpawner.erase(SmallSpawner.begin() + j);
+                    }
+                }
+            }
+        }
+
 
         SDL_RenderPresent(g_screen);
 

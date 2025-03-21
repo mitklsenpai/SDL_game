@@ -25,26 +25,38 @@ public:
     void set_clips(); // hàm xử lý animation
     void DoPlayer(); // ham xu ly di chuyen
     void Normalize_Motion(float &x_val_, float &y_val_);
+    void CheckDead() {if(hp==0) is_dead = true;}
+    void ShowHPBar(SDL_Renderer *des);
 
     float Get_x_pos(){return x_pos_;}
     float Get_y_pos(){return y_pos_;}
     float Get_height_frame() {return height_frame_;}
     float Get_width_frame() {return width_frame_;}
+    SDL_Rect GetRect() {return rect_;}
+
 
 private:
-    float x_val_;  // vị trí de thuc hien tinh toan cho x,y_pos_
+    float x_val_;
     float y_val_;
 
-    float x_pos_;  // vị trí tren ban do
+    float x_pos_;
     float y_pos_;
+    int hp;
+    bool is_dead;
 
-    int width_frame_;   // thông tin dãy frame nhân vật
+    int width_frame_;
     int height_frame_;
 
-    SDL_Rect frame_clip_[4]; // mang luu thong tin cua animation
+    SDL_Rect frame_clip_[4];
     Input input_type_;
     int frame_;
-    int status_;   // trang thai chuyen dong
+    int status_;
+
+    struct HP_Bar
+    {
+        SDL_Rect HP_Inner;
+        SDL_Rect HP_Outer;
+    }HP_Bar;
 
 };
 

@@ -5,13 +5,14 @@
 
 #define FIRERATE 20
 
-class BulletBase : public Player
+class BulletBase
 {
 public:
 
     float x_pos;
     float y_pos;
     float angle;
+
 };
 
 #endif // BULLET_BASE_H_

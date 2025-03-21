@@ -4,11 +4,13 @@
 
 MainObject::MainObject()
 {
+    hp = 100;
+    is_dead =  false;
     frame_ = 0;
     x_pos_ = 570;
     y_pos_ = 270;
     x_val_ = 0;
-    y_val_ = 0;                     // thong so cua Nhan Vat chinh
+    y_val_ = 0;
     width_frame_ = 0;
     height_frame_ = 0;
     status_ = -1;
@@ -21,8 +23,6 @@ MainObject::MainObject()
 
 MainObject::~MainObject()
 {
-
-
 }
 
 void MainObject::Normalize_Motion(float &x_val, float &y_val)
@@ -44,8 +44,10 @@ bool MainObject::LoadImg(std::string path, SDL_Renderer* screen)
 
     if(ret == true)
     {
-        width_frame_ = rect_.w/4;   // thông tin về 1 frame nhân vật
+        width_frame_ = rect_.w/4;
         height_frame_ = rect_.h;
+        rect_.w = width_frame_;
+        rect_.h = height_frame_;
     }
     return ret;
 }
@@ -72,21 +74,20 @@ void MainObject::set_clips()
         frame_clip_[3].x = 3*width_frame_;
         frame_clip_[3].y = 0;
         frame_clip_[3].h = height_frame_;
-        frame_clip_[3].w = width_frame_;       // xét animation cho các khung hình
+        frame_clip_[3].w = width_frame_;
     }
 }
 
-// ham dua hinh anh ra main
 void MainObject::Show(SDL_Renderer* des)
 {
     if(status_ == WALK_LEFT || status_ == WALK_RIGHT)
     {
         LoadImg("images//4_direct_move.png", des);
     }
-    else if (status_ == GO_DOWN || status_ == GO_UP)
-    {
-        LoadImg("images//4_direct_move.png", des);
-    }
+//    else if (status_ == GO_DOWN || status_ == GO_UP)
+//    {
+//        LoadImg("images//4_direct_move.png", des);
+//    }
 
 
     if(input_type_.left_ == 1 || input_type_.rigth_ == 1 || input_type_.down_ == 1 || input_type_.up_ == 1)
@@ -106,17 +107,17 @@ void MainObject::Show(SDL_Renderer* des)
     rect_.x = x_pos_;
     rect_.y = y_pos_;
 
-    SDL_Rect* current_clip = &frame_clip_[frame_];  // hàm lấy thông tin của frame hiện tại
+    SDL_Rect* current_clip = &frame_clip_[frame_];
 
-    SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};  // hàm lấy thông tin của frame (vị trí frame, kích thước)
+    SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};
 
-    SDL_RenderCopy(des, p_object_, current_clip, &renderQuad);  // hàm chạy animation
+    SDL_RenderCopy(des, p_object_, current_clip, &renderQuad);
 }
 
 
-void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // hàm sử lý sự kiện từ bàn phím, di chuyển cho nhân vật
+void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 {
-    if(events.type == SDL_KEYDOWN) //khi phim nhan
+    if(events.type == SDL_KEYDOWN)
     {
         switch(events.key.keysym.sym)
         {
@@ -146,7 +147,7 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)  // h
             break;
         }
     }
-    else if(events.type == SDL_KEYUP) // khi phim ko nhan
+    else if(events.type == SDL_KEYUP)
     {
         switch(events.key.keysym.sym)
         {
@@ -252,5 +253,25 @@ void MainObject::DoPlayer()
     {
         y_pos_ = SCREEN_HEIGHT - width_frame_;
     }
+
+}
+
+void MainObject::ShowHPBar(SDL_Renderer *des)
+{
+    SDL_Texture *HP_Bar_Inner = IMG_LoadTexture(des, "images//hp_bar_inner.png");
+    SDL_Texture *HP_Bar_Outer = IMG_LoadTexture(des, "images//hp_bar_outer.png");
+
+    HP_Bar.HP_Outer.x = 0;
+    HP_Bar.HP_Outer.y = 0;
+    HP_Bar.HP_Outer.h = 32;
+    HP_Bar.HP_Outer.w = 254;
+
+    HP_Bar.HP_Inner.x = 40;
+    HP_Bar.HP_Inner.y = 10;
+    HP_Bar.HP_Inner.h = 12;
+    HP_Bar.HP_Inner.w = 210;
+
+    SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
+    SDL_RenderCopy(des, HP_Bar_Inner, NULL, &HP_Bar.HP_Inner);
 }
 

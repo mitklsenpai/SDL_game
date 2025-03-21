@@ -16,16 +16,18 @@ Gun::~Gun()
 
 void Gun::HandleMouseEvents(SDL_Event event, SDL_Renderer* screen)
 {
-    if(event.type == SDL_MOUSEBUTTONDOWN)
+    if(event.type == SDL_MOUSEMOTION)
     {
-        int x,y;
-        SDL_GetMouseState(&x, &y);
-        x_target = x; y_target = y;
-        is_shot = true;
+        SDL_GetMouseState(&x_target, &y_target);
     }
     else if(event.type == SDL_MOUSEBUTTONUP)
     {
         is_shot = false;
+    }
+    else if(event.type == SDL_MOUSEBUTTONDOWN)
+    {
+        SDL_GetMouseState(&x_target, &y_target);
+        is_shot = true;
     }
 
 }
@@ -63,27 +65,22 @@ void Gun::SetBullet()
         float diff_x = x_target - x_pos;
         float diff_y = y_target - y_pos;
         bullet->angle = atan2(diff_y,diff_x);
-        float gun_offset = 20; //chieu dai cay sung
-        bullet->x_pos = x_pos + gun_offset + cos(bullet->angle);
-        bullet->y_pos = y_pos + gun_offset + sin(bullet->angle);
+
+        bullet->x_pos = x_pos + GUN_OFFSET + cos(bullet->angle);
+        bullet->y_pos = y_pos + GUN_OFFSET + sin(bullet->angle);
 
         bullets.push_back(bullet);
-    }
-    else if(is_shot == false)
-    {
-        delete bullet;
-        bullet = NULL;
     }
 }
 
 void Gun::ShowBullet(SDL_Renderer *des)
 {
-    bullet_texture = IMG_LoadTexture(des,"images//bullet.png");
     for(int i=0;i<(int) bullets.size();i++)
     {
         BulletBase* bullet = bullets.at(i);
         if(bullet != NULL)
         {
+            bullet_texture = IMG_LoadTexture(des,"images//bullet.png");
             bullet->x_pos += cos(bullet->angle) * FIRERATE;
             bullet->y_pos += sin(bullet->angle) * FIRERATE;
 
@@ -91,7 +88,29 @@ void Gun::ShowBullet(SDL_Renderer *des)
             BulletRect_.y = bullet->y_pos;
             BulletRect_.w = 10;
             BulletRect_.h = 10;
-            SDL_RenderCopy(des,bullet_texture,NULL,&BulletRect_);
+            if(BulletRect_.x > 0 && BulletRect_.y > 0 && BulletRect_.x + BulletRect_.w < SCREEN_WIDTH && BulletRect_.h + BulletRect_.y < SCREEN_HEIGHT)
+            {
+                SDL_RenderCopy(des,bullet_texture,NULL,&BulletRect_);
+            }
+            else
+            {
+                bullets.erase(bullets.begin() + i);
+            }
+        }
+    }
+}
+
+void Gun::RemoveBullet(const int &index)
+{
+    int size = bullets.size();
+    if(index < size && size > 0)
+    {
+        bullets.erase(bullets.begin()+index);
+        BulletBase* bullet = bullets.at(index);
+        if(bullet != NULL)
+        {
+            delete bullet;
+            bullet = NULL;
         }
     }
 }
