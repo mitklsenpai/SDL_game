@@ -111,3 +111,4 @@ void SmallEnemy::Follow(MainObject &player)
         }
     }
 }
+

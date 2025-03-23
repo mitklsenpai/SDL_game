@@ -8,10 +8,14 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#define SMALL_ENEMY_FRAME_OFFSET 30
+#define PLAYER_FRAME_OFFSET 26
+
 
 static SDL_Window* g_window = NULL;
 static SDL_Renderer* g_screen = NULL;
 static SDL_Event g_event;
+
 
 // Thiet lap man hinh
 const int SCREEN_WIDTH = 1280;

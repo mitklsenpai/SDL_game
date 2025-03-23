@@ -8,6 +8,7 @@
 
 #define SMALL_ENEMY_SPEED 1
 #define MAX_SMALL_ENEMIES 10
+#define SMALL_ENEMY_DAME 1
 
 class SmallEnemy : public Player
 {
@@ -20,6 +21,7 @@ public:
     void Show(SDL_Renderer *des);
     void Follow(MainObject &player);
     void SetSpawnPoint(float &X, float &Y);
+
     float Get_X_Pos() {return x_pos;}
     float Get_Y_Pos() {return y_pos;}
     int Get_Height_Frame() {return height_frame_;}
@@ -36,6 +38,7 @@ private:
 
     bool is_move;
     int hp;
+    SDL_Rect HP_bar;
 
 };
 

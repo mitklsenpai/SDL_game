@@ -88,13 +88,13 @@ void Gun::ShowBullet(SDL_Renderer *des)
             BulletRect_.y = bullet->y_pos;
             BulletRect_.w = 10;
             BulletRect_.h = 10;
-            if(BulletRect_.x > 0 && BulletRect_.y > 0 && BulletRect_.x + BulletRect_.w < SCREEN_WIDTH && BulletRect_.h + BulletRect_.y < SCREEN_HEIGHT)
+            if(BulletRect_.x < 0 || BulletRect_.y < 0 || BulletRect_.x + BulletRect_.w > SCREEN_WIDTH || BulletRect_.h + BulletRect_.y > SCREEN_HEIGHT)
             {
-                SDL_RenderCopy(des,bullet_texture,NULL,&BulletRect_);
+                bullets.erase(bullets.begin() + i);
             }
             else
             {
-                bullets.erase(bullets.begin() + i);
+                SDL_RenderCopy(des,bullet_texture,NULL,&BulletRect_);
             }
         }
     }
@@ -105,12 +105,12 @@ void Gun::RemoveBullet(const int &index)
     int size = bullets.size();
     if(index < size && size > 0)
     {
-        bullets.erase(bullets.begin()+index);
         BulletBase* bullet = bullets.at(index);
         if(bullet != NULL)
         {
             delete bullet;
             bullet = NULL;
         }
+        bullets.erase(bullets.begin() + index);
     }
 }

@@ -4,9 +4,9 @@
 
 MainObject::MainObject()
 {
-    hp = 100;
-    is_dead =  false;
+    hp = 210;
     frame_ = 0;
+    dead_frame = 0;
     x_pos_ = 570;
     y_pos_ = 270;
     x_val_ = 0;
@@ -46,9 +46,23 @@ bool MainObject::LoadImg(std::string path, SDL_Renderer* screen)
     {
         width_frame_ = rect_.w/4;
         height_frame_ = rect_.h;
-        rect_.w = width_frame_;
-        rect_.h = height_frame_;
     }
+
+    // LoadImg dead
+    SDL_Surface* surface = IMG_Load("images//player_dead.png");
+    if(surface != NULL)
+    {
+        SDL_SetColorKey(surface,SDL_TRUE ,SDL_MapRGB(surface->format, 167, 175, 180));
+        dead_texture = SDL_CreateTextureFromSurface(screen, surface);
+        if (dead_texture != NULL)
+        {
+            r_dead.w = surface->w/4;
+            r_dead.h = surface->h;
+        }
+
+        SDL_FreeSurface(surface);
+    }
+
     return ret;
 }
 
@@ -76,6 +90,17 @@ void MainObject::set_clips()
         frame_clip_[3].h = height_frame_;
         frame_clip_[3].w = width_frame_;
     }
+
+    if(r_dead.h > 0 && r_dead.w > 0)
+    {
+        for(int i=0;i<4;i++)
+        {
+            dead_frame_clip[i].x = i*r_dead.w;
+            dead_frame_clip[i].y = 0;
+            dead_frame_clip[i].w = r_dead.w;
+            dead_frame_clip[i].h = r_dead.h;
+        }
+    }
 }
 
 void MainObject::Show(SDL_Renderer* des)
@@ -84,19 +109,15 @@ void MainObject::Show(SDL_Renderer* des)
     {
         LoadImg("images//4_direct_move.png", des);
     }
-//    else if (status_ == GO_DOWN || status_ == GO_UP)
-//    {
-//        LoadImg("images//4_direct_move.png", des);
-//    }
+    else if (status_ == GO_DOWN || status_ == GO_UP)
+    {
+        LoadImg("images//4_direct_move.png", des);
+    }
 
 
     if(input_type_.left_ == 1 || input_type_.rigth_ == 1 || input_type_.down_ == 1 || input_type_.up_ == 1)
     {
         frame_++;
-    }
-    else
-    {
-        frame_ = 0;
     }
 
     if(frame_>=4)
@@ -184,7 +205,6 @@ void MainObject::DoPlayer()
 {
     x_val_ = 0;
     y_val_ = 0;
-
     // di chuyen thang
     if(input_type_.left_ == 1 && input_type_.rigth_ == 0 && input_type_.down_ == 0 && input_type_.up_ == 0)
     {
@@ -260,18 +280,39 @@ void MainObject::ShowHPBar(SDL_Renderer *des)
 {
     SDL_Texture *HP_Bar_Inner = IMG_LoadTexture(des, "images//hp_bar_inner.png");
     SDL_Texture *HP_Bar_Outer = IMG_LoadTexture(des, "images//hp_bar_outer.png");
-
-    HP_Bar.HP_Outer.x = 0;
-    HP_Bar.HP_Outer.y = 0;
-    HP_Bar.HP_Outer.h = 32;
-    HP_Bar.HP_Outer.w = 254;
+    SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
 
     HP_Bar.HP_Inner.x = 40;
     HP_Bar.HP_Inner.y = 10;
     HP_Bar.HP_Inner.h = 12;
-    HP_Bar.HP_Inner.w = 210;
+    HP_Bar.HP_Inner.w = hp;
 
-    SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
+
     SDL_RenderCopy(des, HP_Bar_Inner, NULL, &HP_Bar.HP_Inner);
 }
 
+void MainObject::ShowDead(SDL_Renderer *screen)
+{
+    dead_frame++;
+    if(dead_frame>4) dead_frame=0;
+    r_dead.x = x_pos_;
+    r_dead.y = y_pos_;
+
+    SDL_Rect* current_clip = &dead_frame_clip[dead_frame];
+
+    SDL_RenderCopy(screen, dead_texture, current_clip, &r_dead);
+}
+
+bool MainObject::Dead()
+{
+    if(hp<=0)
+    {
+        status_ = 1000;
+        input_type_.down_ = 10;
+        input_type_.up_ = 10;
+        input_type_.rigth_ = 10;
+        input_type_.left_ = 10;
+        return true;
+    }
+    return false;
+}

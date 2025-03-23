@@ -25,7 +25,6 @@ public:
     void set_clips(); // hàm xử lý animation
     void DoPlayer(); // ham xu ly di chuyen
     void Normalize_Motion(float &x_val_, float &y_val_);
-    void CheckDead() {if(hp==0) is_dead = true;}
     void ShowHPBar(SDL_Renderer *des);
 
     float Get_x_pos(){return x_pos_;}
@@ -33,7 +32,9 @@ public:
     float Get_height_frame() {return height_frame_;}
     float Get_width_frame() {return width_frame_;}
     SDL_Rect GetRect() {return rect_;}
-
+    void Minus_Hp_When_Hit(int dame) {hp -= dame;}
+    bool Dead();
+    void ShowDead(SDL_Renderer *screen);
 
 private:
     float x_val_;
@@ -41,21 +42,25 @@ private:
 
     float x_pos_;
     float y_pos_;
-    int hp;
-    bool is_dead;
 
     int width_frame_;
     int height_frame_;
+    int hp;
 
     SDL_Rect frame_clip_[4];
     Input input_type_;
     int frame_;
     int status_;
 
+    SDL_Rect dead_frame_clip[4];
+    int dead_frame;
+    SDL_Rect r_dead;
+    SDL_Texture *dead_texture = NULL;
+
     struct HP_Bar
     {
         SDL_Rect HP_Inner;
-        SDL_Rect HP_Outer;
+        const SDL_Rect HP_Outer ={0,0,254,32};
     }HP_Bar;
 
 };
