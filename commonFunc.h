@@ -7,6 +7,8 @@
 #include <vector>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <time.h>
+#include <stdlib.h>
 
 #define SMALL_ENEMY_FRAME_OFFSET 30
 #define PLAYER_FRAME_OFFSET 26

@@ -7,7 +7,7 @@
 #include "MainObject.h"
 
 #define SMALL_ENEMY_SPEED 1
-#define MAX_SMALL_ENEMIES 10
+#define MAX_SMALL_ENEMIES 30
 #define SMALL_ENEMY_DAME 1
 
 class SmallEnemy : public Player
@@ -20,7 +20,7 @@ public:
     void set_clips();
     void Show(SDL_Renderer *des);
     void Follow(MainObject &player);
-    void SetSpawnPoint(float &X, float &Y);
+    void SetSpawnPoint(int X, int Y);
 
     float Get_X_Pos() {return x_pos;}
     float Get_Y_Pos() {return y_pos;}

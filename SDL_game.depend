@@ -5,9 +5,8 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1742704687 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1742744384 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	<iostream>
-	<stdlib.h>
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
@@ -17,6 +16,7 @@
 	"Gun.h"
 	"BulletBase.h"
 	"Collision.h"
+	"Menu.h"
 
 1739455303 c:\users\dell_pc\desktop\dev\sdl_game\graphic.h
 	<SDL.h>
@@ -24,13 +24,15 @@
 	"commonFunc.h"
 	"logic.h"
 
-1742699797 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
+1742716943 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
 	<iostream>
 	<string>
 	<cmath>
 	<vector>
 	<SDL.h>
 	<SDL_image.h>
+	<time.h>
+	<stdlib.h>
 
 1739454342 c:\users\dell_pc\desktop\dev\sdl_game\logic.h
 
@@ -47,7 +49,7 @@
 	"commonFunc.h"
 	"Player.h"
 
-1742702236 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+1742705260 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
 	"MainObject.h"
 	"commonFunc.h"
 
@@ -67,11 +69,11 @@
 1741314498 c:\users\dell_pc\desktop\dev\sdl_game\small_enemy.h
 	"commonFunc.h"
 
-1742700998 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
+1742716366 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
 	"SmallEnemy.h"
 	"commonFunc.h"
 
-1742700998 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
+1742716366 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
@@ -96,4 +98,10 @@
 
 1742565164 c:\users\dell_pc\desktop\dev\sdl_game\collision.h
 	"commonFunc.h"
+
+1742743321 c:\users\dell_pc\desktop\dev\sdl_game\menu.h
+	"commonFunc.h"
+
+1742743346 source:c:\users\dell_pc\desktop\dev\sdl_game\menu.cpp
+	"Menu.h"
 

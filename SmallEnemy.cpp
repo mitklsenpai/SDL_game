@@ -19,7 +19,7 @@ SmallEnemy::~SmallEnemy()
 {
 }
 
-void SmallEnemy::SetSpawnPoint(float &x, float &y)
+void SmallEnemy::SetSpawnPoint(int x, int y)
 {
     x_pos = x;
     y_pos = y;

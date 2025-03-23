@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stdlib.h>
 #include "commonFunc.h"
 #include "Player.h"
 #include "MainObject.h"
@@ -9,6 +8,7 @@
 #include "Gun.h"
 #include "BulletBase.h"
 #include "Collision.h"
+#include "Menu.h"
 
 
 Player g_background;
@@ -48,13 +48,13 @@ bool InitData()
     return success;
 }
 
-//bool LoadBackground()
-//{
-//    bool ret = g_background.LoadImg("images//dark_space_background" ,g_screen);
-//    if(ret = false)
-//        return false;
-//    return true;
-//}
+bool LoadBackground()
+{
+    bool ret = g_background.LoadImg("images//back_ground.png" ,g_screen);
+    if(ret = false)
+        return false;
+    return true;
+}
 
 void close()
 {
@@ -81,18 +81,17 @@ std::vector<SmallEnemy*> SmallEnemySpawner()
         SmallEnemy* object = smallenemy + i;
         if(object != NULL)
         {
-            float rand_x = rand()%1280;
-            float rand_y = rand()%640;
+            int x = rand()%1281;
+            int y = rand()%681;
             object->LoadImg("images//Run_Left.png", g_screen);
             object->set_clips();
-            object->SetSpawnPoint(rand_x,rand_y);
+            object->SetSpawnPoint(x,y);
 
             SmallSpawner.push_back(object);
         }
     }
     return SmallSpawner;
 }
-
 
 //Ham main
 int main(int argc, char* argv[])
@@ -102,38 +101,36 @@ int main(int argc, char* argv[])
     if(InitData()==false)
         return -1;
 
-//    if(LoadBackground() == false)
-//        return -1;
+    if(LoadBackground() == false)
+        return -1;
+    g_background.Render(g_screen, NULL);
 
-
-    // Load animation cho Nhan vat
+    // Nhan vat
     MainObject p_player;
     p_player.LoadImg("images//4_direct_move.png", g_screen);
     p_player.set_clips();
 
-    //Load sung
+    // sung
     Gun gun;
     gun.LoadImg("images//shot_gun.png", g_screen);
 
-    // Spawn Small_enemy + rect quai
+    // Spawn Small_enemy
     std::vector<SmallEnemy*> SmallSpawner = SmallEnemySpawner();
     bool is_clear_ = false;
 
-    //Check va cham
+    // va cham
     Collision collision;
-
 
     // Load map anh
     GameMap game_map;
     game_map.LoadMap("map/map01.dat");
     game_map.LoadTiles(g_screen);
-
+    Menu menu;
     // Vong lap game
     bool is_quit = false;
     while(!is_quit)
     {
         fps_timer.start(); // chay dong ho
-
 
         while (SDL_PollEvent(&g_event)!=0)
         {
@@ -144,111 +141,121 @@ int main(int argc, char* argv[])
 
             p_player.HandleInputAction(g_event,g_screen);
             gun.HandleMouseEvents(g_event, g_screen);
-
+            menu.HandleMouseHover(g_event);
+            menu.In_Which_Button(g_event);
         }
-
-        SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
-        SDL_RenderClear(g_screen);
-
-        g_background.Render(g_screen, NULL);
-
-        // ve map
-        game_map.DrawMap(g_screen);
-
-
-        // chay chuyen dong cho nhan vat
-        p_player.DoPlayer();
-        p_player.Show(g_screen);
-        p_player.ShowHPBar(g_screen);
-
-        //sung
-        gun.Rotation(p_player,g_screen);
-        gun.SetBullet();
-        gun.ShowBullet(g_screen);
-
-        //chuyen dong + show animation cho SmallEnemy
-        for(int i=0;i<(int)SmallSpawner.size();i++)
+        if(menu.Is_Menu())
         {
-            SmallEnemy* smallenemy = SmallSpawner.at(i);
-            if(smallenemy!=NULL)
+            menu.set_clips();
+            menu.LoadImg(g_screen);
+            menu.RenderPlay(g_screen);
+            menu.RenderLogo(g_screen);
+        }
+        else
+        {
+            SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
+            SDL_RenderClear(g_screen);
+
+            // ve map
+            game_map.DrawMap(g_screen);
+
+
+            // chay chuyen dong cho nhan vat
+            p_player.DoPlayer();
+            p_player.Show(g_screen);
+            p_player.ShowHPBar(g_screen);
+
+            //sung
+            gun.Rotation(p_player,g_screen);
+            gun.SetBullet();
+            gun.ShowBullet(g_screen);
+
+            //chuyen dong + show animation cho SmallEnemy
+            if(SmallSpawner.size() < 0.3 * MAX_SMALL_ENEMIES)
             {
-                smallenemy->Show(g_screen);
-                smallenemy->Follow(p_player);
+                SmallSpawner = SmallEnemySpawner();
             }
-        }
-
-        // va cham dan + quai
-        std::vector<BulletBase*> bullet_list = gun.Get_Bullets();
-        for(int i=0; i<(int)bullet_list.size(); i++)
-        {
-            BulletBase *bullet = bullet_list.at(i);
-            if(bullet != NULL)
+            for(int i=0;i<(int)SmallSpawner.size();i++)
             {
-                for(int j=0; j<(int)SmallSpawner.size(); j++)
+                SmallEnemy* smallenemy = SmallSpawner.at(i);
+                if(smallenemy!=NULL)
                 {
-                    SmallEnemy* smallenemy = SmallSpawner.at(j);
-                    SDL_Rect r_bullet, r_small_enemy;
+                    smallenemy->Show(g_screen);
+                    smallenemy->Follow(p_player);
+                }
+            }
 
-                    r_small_enemy.x = smallenemy->Get_X_Pos();
-                    r_small_enemy.y = smallenemy->Get_Y_Pos();
-                    r_small_enemy.w = smallenemy->Get_Width_Frame();
-                    r_small_enemy.h = smallenemy->Get_Height_Frame();
-
-                    r_bullet.x = bullet->x_pos;
-                    r_bullet.y = bullet->y_pos;
-                    r_bullet.w = 10;
-                    r_bullet.h = 10;
-
-                    bool enemy_bullet = collision.CheckCollision(r_small_enemy,r_bullet);
-                    if(enemy_bullet)
+            // va cham dan + quai
+            std::vector<BulletBase*> bullet_list = gun.Get_Bullets();
+            for(int i=0; i<(int)bullet_list.size(); i++)
+            {
+                BulletBase *bullet = bullet_list.at(i);
+                if(bullet != NULL)
+                {
+                    for(int j=0; j<(int)SmallSpawner.size(); j++)
                     {
-                        gun.RemoveBullet(i);
-                        smallenemy->Free();
-                        SmallSpawner.erase(SmallSpawner.begin() + j);
-                        smallenemy = NULL;
+                        SmallEnemy* smallenemy = SmallSpawner.at(j);
+                        SDL_Rect r_bullet, r_small_enemy;
+
+                        r_small_enemy.x = smallenemy->Get_X_Pos();
+                        r_small_enemy.y = smallenemy->Get_Y_Pos();
+                        r_small_enemy.w = smallenemy->Get_Width_Frame();
+                        r_small_enemy.h = smallenemy->Get_Height_Frame();
+
+                        r_bullet.x = bullet->x_pos;
+                        r_bullet.y = bullet->y_pos;
+                        r_bullet.w = 10;
+                        r_bullet.h = 10;
+
+                        bool enemy_bullet = collision.CheckCollision(r_small_enemy,r_bullet);
+                        if(enemy_bullet)
+                        {
+                            gun.RemoveBullet(i);
+                            smallenemy->Free();
+                            SmallSpawner.erase(SmallSpawner.begin() + j);
+                            smallenemy = NULL;
+                        }
+                        if(is_clear_)
+                        {
+                            bullet_list.clear();
+                        }
                     }
+                }
+            }
+
+            // va cham nguoi choi va quai
+            for(int i=0;i<(int) SmallSpawner.size(); i++)
+            {
+                SmallEnemy *smallenemy = SmallSpawner.at(i);
+
+                SDL_Rect r_enemy, r_player;
+                r_enemy = {smallenemy->Get_X_Pos(), smallenemy->Get_Y_Pos(),
+                           smallenemy->Get_Width_Frame()-SMALL_ENEMY_FRAME_OFFSET,
+                           smallenemy->Get_Height_Frame()-SMALL_ENEMY_FRAME_OFFSET};
+
+                r_player = {p_player.Get_x_pos(), p_player.Get_y_pos(),
+                            p_player.Get_width_frame()-PLAYER_FRAME_OFFSET,
+                            p_player.Get_height_frame()-PLAYER_FRAME_OFFSET};
+
+                bool enemy_player = collision.CheckCollision(r_enemy, r_player);
+                if(enemy_player)
+                {
+                    p_player.Minus_Hp_When_Hit(SMALL_ENEMY_DAME);
                     if(is_clear_)
                     {
-                        bullet_list.clear();
+                        SmallSpawner.clear();
+                        break;
                     }
                 }
             }
-        }
-
-        // va cham nguoi choi va quai
-        for(int i=0;i<(int) SmallSpawner.size(); i++)
-        {
-            SmallEnemy *smallenemy = SmallSpawner.at(i);
-
-            SDL_Rect r_enemy, r_player;
-            r_enemy = {smallenemy->Get_X_Pos(), smallenemy->Get_Y_Pos(),
-                       smallenemy->Get_Width_Frame()-SMALL_ENEMY_FRAME_OFFSET,
-                       smallenemy->Get_Height_Frame()-SMALL_ENEMY_FRAME_OFFSET};
-
-            r_player = {p_player.Get_x_pos(), p_player.Get_y_pos(),
-                        p_player.Get_width_frame()-PLAYER_FRAME_OFFSET,
-                        p_player.Get_height_frame()-PLAYER_FRAME_OFFSET};
-
-            bool enemy_player = collision.CheckCollision(r_enemy, r_player);
-            if(enemy_player)
+            if(p_player.Dead())
             {
-                p_player.Minus_Hp_When_Hit(SMALL_ENEMY_DAME);
-                if(is_clear_)
-                {
-                    SmallSpawner.clear();
-                    break;
-                }
+                is_clear_ = true;
+                p_player.Free();
+                gun.Free();
+                p_player.ShowDead(g_screen);
             }
         }
-        if(p_player.Dead())
-        {
-            is_clear_ = true;
-            p_player.Free();
-            gun.Free();
-            p_player.ShowDead(g_screen);
-        }
-
-
 
         SDL_RenderPresent(g_screen);
 
