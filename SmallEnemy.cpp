@@ -1,7 +1,6 @@
 
 #include "SmallEnemy.h";
 #include "commonFunc.h"
-
 SmallEnemy::SmallEnemy()
 {
     x_pos = 0;
@@ -12,30 +11,42 @@ SmallEnemy::SmallEnemy()
     height_frame_ = 0;
 
     is_move = false;
-    hp = 50;
+
+
 }
 
 SmallEnemy::~SmallEnemy()
 {
 }
 
-void SmallEnemy::SetSpawnPoint(int x, int y)
+bool SmallEnemy::LoadImg(std::string path, SDL_Renderer *des)
 {
-    x_pos = x;
-    y_pos = y;
-}
-
-bool SmallEnemy::LoadImg(std::string path, SDL_Renderer* screen)
-{
-    bool ret = Player::LoadImg(path, screen);
-
-    if(ret == true)
+    bool ret = Player::LoadImg(path,des);
+    if(ret)
     {
-        width_frame_ = rect_.w/6;   // thông tin về 1 frame quai vat
+        width_frame_ = rect_.w/6;
         height_frame_ = rect_.h;
     }
     return ret;
 }
+
+void SmallEnemy::SetSpawnPoint(SDL_Point &position)
+{
+    x_pos = position.x;
+    y_pos = position.y;
+}
+
+SDL_Rect SmallEnemy::GetRect()
+{
+    SDL_Rect r_;
+    r_.x = x_pos;
+    r_.y = y_pos;
+    r_.h = height_frame_;
+    r_.w = width_frame_;
+
+    return r_;
+}
+
 
 void SmallEnemy::set_clips()
 {
@@ -51,25 +62,20 @@ void SmallEnemy::set_clips()
     }
 }
 
-void SmallEnemy::Show(SDL_Renderer* des)
+void SmallEnemy::Show(SDL_Renderer* screen)
 {
     if(is_move)
     {
-        LoadImg("images//Run_Right.png", des);
+        LoadImg("images//Run_Right.png", screen);
     }
 
     if(is_move)
     {
         frame_++;
-    }
-    else
-    {
-        frame_ = 0;
-    }
-
-    if(frame_ > 6)
-    {
-        frame_ = 0;
+        if(frame_ > 6)
+        {
+            frame_ = 0;
+        }
     }
 
     rect_.x = x_pos;
@@ -78,8 +84,7 @@ void SmallEnemy::Show(SDL_Renderer* des)
     SDL_Rect* current_clip = &frame_clips[frame_];  // hàm lấy thông tin của frame hiện tại
 
     SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};  // hàm lấy thông tin của frame (vị trí frame, kích thước)
-
-    SDL_RenderCopy(des, p_object_, current_clip, &renderQuad);  // hàm chạy animation
+    SDL_RenderCopy(screen, p_object_, current_clip, &renderQuad);
 }
 
 void SmallEnemy::Follow(MainObject &player)

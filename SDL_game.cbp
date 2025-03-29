@@ -36,14 +36,14 @@
 		<Unit filename="BulletBase.h" />
 		<Unit filename="Collision.cpp" />
 		<Unit filename="Collision.h" />
+		<Unit filename="Game.cpp" />
+		<Unit filename="Game.h" />
 		<Unit filename="Gun.cpp" />
 		<Unit filename="Gun.h" />
 		<Unit filename="MainObject.cpp" />
 		<Unit filename="MainObject.h" />
 		<Unit filename="Map.cpp" />
 		<Unit filename="Map.h" />
-		<Unit filename="Menu.cpp" />
-		<Unit filename="Menu.h" />
 		<Unit filename="Player.cpp" />
 		<Unit filename="Player.h" />
 		<Unit filename="SmallEnemy.cpp" />

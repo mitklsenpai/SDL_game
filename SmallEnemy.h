@@ -6,28 +6,62 @@
 #include "Player.h"
 #include "MainObject.h"
 
+
 #define SMALL_ENEMY_SPEED 1
-#define MAX_SMALL_ENEMIES 30
-#define SMALL_ENEMY_DAME 1
+#define MAX_SMALL_ENEMIES 40
+#define SMALL_ENEMY_DAME 2
+
+
 
 class SmallEnemy : public Player
 {
 public:
     SmallEnemy();
     ~SmallEnemy();
+    SDL_Point Make_random_point()
+    {
+        SDL_Point p;
+        int a = rand()%SCREEN_WIDTH;
+        int b = rand()%SCREEN_HEIGHT;
+        p.x = a; p.y = b;
+        return p;
+    }
 
-    bool LoadImg(std::string path, SDL_Renderer *screen);
     void set_clips();
     void Show(SDL_Renderer *des);
     void Follow(MainObject &player);
-    void SetSpawnPoint(int X, int Y);
+    void SetSpawnPoint(SDL_Point &position);
+    SDL_Rect GetRect();
 
     float Get_X_Pos() {return x_pos;}
     float Get_Y_Pos() {return y_pos;}
     int Get_Height_Frame() {return height_frame_;}
     int Get_Width_Frame() {return width_frame_;}
+    bool LoadImg(std::string path, SDL_Renderer *screen);
+
+    std::vector<SmallEnemy*> Make_S_Spawner()
+{
+    std::vector<SmallEnemy*> SmallSpawner;
+
+    SmallEnemy* smallenemy = new SmallEnemy[MAX_SMALL_ENEMIES];
+    for(int i=0;i<MAX_SMALL_ENEMIES;i++)
+    {
+        SmallEnemy* object = smallenemy + i;
+
+        if(object != NULL)
+        {
+            SDL_Point random = Make_random_point();
+            object->LoadImg("images//Run_Right.png",g_screen);
+            object->set_clips();
+            object->SetSpawnPoint(random);
+            SmallSpawner.push_back(object);
+        }
+    }
+    return SmallSpawner;
+}
 
 private:
+
     float x_pos;
     float y_pos;
 

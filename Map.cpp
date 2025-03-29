@@ -103,3 +103,4 @@ void GameMap::DrawMap(SDL_Renderer* screen)
     }
 }
 
+

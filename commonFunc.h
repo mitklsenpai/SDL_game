@@ -5,18 +5,23 @@
 #include <string>
 #include <cmath>
 #include <vector>
+#include <iomanip>
 #include <SDL.h>
 #include <SDL_image.h>
-#include <time.h>
-#include <stdlib.h>
+#include <SDL_ttf.h>
+
 
 #define SMALL_ENEMY_FRAME_OFFSET 30
 #define PLAYER_FRAME_OFFSET 26
 
+const int SCREEN_HEIGHT_MID = 320;
+const int SCREEN_WIDTH_MID = 640;
+const int SPAWN_RADIUS = 300;
 
 static SDL_Window* g_window = NULL;
 static SDL_Renderer* g_screen = NULL;
 static SDL_Event g_event;
+static TTF_Font* g_font;
 
 
 // Thiet lap man hinh

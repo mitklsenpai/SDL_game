@@ -6,7 +6,7 @@
 
 #define PLAYER_SPEED 5
 
-class MainObject : public Player // tái sử dụng hàm class Player
+class MainObject : public Player
 {
 public:
     MainObject();
@@ -20,10 +20,10 @@ public:
         GO_DOWN = 3
     };
     bool LoadImg(std::string path, SDL_Renderer* screen);
-    void Show(SDL_Renderer* des);// ham trinh chieu animation
-    void HandleInputAction(SDL_Event svents, SDL_Renderer* screen); // hàm xử lý sự kiện
-    void set_clips(); // hàm xử lý animation
-    void DoPlayer(); // ham xu ly di chuyen
+    void Show(SDL_Renderer* des);
+    void HandleInputAction(SDL_Event svents, SDL_Renderer* screen);
+    void set_clips();
+    void DoPlayer();
     void Normalize_Motion(float &x_val_, float &y_val_);
     void ShowHPBar(SDL_Renderer *des);
 
@@ -34,7 +34,8 @@ public:
     SDL_Rect GetRect() {return rect_;}
     void Minus_Hp_When_Hit(int dame) {hp -= dame;}
     bool Dead();
-    void ShowDead(SDL_Renderer *screen);
+    void Score(SDL_Renderer *des, TTF_Font *font);
+    void Set_score() {score++;}
 
 private:
     float x_val_;
@@ -51,11 +52,7 @@ private:
     Input input_type_;
     int frame_;
     int status_;
-
-    SDL_Rect dead_frame_clip[4];
-    int dead_frame;
-    SDL_Rect r_dead;
-    SDL_Texture *dead_texture = NULL;
+    int score;
 
     struct HP_Bar
     {
