@@ -83,7 +83,8 @@ void SmallEnemy::Show(SDL_Renderer* screen)
 
     SDL_Rect* current_clip = &frame_clips[frame_];  // hàm lấy thông tin của frame hiện tại
 
-    SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};  // hàm lấy thông tin của frame (vị trí frame, kích thước)
+//    SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};  // hàm lấy thông tin của frame (vị trí frame, kích thước)
+    SDL_Rect renderQuad = {rect_.x, rect_.y, 48, 48};
     SDL_RenderCopy(screen, p_object_, current_clip, &renderQuad);
 }
 

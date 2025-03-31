@@ -51,7 +51,7 @@ public:
         if(object != NULL)
         {
             SDL_Point random = Make_random_point();
-            object->LoadImg("images//Run_Right.png",g_screen);
+            object->LoadImg("images/Run_Right.png", g_screen);
             object->set_clips();
             object->SetSpawnPoint(random);
             SmallSpawner.push_back(object);
@@ -59,6 +59,11 @@ public:
     }
     return SmallSpawner;
 }
+
+
+//
+//    SDL_Texture *sharedTex = NULL;
+//    void SetTex(SDL_Texture *tex) {sharedTex = tex;}
 
 private:
 
