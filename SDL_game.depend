@@ -5,7 +5,7 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1743261832 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1745143227 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
@@ -44,11 +44,11 @@
 	"commonFunc.h"
 	"Player.h"
 
-1743253456 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+1745141688 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
 	"commonFunc.h"
 	"Player.h"
 
-1743253189 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+1745141719 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
 	"MainObject.h"
 	"commonFunc.h"
 
@@ -68,7 +68,7 @@
 1741314498 c:\users\dell_pc\desktop\dev\sdl_game\small_enemy.h
 	"commonFunc.h"
 
-1743261832 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
+1743261871 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
 	"SmallEnemy.h"
 	"commonFunc.h"
 
@@ -115,7 +115,7 @@
 	"Player.h"
 	"commonFunc.h"
 
-1743253456 c:\users\dell_pc\desktop\dev\sdl_game\game.h
+1745142302 c:\users\dell_pc\desktop\dev\sdl_game\game.h
 	"commonFunc.h"
 	"MainObject.h"
 	"Gun.h"
@@ -123,6 +123,6 @@
 	"BulletBase.h"
 	"SmallEnemy.h"
 
-1743253456 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
+1745143420 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
 	"Game.h"
 

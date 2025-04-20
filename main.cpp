@@ -1,4 +1,3 @@
-
 #include "commonFunc.h"
 #include "Player.h"
 #include "MainObject.h"
@@ -11,7 +10,6 @@
 #include "Game.h"
 
 Player g_background;
-
 bool InitData()
 {
     bool success = true;
@@ -58,13 +56,11 @@ bool InitData()
     }
     return success;
 }
-
 bool LoadBackground()
 {
     bool ret = g_background.LoadImg("images//back_ground.png" ,g_screen);
     return ret;
 }
-
 void close()
 {
     g_background.Free();
@@ -82,35 +78,25 @@ void close()
     IMG_Quit();
     SDL_QUIT;
 }
-
-
 //Ham main
 int main(int argc, char* argv[])
 {
-
     ImpTimer fps_timer;
     SmallEnemy smallenemy;
     if(InitData()==false)
         return -1;
-
     if(LoadBackground() == false)
         return -1;
-
-    g_background.Render(g_screen, NULL);
 
     // Nhan vat
     MainObject p_player;
     p_player.LoadImg("images//4_direct_move.png", g_screen);
     p_player.set_clips();
-
     // sung
     Gun gun;
     gun.LoadImg("images//shot_gun.png", g_screen);
-
     // Spawn Small_enemy
     std::vector<SmallEnemy*> SmallSpawner = smallenemy.Make_S_Spawner();
-
-
     // Load map anh
     GameMap game_map;
     game_map.LoadMap("map/map01.dat");
@@ -137,17 +123,16 @@ int main(int argc, char* argv[])
             }
         }
         if(game.Is_Menu())
+        {
+            g_background.Render(g_screen, NULL);
             game.RenderStartMenu(g_screen);
+        }
         else if(!game.Is_Menu())
         {
-            g_background.Free();
-            game.FreePlayButton();
             SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
             SDL_RenderClear(g_screen);
-
             // ve map
             game_map.DrawMap(g_screen);
-
             // chay chuyen dong cho nhan vat
             p_player.DoPlayer();
             p_player.Show(g_screen);
@@ -178,16 +163,15 @@ int main(int argc, char* argv[])
             if(SmallSpawner.size() < 0.1 * MAX_SMALL_ENEMIES && !p_player.Dead())
             {
                 std::vector<SmallEnemy*> newSpawner = smallenemy.Make_S_Spawner();
-                int maxSpawn = 10; // Chỉ thêm tối đa 5 quái mỗi lần
+                int maxSpawn = 20;
                 int numToAdd = std::min((int)newSpawner.size(), maxSpawn);
 
                 SmallSpawner.insert(SmallSpawner.end(), newSpawner.begin(), newSpawner.begin() + numToAdd);
             }
             if(p_player.Dead())
             {
-                SmallSpawner.clear();
                 player_event = false;
-                game.YouLose(g_screen, g_font);
+                game.Replay(g_screen, g_font, player_event, is_quit, p_player, SmallSpawner);
             }
         }
 
@@ -209,4 +193,4 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-;
+

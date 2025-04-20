@@ -266,9 +266,7 @@ void MainObject::ShowHPBar(SDL_Renderer *des)
 bool MainObject::Dead()
 {
     if(hp<=0)
-    {
         return true;
-    }
     return false;
 }
 

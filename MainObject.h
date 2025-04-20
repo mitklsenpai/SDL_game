@@ -36,6 +36,10 @@ public:
     bool Dead();
     void Score(SDL_Renderer *des, TTF_Font *font);
     void Set_score() {score++;}
+    void Reset_status() {
+        score = 0;
+        hp = 210;
+    }
 
 private:
     float x_val_;
@@ -47,6 +51,7 @@ private:
     int width_frame_;
     int height_frame_;
     int hp;
+    bool is_dead;
 
     SDL_Rect frame_clip_[4];
     Input input_type_;

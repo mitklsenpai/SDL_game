@@ -4,6 +4,9 @@
 Game::Game()
 {
     p_play.x = 544; p_play.y = 400;
+    p_replay.x = 544; p_replay.y = 272;
+    p_quit.x = 544; p_quit.y = 388;
+    P_YouLose.x = 544; P_YouLose.y = 100;
 }
 
 Game::~Game()
@@ -38,12 +41,26 @@ switch(event.type)
                         pressed[0] = true;
                     }
                 }
+                else
+                {
+                    if(CheckButton(p_replay))
+                    {
+                        pressed[1] = true;
+                    }
+                    else if(CheckButton(p_quit))
+                    {
+                        pressed[2] = true;
+                    }
+                }
             }
             break;
         }
         case SDL_MOUSEBUTTONUP:
         {
-            pressed[0] = false;
+            for(int i=0;i<3;i++)
+            {
+                pressed[i] = false;
+            }
             break;
         }
         case SDL_MOUSEMOTION:
@@ -54,11 +71,38 @@ switch(event.type)
                 if(CheckButton(p_play))
                 {
                     play_button_frame++;
-                    if(play_button_frame>3)
-                        play_button_frame = 0;
+                    if(play_button_frame == 3)
+                    {
+                        play_button_frame = 2;
+                    }
                 }
                 else
+                {
                     play_button_frame = 0;
+                }
+            }
+            else
+            {
+                if(CheckButton(p_replay))
+                {
+                   replay_button_frame++;
+                   if(replay_button_frame == 3)
+                        replay_button_frame = 2;
+                }
+                else
+                {
+                    replay_button_frame = 0;
+                }
+                if(CheckButton(p_quit))
+                {
+                    quit_button_frame++;
+                    if(quit_button_frame == 3)
+                        quit_button_frame = 2;
+                }
+                else
+                {
+                    quit_button_frame = 0;
+                }
             }
             break;
         }
@@ -71,50 +115,76 @@ switch(event.type)
 
 void Game::RenderStartMenu(SDL_Renderer *des)
 {
-    for(int i=0;i<3;i++)
-    {
-        Play_button_clips[i].x = WIDTH_BUTTON*i;
-        Play_button_clips[i].y = 0;
-        Play_button_clips[i].w = WIDTH_BUTTON;
-        Play_button_clips[i].h = HEIGH_BUTTON;
-    }
-
-    play_button = IMG_LoadTexture(des,"images//Play_button.png");
+    Setclip_and_Render(des, p_play, play_button, r_play_button, play_button_frame, "images//Play_button.png");
     Logo = IMG_LoadTexture(des, "images//Logo.png");
-
-    r_play_button.h = HEIGH_BUTTON;
-    r_play_button.w = WIDTH_BUTTON;
-    r_play_button.x = 544;
-    r_play_button.y = 400;
-
-    SDL_Rect *current_frame = &Play_button_clips[play_button_frame];
-    SDL_RenderCopy(des,play_button,current_frame,&r_play_button);
     SDL_RenderCopy(des,Logo,NULL,&r_logo);
 }
 
-void Game::FreePlayButton()
+void Game::Setclip_and_Render(SDL_Renderer *des, SDL_Point &point, SDL_Texture *&texture, SDL_Rect &button_rect, int &frame, const char* name)
 {
-    if(play_button!=NULL)
+    SDL_Rect button_clips[3];
+    for(int i=0;i<3;i++)
     {
-        SDL_DestroyTexture(play_button);
-        SDL_DestroyTexture(Logo);
-        play_button = NULL;
-        Logo = NULL;
-        r_play_button.w = 0;
-        r_play_button.h = 0;
+        button_clips[i].x = WIDTH_BUTTON*i;
+        button_clips[i].y = 0;
+        button_clips[i].w = WIDTH_BUTTON;
+        button_clips[i].h = HEIGH_BUTTON;
+    }
+    if(texture == NULL)
+    {
+        texture = IMG_LoadTexture(des, name);
+    }
+    button_rect = {point.x, point.y, WIDTH_BUTTON, HEIGH_BUTTON};
+    SDL_Rect *current_frame = &button_clips[frame];
+    SDL_RenderCopy(des, texture, current_frame, &button_rect);
+}
+
+void Game::FreeButton(SDL_Texture*& texture, SDL_Rect &rect)
+{
+    if(texture!=nullptr)
+    {
+        SDL_DestroyTexture(texture);
+        texture = nullptr;
+        rect.w = 0;
+        rect.h = 0;
     }
 }
 
-void Game::YouLose(SDL_Renderer *des, TTF_Font *font)
+SDL_Texture* Game::Render_Text(SDL_Renderer *des, TTF_Font *font, const char *text, SDL_Point point)
 {
     SDL_Color textColor = { 255, 0, 0 }; // Màu đỏ
-    SDL_Surface* textSurface = TTF_RenderText_Solid(font, "YOU LOSE", textColor);
+
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text, textColor);
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(des, textSurface);
 
-    SDL_Rect textRect = {640, 320, textSurface->w, textSurface->h };
+    SDL_Rect textRect = {point.x, point.y, textSurface->w, textSurface->h };
     SDL_RenderCopy(des, textTexture, NULL, &textRect);
 
     SDL_FreeSurface(textSurface);
-    SDL_DestroyTexture(textTexture);
+
+    return textTexture;
 }
 
+void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner)
+{
+    SDL_Texture* Youlose = Render_Text(des, font, "YOU LOSE", P_YouLose);
+    Setclip_and_Render(des, p_replay, Replay_button, r_replay_button, replay_button_frame, "images//Replay_button.png");
+    Setclip_and_Render(des, p_quit, Quit_button, r_quit_button, quit_button_frame, "images//Quit_button.png");
+    game_event = false;
+    Spawner.clear();
+
+    if(pressed[1] == true)
+    {
+        FreeButton(Replay_button, r_replay_button);
+        FreeButton(Quit_button, r_quit_button);
+        SDL_DestroyTexture(Youlose);
+        Youlose = NULL;
+        player.Reset_status();
+        game_event = true;
+        menu = true;
+    }
+    if(pressed[2] == true)
+    {
+        is_quit = true;
+    }
+}
