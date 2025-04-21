@@ -24,6 +24,7 @@ public:
     void Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner);
     SDL_Texture* Render_Text(SDL_Renderer *des, TTF_Font *font, const char *text, SDL_Point point);
     void Setclip_and_Render(SDL_Renderer *des, SDL_Point &point, SDL_Texture *&texture, SDL_Rect &button_rect, int &frame,const char* name);
+
 private:
     const int WIDTH_BUTTON = 192;
     const int HEIGH_BUTTON = 96;

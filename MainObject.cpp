@@ -18,6 +18,9 @@ MainObject::MainObject()
     input_type_.rigth_ = 0;
     input_type_.down_ = 0;
     input_type_.up_ = 0;
+    LEVEL = 0;
+    MAX_EXP = 10;
+    G_EXP = 0;
 }
 
 
@@ -249,18 +252,37 @@ void MainObject::DoPlayer()
 
 }
 
-void MainObject::ShowHPBar(SDL_Renderer *des)
+void MainObject::ShowBar(SDL_Renderer *des)
 {
     SDL_Texture *HP_Bar_Inner = IMG_LoadTexture(des, "images//hp_bar_inner.png");
     SDL_Texture *HP_Bar_Outer = IMG_LoadTexture(des, "images//hp_bar_outer.png");
+    SDL_Texture *Exp_Bar_Outer = IMG_LoadTexture(des, "images//experience_bar_background.png");
+    SDL_Texture *Exp_Bar_Inner = IMG_LoadTexture(des, "images//experience_bar_progress.png");
+
     SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
+    SDL_RenderCopy(des, Exp_Bar_Outer, NULL, &Exp_Bar.Exp_Outer);
 
     HP_Bar.HP_Inner.x = 40;
     HP_Bar.HP_Inner.y = 10;
     HP_Bar.HP_Inner.h = 12;
     HP_Bar.HP_Inner.w = hp;
 
+    double percent_progress = (double)G_EXP/MAX_EXP;
+    double progress = 254.0*percent_progress;
+
+    Exp_Bar.Exp_Inner.x = 0;
+    Exp_Bar.Exp_Inner.y = 30;
+    Exp_Bar.Exp_Inner.w = (int)progress;
+    Exp_Bar.Exp_Inner.h = 8;
+
+    SDL_RenderCopy(des, Exp_Bar_Inner, NULL, &Exp_Bar.Exp_Inner);
     SDL_RenderCopy(des, HP_Bar_Inner, NULL, &HP_Bar.HP_Inner);
+    if(G_EXP >= MAX_EXP)
+    {
+        LEVEL++;
+        G_EXP = 0;
+        MAX_EXP = MAX_EXP * pow(1.5f, LEVEL - 1);
+    }
 }
 
 bool MainObject::Dead()
@@ -274,7 +296,7 @@ void MainObject::Score(SDL_Renderer *des, TTF_Font *font)
 {
     std::string s = std::to_string(score);
     SDL_Color textColor = { 0, 0, 0 }; // Màu đỏ
-    SDL_Surface* textSurface = TTF_RenderText_Solid(font, "SCORE:", textColor);
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, "KILLS: ", textColor);
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(des, textSurface);
 
     SDL_Surface* Surface = TTF_RenderText_Solid(font, s.c_str(), textColor);

@@ -8,6 +8,7 @@
 #include "BulletBase.h"
 #include "Collision.h"
 #include "Game.h"
+#include "Nuke.h"
 
 Player g_background;
 bool InitData()
@@ -78,6 +79,7 @@ void close()
     IMG_Quit();
     SDL_QUIT;
 }
+
 //Ham main
 int main(int argc, char* argv[])
 {
@@ -97,18 +99,20 @@ int main(int argc, char* argv[])
     gun.LoadImg("images//shot_gun.png", g_screen);
     // Spawn Small_enemy
     std::vector<SmallEnemy*> SmallSpawner = smallenemy.Make_S_Spawner();
+    std::vector<Exp*> Exp_List;
     // Load map anh
     GameMap game_map;
     game_map.LoadMap("map/map01.dat");
     game_map.LoadTiles(g_screen);
     Game game;
+    // Nuke
+    NukeManager nukemanager(g_screen);
     // Vong lap game
     bool is_quit = false;
     bool player_event = true;
     while(!is_quit)
     {
         fps_timer.start(); // chay dong ho
-
         while (SDL_PollEvent(&g_event)!=0)
         {
             if(g_event.type == SDL_QUIT)
@@ -129,6 +133,7 @@ int main(int argc, char* argv[])
         }
         else if(!game.Is_Menu())
         {
+
             SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
             SDL_RenderClear(g_screen);
             // ve map
@@ -136,7 +141,7 @@ int main(int argc, char* argv[])
             // chay chuyen dong cho nhan vat
             p_player.DoPlayer();
             p_player.Show(g_screen);
-            p_player.ShowHPBar(g_screen);
+            p_player.ShowBar(g_screen);
             p_player.Score(g_screen, g_font);
             //sung
             gun.Rotation(p_player,g_screen);
@@ -152,13 +157,18 @@ int main(int argc, char* argv[])
                     smallenemy->Follow(p_player);
                 }
             }
+
+            nukemanager.updateBomb();
+            nukemanager.Render(g_screen);
+
             // va cham
             Collision collision;
-            if(collision.Col_bullet_enemy(SmallSpawner,gun))
+            if(collision.Col_bullet_enemy(SmallSpawner,gun, Exp_List, g_screen))
             {
                 p_player.Set_score();
             }
             collision.Col_player_enemy(SmallSpawner,p_player);
+            collision.Col_player_exp(Exp_List, p_player, g_screen);
 
             if(SmallSpawner.size() < 0.1 * MAX_SMALL_ENEMIES && !p_player.Dead())
             {

@@ -9,18 +9,16 @@ public:
     Player();
     ~Player();
 
-// ham set kich thuoc
     void SetRect(const int& x, const int& y)
     {
         rect_.x = x;
         rect_.y = y;
     }
     SDL_Texture* GetObject() const {return p_object_;} // ham lay ra p_object
-
-// ham load anh
+    void Render(SDL_Renderer *des, const SDL_Rect* clips = NULL);
+    void Render(SDL_Renderer *des, SDL_Texture* texture, const SDL_Rect &rect);
     virtual bool LoadImg(std::string path, SDL_Renderer* screen);
-// ham render anh
-    void Render(SDL_Renderer* des, const SDL_Rect* clip = NULL);
+    SDL_Texture* Loadimg(std::string path, SDL_Renderer* screen);
     void Free();
 
 

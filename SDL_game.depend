@@ -5,7 +5,7 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1745143227 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1745253602 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
@@ -16,6 +16,7 @@
 	"BulletBase.h"
 	"Collision.h"
 	"Game.h"
+	"Nuke.h"
 
 1739455303 c:\users\dell_pc\desktop\dev\sdl_game\graphic.h
 	<SDL.h>
@@ -23,7 +24,7 @@
 	"commonFunc.h"
 	"logic.h"
 
-1743252070 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
+1745234761 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
 	<iostream>
 	<string>
 	<cmath>
@@ -37,18 +38,18 @@
 
 1739454167 source:c:\users\dell_pc\desktop\dev\sdl_game\logic.cpp
 
-1742520221 c:\users\dell_pc\desktop\dev\sdl_game\player.h
+1745241007 c:\users\dell_pc\desktop\dev\sdl_game\player.h
 	"commonFunc.h"
 
-1742181645 source:c:\users\dell_pc\desktop\dev\sdl_game\player.cpp
-	"commonFunc.h"
-	"Player.h"
-
-1745141688 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+1745241083 source:c:\users\dell_pc\desktop\dev\sdl_game\player.cpp
 	"commonFunc.h"
 	"Player.h"
 
-1745141719 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+1745234864 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+	"commonFunc.h"
+	"Player.h"
+
+1745235566 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
 	"MainObject.h"
 	"commonFunc.h"
 
@@ -68,11 +69,11 @@
 1741314498 c:\users\dell_pc\desktop\dev\sdl_game\small_enemy.h
 	"commonFunc.h"
 
-1743261871 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
+1745224505 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
 	"SmallEnemy.h"
 	"commonFunc.h"
 
-1743261832 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
+1745234272 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
@@ -92,10 +93,10 @@
 1742795451 c:\users\dell_pc\desktop\dev\sdl_game\bulletbase.h
 	"Player.h"
 
-1743251937 source:c:\users\dell_pc\desktop\dev\sdl_game\collision.cpp
+1745234864 source:c:\users\dell_pc\desktop\dev\sdl_game\collision.cpp
 	"Collision.h"
 
-1743251936 c:\users\dell_pc\desktop\dev\sdl_game\collision.h
+1745224259 c:\users\dell_pc\desktop\dev\sdl_game\collision.h
 	"commonFunc.h"
 	"Gun.h"
 	"BulletBase.h"
@@ -115,7 +116,7 @@
 	"Player.h"
 	"commonFunc.h"
 
-1745142302 c:\users\dell_pc\desktop\dev\sdl_game\game.h
+1745237701 c:\users\dell_pc\desktop\dev\sdl_game\game.h
 	"commonFunc.h"
 	"MainObject.h"
 	"Gun.h"
@@ -125,4 +126,10 @@
 
 1745143420 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
 	"Game.h"
+
+1745248875 source:c:\users\dell_pc\desktop\dev\sdl_game\nuke.cpp
+	"Nuke.h"
+
+1745254019 c:\users\dell_pc\desktop\dev\sdl_game\nuke.h
+	"commonFunc.h"
 

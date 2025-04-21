@@ -6,11 +6,10 @@
 #include "Player.h"
 #include "MainObject.h"
 
-
 #define SMALL_ENEMY_SPEED 1
 #define MAX_SMALL_ENEMIES 40
 #define SMALL_ENEMY_DAME 2
-
+#define EXP 2
 
 
 class SmallEnemy : public Player
@@ -60,11 +59,6 @@ public:
     return SmallSpawner;
 }
 
-
-//
-//    SDL_Texture *sharedTex = NULL;
-//    void SetTex(SDL_Texture *tex) {sharedTex = tex;}
-
 private:
 
     float x_pos;
@@ -76,9 +70,17 @@ private:
     SDL_Rect frame_clips[6];
 
     bool is_move;
-    int hp;
-    SDL_Rect HP_bar;
+};
 
+class Exp : public Player
+{
+public:
+    bool Load(std::string path, SDL_Renderer *des);
+    void Set_Position(int x, int y) {r_exp.x = x; r_exp.y = y;}
+    SDL_Rect GetRect() {return r_exp;}
+
+    SDL_Rect r_exp;
+    SDL_Texture* exp_orb;
 };
 
 #endif // SMALL_ENEMY_H_

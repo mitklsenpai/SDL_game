@@ -25,7 +25,7 @@ public:
     void set_clips();
     void DoPlayer();
     void Normalize_Motion(float &x_val_, float &y_val_);
-    void ShowHPBar(SDL_Renderer *des);
+    void ShowBar(SDL_Renderer *des);
 
     float Get_x_pos(){return x_pos_;}
     float Get_y_pos(){return y_pos_;}
@@ -39,7 +39,9 @@ public:
     void Reset_status() {
         score = 0;
         hp = 210;
+        G_EXP = 0;
     }
+    void SetExp(int x) {G_EXP += x;}
 
 private:
     float x_val_;
@@ -58,12 +60,21 @@ private:
     int frame_;
     int status_;
     int score;
+    int G_EXP;
+    int MAX_EXP;
+    int LEVEL;
 
     struct HP_Bar
     {
         SDL_Rect HP_Inner;
         const SDL_Rect HP_Outer ={0,0,254,32};
     }HP_Bar;
+
+    struct Exp_Bar
+    {
+        SDL_Rect Exp_Inner;
+        const SDL_Rect Exp_Outer = {0,30,254,8};
+    }Exp_Bar;
 
 };
 

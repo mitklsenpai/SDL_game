@@ -36,15 +36,30 @@ bool Player::LoadImg(std::string path, SDL_Renderer* screen)
     return p_object_ != NULL;
 }
 
-void Player::Render(SDL_Renderer* des, const SDL_Rect* clip)
+SDL_Texture* Player::Loadimg(std::string path, SDL_Renderer* screen)
 {
-    SDL_Rect renderquad;
-    renderquad.x = rect_.x;
-    renderquad.y = rect_.y;
-    renderquad.w = rect_.w;
-    renderquad.h = rect_.h;
+    SDL_Texture* new_texture = NULL;        // buc anh cuoi cung, sau khi xu ly
 
-    SDL_RenderCopy(des, p_object_, clip, &renderquad);
+    SDL_Surface* load_surface = IMG_Load(path.c_str());         // tao anh tu duong dan
+    if(load_surface != NULL)
+    {
+        SDL_SetColorKey(load_surface,SDL_TRUE ,SDL_MapRGB(load_surface->format, 167, 175, 180)); //xoa phong buc anh
+        new_texture = SDL_CreateTextureFromSurface(screen, load_surface);
+
+        SDL_FreeSurface(load_surface); // xoa anh cu
+    }
+
+    return new_texture;
+}
+
+void Player::Render(SDL_Renderer *des, const SDL_Rect* clips)
+{
+    SDL_RenderCopy(des, p_object_, NULL, &rect_);
+}
+
+void Player::Render(SDL_Renderer *des, SDL_Texture* texture, const SDL_Rect &rect)
+{
+    SDL_RenderCopy(des, texture, NULL, &rect);
 }
 
 void Player::Free()

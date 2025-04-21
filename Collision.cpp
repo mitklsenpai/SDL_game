@@ -32,7 +32,7 @@ bool Collision::CheckCollision(const SDL_Rect &a, const SDL_Rect &b)
     return true;
 }
 
-bool Collision::Col_bullet_enemy(std::vector<SmallEnemy*> &SmallSpawner, Gun &gun)
+bool Collision::Col_bullet_enemy(std::vector<SmallEnemy*> &SmallSpawner, Gun &gun, std::vector<Exp*> &Exp_List, SDL_Renderer *des)
 {
     std::vector<BulletBase*> bullet_list = gun.Get_Bullets();
     for(int i=0; i<(int)bullet_list.size(); i++)
@@ -42,16 +42,20 @@ bool Collision::Col_bullet_enemy(std::vector<SmallEnemy*> &SmallSpawner, Gun &gu
         {
             for(int j=0; j<(int)SmallSpawner.size(); j++)
             {
+                Exp* exp = new Exp;
                 SmallEnemy* smallenemy = SmallSpawner.at(j);
                 SDL_Rect r_bullet, r_small_enemy;
                 r_small_enemy = smallenemy->GetRect();
                 r_bullet = bullet->GetRect();
-
                 bool enemy_bullet = CheckCollision(r_small_enemy,r_bullet);
                 if(enemy_bullet)
                 {
                     gun.RemoveBullet(i);
                     smallenemy->Free();
+                    exp->Load("images//exp_orb.png", des);
+                    exp->Set_Position(r_small_enemy.x+31, r_small_enemy.y+31);
+                    Exp_List.push_back(exp);
+
                     SmallSpawner.erase(SmallSpawner.begin() + j);
                     smallenemy = NULL;
                     return true;
@@ -81,6 +85,34 @@ void Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObj
         if(enemy_player)
         {
             p_player.Minus_Hp_When_Hit(SMALL_ENEMY_DAME);
+        }
+    }
+}
+
+void Collision::Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &p_player, SDL_Renderer *des)
+{
+    for(int i=0;i<Exp_List.size();i++)
+    {
+        Exp* exp = Exp_List.at(i);
+
+        if(exp!=NULL)
+        {
+
+            SDL_Rect r_player; SDL_Rect r_exp;
+            r_player = {p_player.Get_x_pos(), p_player.Get_y_pos(),
+                    p_player.Get_width_frame()-PLAYER_FRAME_OFFSET,
+                    p_player.Get_height_frame()-PLAYER_FRAME_OFFSET};
+
+            r_exp = exp->r_exp;
+            exp->Render(des, exp->exp_orb, exp->r_exp);
+            bool player_exp = CheckCollision(r_player, r_exp);
+            if(player_exp)
+            {
+                p_player.SetExp(EXP);
+                exp->Free();
+                Exp_List.erase(Exp_List.begin() + i);
+                exp = NULL;
+            }
         }
     }
 }

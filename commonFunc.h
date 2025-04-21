@@ -11,8 +11,8 @@
 #include <SDL_ttf.h>
 
 
-#define SMALL_ENEMY_FRAME_OFFSET 30
-#define PLAYER_FRAME_OFFSET 26
+const int SMALL_ENEMY_FRAME_OFFSET = 30;
+const int PLAYER_FRAME_OFFSET = 26;
 
 const int SCREEN_HEIGHT_MID = 320;
 const int SCREEN_WIDTH_MID = 640;
@@ -63,7 +63,5 @@ typedef struct Input
     int up_;
     int down_;
 };
-
-
 
 #endif

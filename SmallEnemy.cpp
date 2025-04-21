@@ -11,8 +11,6 @@ SmallEnemy::SmallEnemy()
     height_frame_ = 0;
 
     is_move = false;
-
-
 }
 
 SmallEnemy::~SmallEnemy()
@@ -118,3 +116,14 @@ void SmallEnemy::Follow(MainObject &player)
     }
 }
 
+bool Exp::Load(std::string path, SDL_Renderer *des)
+{
+    if(exp_orb == NULL)
+    {
+        exp_orb = Loadimg("images//exp_orb.png", des);
+        r_exp.h = 10;
+        r_exp.w = 10;
+        return true;
+    }
+    return false;
+}
