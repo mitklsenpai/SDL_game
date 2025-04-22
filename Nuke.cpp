@@ -9,6 +9,7 @@ Nuke::Nuke(SDL_Renderer *des)
     y_target = 0;
     nuke_frame = 0;
     boom_frame = 0;
+    explosive_active = true;
 
     nuke_texture = IMG_LoadTexture(des, "images//Nuke.png");
     boom_texture = IMG_LoadTexture(des, "images//Boom.png");
@@ -34,11 +35,22 @@ void Nuke::Set_Position()
     y_pos = y_target - 200;
 }
 
+SDL_Rect Nuke::GetRect()
+{
+    SDL_Rect r;
+    r.x = x_target;
+    r.y = y_target;
+    r.w = 30;
+    r.h = 27;
+
+    return r;
+}
+
 void Nuke::update()
 {
     if (y_pos < y_target)
     {
-        y_pos += 2;
+        y_pos += 1;
         nuke_frame = (nuke_frame + 1) % 4;
     }
     else
@@ -50,8 +62,7 @@ void Nuke::update()
         else
         {
             explosive_active = false;
-            SDL_DestroyTexture(boom_texture);
-            boom_texture = NULL;
+            boom_frame = 0;
         }
     }
 }
@@ -76,7 +87,7 @@ void Nuke::set_clips()
 
 void Nuke::RenderAnimation(SDL_Renderer* des)
 {
-    if(y_pos < y_target)
+    if(explosive_active)
     {
         SDL_Rect renderQuad = {x_target-33,y_pos-59,nuke_wid_frame,nuke_hei_frame};
         SDL_Rect *current = &nuke_clips[nuke_frame];
@@ -122,7 +133,6 @@ void NukeManager::updateBomb()
         lastSpawnTime = currentTime;
     }
 
-
     for(int i=0;i<Nuke_List.size();i++)
     {
         Nuke *nuke = Nuke_List.at(i);
@@ -143,6 +153,7 @@ void NukeManager::Render(SDL_Renderer *renderer)
 {
     for(auto *nuke : Nuke_List)
     {
+        nuke->update();
         nuke->RenderAnimation(renderer);
     }
 }

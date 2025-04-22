@@ -6,11 +6,8 @@
 #include "Player.h"
 #include "MainObject.h"
 
-#define SMALL_ENEMY_SPEED 1
 #define MAX_SMALL_ENEMIES 40
-#define SMALL_ENEMY_DAME 2
 #define EXP 2
-
 
 class SmallEnemy : public Player
 {
@@ -58,6 +55,12 @@ public:
     }
     return SmallSpawner;
 }
+
+    void Set_Speed() {SMALL_ENEMY_SPEED ++;}
+    void Set_Dame() {SMALL_ENEMY_DAME ++;}
+
+    int SMALL_ENEMY_SPEED = 1;
+    int SMALL_ENEMY_DAME = 2;
 
 private:
 

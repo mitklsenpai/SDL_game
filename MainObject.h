@@ -40,6 +40,7 @@ public:
         score = 0;
         hp = 210;
         G_EXP = 0;
+        MAX_EXP = 10;
     }
     void SetExp(int x) {G_EXP += x;}
 

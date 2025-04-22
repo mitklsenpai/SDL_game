@@ -84,7 +84,7 @@ void Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObj
         bool enemy_player = CheckCollision(r_enemy, r_player);
         if(enemy_player)
         {
-            p_player.Minus_Hp_When_Hit(SMALL_ENEMY_DAME);
+            p_player.Minus_Hp_When_Hit(smallenemy->SMALL_ENEMY_DAME);
         }
     }
 }
@@ -116,3 +116,60 @@ void Collision::Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &p_player
         }
     }
 }
+
+void Collision::Col_player_nuke(MainObject &p_player, const std::vector<Nuke*> &nukes)
+{
+    for(auto *nuke : nukes)
+    {
+        if(nuke != NULL)
+        {
+            SDL_Rect r_nuke; SDL_Rect r_player;
+
+            r_player = {p_player.Get_x_pos(), p_player.Get_y_pos(),
+                        p_player.Get_width_frame(),
+                        p_player.Get_height_frame()};
+
+            r_nuke = nuke->GetRect();
+
+            bool player_nuke = CheckCollision(r_player, r_nuke);
+            bool is_nuke_active = nuke->is_active();
+
+            if(player_nuke && !is_nuke_active)
+            {
+
+                p_player.Minus_Hp_When_Hit(NUKE_DAME);
+            }
+        }
+    }
+}
+
+void Collision::Col_enemy_nuke(std::vector<SmallEnemy*> &SmallSpawner, const std::vector<Nuke*> &nukes)
+{
+    for(auto *smallenemy : SmallSpawner)
+    {
+        if(smallenemy != NULL)
+        {
+            for(auto *nuke : nukes)
+            {
+                if(nuke != NULL)
+                {
+                    SDL_Rect r_nuke; SDL_Rect r_enemy;
+
+                    r_enemy = {smallenemy->Get_X_Pos(), smallenemy->Get_Y_Pos(),
+                                smallenemy->Get_Width_Frame()-SMALL_ENEMY_FRAME_OFFSET,
+                                smallenemy->Get_Height_Frame()-SMALL_ENEMY_FRAME_OFFSET};
+                    r_nuke = nuke->GetRect();
+
+                    bool nuke_enemy = CheckCollision(r_nuke, r_enemy);
+                    bool is_nuke_active = nuke->is_active();
+                    if(nuke_enemy && !is_nuke_active)
+                    {
+                        smallenemy->Set_Speed();
+                        smallenemy->Set_Dame();
+                    }
+                }
+            }
+        }
+    }
+}
+

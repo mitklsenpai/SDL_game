@@ -1,7 +1,7 @@
 
 #ifndef NUKE_H_
 #define NUKE_H_
-#define NUKE_DAME
+#define NUKE_DAME 50
 #include "commonFunc.h"
 
 class Nuke
@@ -17,6 +17,7 @@ public:
 //    void Follow();
     void update();
     bool is_active() {return explosive_active;}
+    SDL_Rect GetRect();
 private:
 
     int x_pos;
@@ -32,7 +33,7 @@ private:
 
     int nuke_frame;
     int boom_frame;
-    bool explosive_active = true;
+    bool explosive_active;
 
     SDL_Texture *nuke_texture;
     SDL_Texture *boom_texture;
@@ -50,6 +51,7 @@ public:
     void SpawnBomb(int number);
     void updateBomb();
     void Render(SDL_Renderer *des);
+    std::vector<Nuke*> Get_Nuke_List() {return Nuke_List;}
 
 private:
     SDL_Renderer* renderer;

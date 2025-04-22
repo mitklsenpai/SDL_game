@@ -148,15 +148,15 @@ int main(int argc, char* argv[])
             gun.SetBullet();
             gun.ShowBullet(g_screen);
             //chuyen dong + show animation cho SmallEnemy
-            for(int i=0;i<(int)SmallSpawner.size();i++)
-            {
-                SmallEnemy* smallenemy = SmallSpawner.at(i);
-                if(smallenemy!=NULL)
-                {
-                    smallenemy->Show(g_screen);
-                    smallenemy->Follow(p_player);
-                }
-            }
+//            for(int i=0;i<(int)SmallSpawner.size();i++)
+//            {
+//                SmallEnemy* smallenemy = SmallSpawner.at(i);
+//                if(smallenemy!=NULL)
+//                {
+//                    smallenemy->Show(g_screen);
+//                    smallenemy->Follow(p_player);
+//                }
+//            }
 
             nukemanager.updateBomb();
             nukemanager.Render(g_screen);
@@ -169,6 +169,8 @@ int main(int argc, char* argv[])
             }
             collision.Col_player_enemy(SmallSpawner,p_player);
             collision.Col_player_exp(Exp_List, p_player, g_screen);
+            collision.Col_enemy_nuke(SmallSpawner, nukemanager.Get_Nuke_List());
+            collision.Col_player_nuke(p_player, nukemanager.Get_Nuke_List());
 
             if(SmallSpawner.size() < 0.1 * MAX_SMALL_ENEMIES && !p_player.Dead())
             {
