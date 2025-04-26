@@ -104,7 +104,6 @@ void Collision::Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &p_player
                     p_player.Get_height_frame()-PLAYER_FRAME_OFFSET};
 
             r_exp = exp->r_exp;
-            exp->Render(des, exp->exp_orb, exp->r_exp);
             bool player_exp = CheckCollision(r_player, r_exp);
             if(player_exp)
             {
@@ -172,4 +171,3 @@ void Collision::Col_enemy_nuke(std::vector<SmallEnemy*> &SmallSpawner, const std
         }
     }
 }
-

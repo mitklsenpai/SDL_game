@@ -123,14 +123,16 @@ void NukeManager::SpawnBomb(int number)
     }
 }
 
-void NukeManager::updateBomb()
+void NukeManager::updateBomb(int LEVEL)
 {
     Uint32 currentTime = SDL_GetTicks();
-    if (currentTime - lastSpawnTime >= spawnInterval) {
-        SpawnBomb(MAX_NUKES);
-        lastSpawnTime = currentTime;
+    if(LEVEL != 0 && LEVEL % 2 == 0)
+    {
+        if (currentTime - lastSpawnTime >= spawnInterval) {
+            SpawnBomb(MAX_NUKES);
+            lastSpawnTime = currentTime;
+        }
     }
-
     for(int i = Nuke_List.size() - 1; i >= 0; i--)
     {
         Nuke *nuke = Nuke_List.at(i);
@@ -144,11 +146,16 @@ void NukeManager::updateBomb()
     }
 }
 
-void NukeManager::Render(SDL_Renderer *renderer)
+void NukeManager::Render(SDL_Renderer *des)
 {
     for(auto *nuke : Nuke_List)
     {
-        nuke->RenderAnimation(renderer);
+        if(nuke != nullptr)
+        {
+            nuke->RenderAnimation(des);
+        }
     }
 }
+
+
 

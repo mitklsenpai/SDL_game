@@ -34,6 +34,9 @@ public:
     int Get_Height_Frame() {return height_frame_;}
     int Get_Width_Frame() {return width_frame_;}
     bool LoadImg(std::string path, SDL_Renderer *screen);
+    void Set_Speed() {SMALL_ENEMY_SPEED += 0.1;}
+    void Set_Dame() {SMALL_ENEMY_DAME += 0.1;}
+    void SetMove(bool status) {is_move = status;}
 
     std::vector<SmallEnemy*> Make_S_Spawner()
 {
@@ -55,9 +58,6 @@ public:
     }
     return SmallSpawner;
 }
-
-    void Set_Speed() {SMALL_ENEMY_SPEED ++;}
-    void Set_Dame() {SMALL_ENEMY_DAME ++;}
 
     int SMALL_ENEMY_SPEED = 1;
     int SMALL_ENEMY_DAME = 2;

@@ -49,17 +49,16 @@ public:
     NukeManager(SDL_Renderer* des);
 
     void SpawnBomb(int number);
-    void updateBomb();
+    void updateBomb(int LEVEL);
     void Render(SDL_Renderer *des);
     std::vector<Nuke*> Get_Nuke_List() {return Nuke_List;}
-
 private:
     SDL_Renderer* renderer;
     std::vector<Nuke*> Nuke_List;
     Uint32 lastSpawnTime;
     Uint32 spawnInterval;
 
-    const int MAX_NUKES = 10;
+    const int MAX_NUKES = 5;
 };
 
 #endif // NUKE_H_

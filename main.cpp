@@ -1,3 +1,4 @@
+
 #include "commonFunc.h"
 #include "Player.h"
 #include "MainObject.h"
@@ -119,14 +120,21 @@ int main(int argc, char* argv[])
             {
                 is_quit = true;
             }
-            game.HandleMouseHover(g_event);
-            if(player_event)
+            if(!game.Is_Paused())
             {
-                p_player.HandleInputAction(g_event,g_screen);
-                gun.HandleMouseEvents(g_event, g_screen);
+                game.HandleMouseHover(g_event);
+                if(player_event)
+                {
+                    p_player.HandleInputAction(g_event,g_screen);
+                    gun.HandleMouseEvents(g_event, g_screen);
+                }
             }
-
+            else
+            {
+                game.HandleMouseHover(g_event);
+            }
         }
+
         if(game.Is_Menu())
         {
             g_background.Render(g_screen, NULL);
@@ -137,50 +145,61 @@ int main(int argc, char* argv[])
 
             SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
             SDL_RenderClear(g_screen);
-            // ve map
-            game_map.DrawMap(g_screen);
-            // chay chuyen dong cho nhan vat
-            game.RenderPausedList(g_screen, is_quit, player_event);
-            nukemanager.updateBomb();
-            nukemanager.Render(g_screen);
-                std::vector<Nuke*> nuke_list = nukemanager.Get_Nuke_List();
 
-            p_player.DoPlayer();
+            game_map.DrawMap(g_screen);
             p_player.Show(g_screen);
             p_player.ShowBar(g_screen);
             p_player.Score(g_screen, g_font);
-            //sung
             gun.Rotation(p_player,g_screen);
             gun.ShowBullet(g_screen);
-            gun.update();
-            //chuyen dong + show animation cho SmallEnemy
-            for(int i=0;i<(int)SmallSpawner.size();i++)
+            for(auto *smallenemy : SmallSpawner)
             {
-                SmallEnemy* smallenemy = SmallSpawner.at(i);
-                if(smallenemy!=NULL)
-                {
+                if(smallenemy != nullptr)
                     smallenemy->Show(g_screen);
-                    smallenemy->Follow(p_player);
-                }
             }
-
-            // va cham
-            collision.Col_bullet_enemy(p_player, SmallSpawner,gun, Exp_List, g_screen);
-            collision.Col_player_enemy(SmallSpawner,p_player);
-            collision.Col_player_exp(Exp_List, p_player, g_screen);
-            collision.Col_enemy_nuke(SmallSpawner, nukemanager.Get_Nuke_List());
-            collision.Col_player_nuke(p_player, nukemanager.Get_Nuke_List());
-
-            if(SmallSpawner.size() < 0.1 * MAX_SMALL_ENEMIES && !p_player.Dead())
+            for(auto *exp : Exp_List)
             {
-                std::vector<SmallEnemy*> newSpawner = smallenemy.Make_S_Spawner();
-                int maxSpawn = 20;
-                int numToAdd = std::min((int)newSpawner.size(), maxSpawn);
+                if(exp != nullptr)
+                    exp->Render(g_screen, exp->exp_orb, exp->r_exp);
+            }
+            nukemanager.Render(g_screen);
+            if(!game.Is_Paused())
+            {
+                p_player.DoPlayer();
+                gun.update();
+                for(auto *smallenemy : SmallSpawner)
+                {
+                    if(smallenemy != nullptr)
+                        smallenemy->Follow(p_player);
+                }
+                collision.Col_bullet_enemy(p_player, SmallSpawner,gun, Exp_List, g_screen);
+                collision.Col_player_enemy(SmallSpawner,p_player);
+                collision.Col_player_exp(Exp_List, p_player, g_screen);
+                collision.Col_enemy_nuke(SmallSpawner, nukemanager.Get_Nuke_List());
+                collision.Col_player_nuke(p_player, nukemanager.Get_Nuke_List());
 
-                SmallSpawner.insert(SmallSpawner.end(), newSpawner.begin(), newSpawner.begin() + numToAdd);
+                if(SmallSpawner.size() < 0.1 * MAX_SMALL_ENEMIES && !p_player.Dead())
+                {
+                    std::vector<SmallEnemy*> newSpawner = smallenemy.Make_S_Spawner();
+                    int maxSpawn = 20;
+                    int numToAdd = std::min((int)newSpawner.size(), maxSpawn);
+
+                    SmallSpawner.insert(SmallSpawner.end(), newSpawner.begin(), newSpawner.begin() + numToAdd);
+                }
+                game.RenderPaused(g_screen);
+                nukemanager.updateBomb(p_player.GetLEVEL());
+            }
+            else
+            {
+                for(auto *smallenemy : SmallSpawner)
+                {
+                    if(smallenemy != nullptr) smallenemy->SetMove(false);
+                }
+                game.RenderPausedList(g_screen, is_quit, player_event);
             }
             if(p_player.Dead())
             {
+                std::vector<Nuke*> nuke_list = nukemanager.Get_Nuke_List();
                 game.Replay(g_screen, g_font, player_event, is_quit, p_player, SmallSpawner, Exp_List, nuke_list);
             }
         }

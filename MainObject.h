@@ -57,7 +57,7 @@ public:
     }
 
     void SetExp(int x) {G_EXP += x;}
-
+    int GetLEVEL() {return LEVEL;}
 private:
     float x_val_;
     float y_val_;

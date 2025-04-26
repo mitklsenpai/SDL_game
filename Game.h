@@ -19,13 +19,14 @@ public:
     bool Is_Paused() {return paused;}
     void FreeButton(SDL_Texture *&texture);
     SDL_Texture* Render_Text(SDL_Renderer *des, TTF_Font *font, const char *text, SDL_Point point);
-    void Setclip_and_Render(SDL_Renderer *des, SDL_Point &point, SDL_Texture *&texture, int &frame,const char* name, int wid, int hei);
+    void Setclip_and_Render(SDL_Renderer *des, SDL_Point &point, SDL_Texture *&texture, int &frame, int NUMBER_OF_FRAMES, const char* name, int wid, int hei);
 
     void HandleMouseHover(SDL_Event event);
-    bool CheckButton(SDL_Point &point);
+    bool CheckButton(SDL_Point &point, int wid, int hei);
 
     void RenderStartMenu(SDL_Renderer *des);
 
+    void RenderPaused(SDL_Renderer *des);
     void RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event);
 
     void YouLose(SDL_Renderer *des, TTF_Font *font);
@@ -59,6 +60,8 @@ private:
 	bool pressed[3] = {false};
 
 	// settings
+	const int WIDTH_BUTTON_SETTING = 32;
+	const int HEIGH_BUTTON_SETTING = 32;
     bool paused = false;
 	bool setting_pressed[4] = {false};
 
