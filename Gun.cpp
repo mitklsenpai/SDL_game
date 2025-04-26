@@ -1,12 +1,17 @@
 #include "Gun.h"
 #include "commonFunc.h"
-Gun::Gun()
+Gun::Gun(SDL_Renderer *des)
 {
     x_pos = 0;
     y_pos = 0;
     x_target = 0;
     y_target = 0;
+    last_shot = 0;
+    bullet_delay = 100;
+    last_bullet = 0;
     is_shot = false;
+
+    bullet_texture = IMG_LoadTexture(des,"images//bullet.png");
 }
 
 Gun::~Gun()
@@ -20,16 +25,38 @@ void Gun::HandleMouseEvents(SDL_Event event, SDL_Renderer* screen)
     {
         SDL_GetMouseState(&x_target, &y_target);
     }
-    else if(event.type == SDL_MOUSEBUTTONUP)
-    {
-        is_shot = false;
-    }
     else if(event.type == SDL_MOUSEBUTTONDOWN)
     {
         SDL_GetMouseState(&x_target, &y_target);
-        is_shot = true;
+        if(!is_shot)
+        {
+            is_shot = true;
+            last_bullet = 0;
+            last_shot = SDL_GetTicks();
+        }
     }
+}
 
+void Gun::update()
+{
+    if(is_shot)
+    {
+        Uint32 currentTime = SDL_GetTicks();
+        if(currentTime - last_shot >= bullet_delay)
+        {
+            if(last_bullet < MAX_BULLETS_PER_BURST)
+            {
+                SetBullet();
+                last_shot = currentTime;
+                last_bullet++;
+            }
+            else
+            {
+                is_shot = false;
+                last_bullet = 0;
+            }
+        }
+    }
 }
 
 void Gun::Rotation(MainObject& player, SDL_Renderer* des)
@@ -59,9 +86,7 @@ void Gun::Rotation(MainObject& player, SDL_Renderer* des)
 
 void Gun::SetBullet()
 {
-    BulletBase *bullet = new BulletBase();
-    if(is_shot)
-    {
+        BulletBase *bullet = new BulletBase();
         float diff_x = x_target - x_pos;
         float diff_y = y_target - y_pos;
         bullet->angle = atan2(diff_y,diff_x);
@@ -70,17 +95,16 @@ void Gun::SetBullet()
         bullet->y_pos = y_pos + GUN_OFFSET + sin(bullet->angle);
 
         bullets.push_back(bullet);
-    }
 }
+
 
 void Gun::ShowBullet(SDL_Renderer *des)
 {
-    for(int i=0;i<(int) bullets.size();i++)
+    for(int i=bullets.size() - 1; i>=0; i--)
     {
         BulletBase* bullet = bullets.at(i);
         if(bullet != NULL)
         {
-            bullet_texture = IMG_LoadTexture(des,"images//bullet.png");
             bullet->x_pos += cos(bullet->angle) * FIRERATE;
             bullet->y_pos += sin(bullet->angle) * FIRERATE;
 
@@ -90,6 +114,8 @@ void Gun::ShowBullet(SDL_Renderer *des)
             BulletRect_.h = 10;
             if(BulletRect_.x < 0 || BulletRect_.y < 0 || BulletRect_.x + BulletRect_.w > SCREEN_WIDTH || BulletRect_.h + BulletRect_.y > SCREEN_HEIGHT)
             {
+                delete bullet;
+                bullet = NULL;
                 bullets.erase(bullets.begin() + i);
             }
             else

@@ -70,7 +70,7 @@ void SmallEnemy::Show(SDL_Renderer* screen)
     if(is_move)
     {
         frame_++;
-        if(frame_ > 6)
+        if(frame_ > 5)
         {
             frame_ = 0;
         }

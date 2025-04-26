@@ -4,15 +4,35 @@
 
 #include "commonFunc.h"
 #include "MainObject.h"
-#include "BulletBase.h"
 
 #define GUN_OFFSET 20
 #define BULLET_DAME 2
+#define FIRERATE 20
+
+class BulletBase
+{
+public:
+
+    float x_pos;
+    float y_pos;
+    float angle;
+
+    SDL_Rect GetRect()
+    {
+        SDL_Rect r_;
+        r_.x = x_pos;
+        r_.y = y_pos;
+        r_.w = 10;
+        r_.h = 10;
+
+        return r_;
+    }
+};
 
 class Gun : public Player
 {
 public:
-    Gun();
+    Gun(SDL_Renderer *des);
     ~Gun();
 
     void Rotation(MainObject &player, SDL_Renderer* des);
@@ -22,6 +42,7 @@ public:
     std::vector<BulletBase*> Get_Bullets() {return bullets;}
     void RemoveBullet(const int &index);
     SDL_Rect GetRect() {return BulletRect_;}
+    void update();
 
 private:
     bool is_shot;
@@ -34,7 +55,13 @@ private:
     SDL_Texture *bullet_texture;
     std::vector<BulletBase*> bullets;
     SDL_Rect BulletRect_;
+
+    int last_bullet;
+    Uint32 last_shot;
+    Uint32 bullet_delay;
+    const int MAX_BULLETS_PER_BURST = 3;
 };
+
 
 
 #endif // SHOT_GUN_H_

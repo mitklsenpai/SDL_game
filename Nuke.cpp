@@ -9,7 +9,7 @@ Nuke::Nuke(SDL_Renderer *des)
     y_target = 0;
     nuke_frame = 0;
     boom_frame = 0;
-    explosive_active = true;
+    explosive_active = false;
 
     nuke_texture = IMG_LoadTexture(des, "images//Nuke.png");
     boom_texture = IMG_LoadTexture(des, "images//Boom.png");
@@ -48,21 +48,25 @@ SDL_Rect Nuke::GetRect()
 
 void Nuke::update()
 {
-    if (y_pos < y_target)
+    if (!explosive_active)
     {
         y_pos += 1;
         nuke_frame = (nuke_frame + 1) % 4;
+        if(y_pos >= y_target)
+        {
+            explosive_active = true;
+            boom_frame = 0;
+        }
     }
     else
     {
-        if (boom_frame < 6)
+        if (boom_frame < 5)
         {
             boom_frame++;
         }
         else
         {
             explosive_active = false;
-            boom_frame = 0;
         }
     }
 }
@@ -87,7 +91,7 @@ void Nuke::set_clips()
 
 void Nuke::RenderAnimation(SDL_Renderer* des)
 {
-    if(explosive_active)
+    if(!explosive_active)
     {
         SDL_Rect renderQuad = {x_target-33,y_pos-59,nuke_wid_frame,nuke_hei_frame};
         SDL_Rect *current = &nuke_clips[nuke_frame];
@@ -98,15 +102,9 @@ void Nuke::RenderAnimation(SDL_Renderer* des)
     }
     else
     {
-        SDL_DestroyTexture(target);
-        SDL_DestroyTexture(nuke_texture);
-        nuke_texture = NULL;
-        target = NULL;
-
         SDL_Rect r_ = {x_target, y_target, 48, 48};
         SDL_Rect *current_ = &boom_clips[boom_frame];
-        if(explosive_active)
-            SDL_RenderCopy(des, boom_texture, current_, &r_);
+        SDL_RenderCopy(des, boom_texture, current_, &r_);
     }
 }
 
@@ -133,17 +131,14 @@ void NukeManager::updateBomb()
         lastSpawnTime = currentTime;
     }
 
-    for(int i=0;i<Nuke_List.size();i++)
+    for(int i = Nuke_List.size() - 1; i >= 0; i--)
     {
         Nuke *nuke = Nuke_List.at(i);
         nuke->update();
-        if(!nuke->is_active())
+        if(!nuke->is_explosive() && nuke->get_boom_frame() >= 5)
         {
-            if(nuke != NULL)
-            {
-                delete nuke;
-                nuke = NULL;
-            }
+            delete nuke;
+            nuke = NULL;
             Nuke_List.erase(Nuke_List.begin() + i);
         }
     }
@@ -153,7 +148,6 @@ void NukeManager::Render(SDL_Renderer *renderer)
 {
     for(auto *nuke : Nuke_List)
     {
-        nuke->update();
         nuke->RenderAnimation(renderer);
     }
 }

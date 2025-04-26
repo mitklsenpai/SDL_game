@@ -32,7 +32,7 @@ bool Collision::CheckCollision(const SDL_Rect &a, const SDL_Rect &b)
     return true;
 }
 
-bool Collision::Col_bullet_enemy(std::vector<SmallEnemy*> &SmallSpawner, Gun &gun, std::vector<Exp*> &Exp_List, SDL_Renderer *des)
+void Collision::Col_bullet_enemy(MainObject &player, std::vector<SmallEnemy*> &SmallSpawner, Gun &gun, std::vector<Exp*> &Exp_List, SDL_Renderer *des)
 {
     std::vector<BulletBase*> bullet_list = gun.Get_Bullets();
     for(int i=0; i<(int)bullet_list.size(); i++)
@@ -58,12 +58,12 @@ bool Collision::Col_bullet_enemy(std::vector<SmallEnemy*> &SmallSpawner, Gun &gu
 
                     SmallSpawner.erase(SmallSpawner.begin() + j);
                     smallenemy = NULL;
-                    return true;
+
+                    player.Set_score();
                 }
             }
         }
     }
-    return false;
 }
 
 void Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObject &p_player)
@@ -91,7 +91,7 @@ void Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObj
 
 void Collision::Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &p_player, SDL_Renderer *des)
 {
-    for(int i=0;i<Exp_List.size();i++)
+    for(int i=Exp_List.size()-1;i>=0;i--)
     {
         Exp* exp = Exp_List.at(i);
 
@@ -110,8 +110,9 @@ void Collision::Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &p_player
             {
                 p_player.SetExp(EXP);
                 exp->Free();
-                Exp_List.erase(Exp_List.begin() + i);
+                delete exp;
                 exp = NULL;
+                Exp_List.erase(Exp_List.begin() + i);
             }
         }
     }
@@ -131,12 +132,11 @@ void Collision::Col_player_nuke(MainObject &p_player, const std::vector<Nuke*> &
 
             r_nuke = nuke->GetRect();
 
-            bool player_nuke = CheckCollision(r_player, r_nuke);
-            bool is_nuke_active = nuke->is_active();
+            bool col_player_nuke = CheckCollision(r_player, r_nuke);
+            bool is_done = nuke->is_explosive();
 
-            if(player_nuke && !is_nuke_active)
+            if(col_player_nuke && is_done)
             {
-
                 p_player.Minus_Hp_When_Hit(NUKE_DAME);
             }
         }
@@ -161,8 +161,8 @@ void Collision::Col_enemy_nuke(std::vector<SmallEnemy*> &SmallSpawner, const std
                     r_nuke = nuke->GetRect();
 
                     bool nuke_enemy = CheckCollision(r_nuke, r_enemy);
-                    bool is_nuke_active = nuke->is_active();
-                    if(nuke_enemy && !is_nuke_active)
+                    bool is_nuke_active = nuke->is_explosive();
+                    if(nuke_enemy && is_nuke_active)
                     {
                         smallenemy->Set_Speed();
                         smallenemy->Set_Dame();

@@ -5,7 +5,6 @@
 #include "Timer.h"
 #include "SmallEnemy.h"
 #include "Gun.h"
-#include "BulletBase.h"
 #include "Collision.h"
 #include "Game.h"
 #include "Nuke.h"
@@ -91,11 +90,11 @@ int main(int argc, char* argv[])
         return -1;
 
     // Nhan vat
-    MainObject p_player;
+    MainObject p_player(g_screen);
     p_player.LoadImg("images//4_direct_move.png", g_screen);
     p_player.set_clips();
     // sung
-    Gun gun;
+    Gun gun(g_screen);
     gun.LoadImg("images//shot_gun.png", g_screen);
     // Spawn Small_enemy
     std::vector<SmallEnemy*> SmallSpawner = smallenemy.Make_S_Spawner();
@@ -105,6 +104,7 @@ int main(int argc, char* argv[])
     game_map.LoadMap("map/map01.dat");
     game_map.LoadTiles(g_screen);
     Game game;
+    Collision collision;
     // Nuke
     NukeManager nukemanager(g_screen);
     // Vong lap game
@@ -125,6 +125,7 @@ int main(int argc, char* argv[])
                 p_player.HandleInputAction(g_event,g_screen);
                 gun.HandleMouseEvents(g_event, g_screen);
             }
+
         }
         if(game.Is_Menu())
         {
@@ -139,34 +140,32 @@ int main(int argc, char* argv[])
             // ve map
             game_map.DrawMap(g_screen);
             // chay chuyen dong cho nhan vat
+
+            nukemanager.updateBomb();
+            nukemanager.Render(g_screen);
+                std::vector<Nuke*> nuke_list = nukemanager.Get_Nuke_List();
+
             p_player.DoPlayer();
             p_player.Show(g_screen);
             p_player.ShowBar(g_screen);
             p_player.Score(g_screen, g_font);
             //sung
             gun.Rotation(p_player,g_screen);
-            gun.SetBullet();
             gun.ShowBullet(g_screen);
+            gun.update();
             //chuyen dong + show animation cho SmallEnemy
-//            for(int i=0;i<(int)SmallSpawner.size();i++)
-//            {
-//                SmallEnemy* smallenemy = SmallSpawner.at(i);
-//                if(smallenemy!=NULL)
-//                {
-//                    smallenemy->Show(g_screen);
-//                    smallenemy->Follow(p_player);
-//                }
-//            }
-
-            nukemanager.updateBomb();
-            nukemanager.Render(g_screen);
+            for(int i=0;i<(int)SmallSpawner.size();i++)
+            {
+                SmallEnemy* smallenemy = SmallSpawner.at(i);
+                if(smallenemy!=NULL)
+                {
+                    smallenemy->Show(g_screen);
+                    smallenemy->Follow(p_player);
+                }
+            }
 
             // va cham
-            Collision collision;
-            if(collision.Col_bullet_enemy(SmallSpawner,gun, Exp_List, g_screen))
-            {
-                p_player.Set_score();
-            }
+            collision.Col_bullet_enemy(p_player, SmallSpawner,gun, Exp_List, g_screen);
             collision.Col_player_enemy(SmallSpawner,p_player);
             collision.Col_player_exp(Exp_List, p_player, g_screen);
             collision.Col_enemy_nuke(SmallSpawner, nukemanager.Get_Nuke_List());
@@ -182,8 +181,7 @@ int main(int argc, char* argv[])
             }
             if(p_player.Dead())
             {
-                player_event = false;
-                game.Replay(g_screen, g_font, player_event, is_quit, p_player, SmallSpawner);
+                game.Replay(g_screen, g_font, player_event, is_quit, p_player, SmallSpawner, Exp_List, nuke_list);
             }
         }
 

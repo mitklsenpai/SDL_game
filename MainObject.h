@@ -9,7 +9,7 @@
 class MainObject : public Player
 {
 public:
-    MainObject();
+    MainObject(SDL_Renderer *des);
     ~MainObject();
 
     enum WalkType
@@ -37,11 +37,25 @@ public:
     void Score(SDL_Renderer *des, TTF_Font *font);
     void Set_score() {score++;}
     void Reset_status() {
-        score = 0;
         hp = 210;
-        G_EXP = 0;
+        score = 0;
+        frame_ = 0;
+        x_pos_ = 570;
+        y_pos_ = 270;
+        x_val_ = 0;
+        y_val_ = 0;
+        width_frame_ = 0;
+        height_frame_ = 0;
+        status_ = -1;
+        input_type_.left_ = 0;
+        input_type_.rigth_ = 0;
+        input_type_.down_ = 0;
+        input_type_.up_ = 0;
+        LEVEL = 0;
         MAX_EXP = 10;
+        G_EXP = 0;
     }
+
     void SetExp(int x) {G_EXP += x;}
 
 private:
@@ -64,6 +78,11 @@ private:
     int G_EXP;
     int MAX_EXP;
     int LEVEL;
+
+    SDL_Texture *HP_Bar_Inner;
+    SDL_Texture *HP_Bar_Outer;
+    SDL_Texture *Exp_Bar_Outer;
+    SDL_Texture *Exp_Bar_Inner;
 
     struct HP_Bar
     {

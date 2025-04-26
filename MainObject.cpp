@@ -2,7 +2,7 @@
 #include "MainObject.h"
 #include "commonFunc.h"
 
-MainObject::MainObject()
+MainObject::MainObject(SDL_Renderer *des)
 {
     hp = 210;
     score = 0;
@@ -21,6 +21,11 @@ MainObject::MainObject()
     LEVEL = 0;
     MAX_EXP = 10;
     G_EXP = 0;
+
+    HP_Bar_Inner = IMG_LoadTexture(des, "images//hp_bar_inner.png");
+    HP_Bar_Outer = IMG_LoadTexture(des, "images//hp_bar_outer.png");
+    Exp_Bar_Outer = IMG_LoadTexture(des, "images//experience_bar_background.png");
+    Exp_Bar_Inner = IMG_LoadTexture(des, "images//experience_bar_progress.png");
 }
 
 
@@ -254,10 +259,7 @@ void MainObject::DoPlayer()
 
 void MainObject::ShowBar(SDL_Renderer *des)
 {
-    SDL_Texture *HP_Bar_Inner = IMG_LoadTexture(des, "images//hp_bar_inner.png");
-    SDL_Texture *HP_Bar_Outer = IMG_LoadTexture(des, "images//hp_bar_outer.png");
-    SDL_Texture *Exp_Bar_Outer = IMG_LoadTexture(des, "images//experience_bar_background.png");
-    SDL_Texture *Exp_Bar_Inner = IMG_LoadTexture(des, "images//experience_bar_progress.png");
+
 
     SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
     SDL_RenderCopy(des, Exp_Bar_Outer, NULL, &Exp_Bar.Exp_Outer);
