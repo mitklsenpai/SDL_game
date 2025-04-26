@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
             // ve map
             game_map.DrawMap(g_screen);
             // chay chuyen dong cho nhan vat
-
+            game.RenderPausedList(g_screen, is_quit, player_event);
             nukemanager.updateBomb();
             nukemanager.Render(g_screen);
                 std::vector<Nuke*> nuke_list = nukemanager.Get_Nuke_List();
