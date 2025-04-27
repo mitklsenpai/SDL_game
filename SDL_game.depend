@@ -5,7 +5,7 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1745677014 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1745767002 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
@@ -23,15 +23,19 @@
 	"commonFunc.h"
 	"logic.h"
 
-1745676071 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
+1745762829 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
 	<iostream>
 	<string>
 	<cmath>
 	<vector>
+	<map>
 	<iomanip>
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
+	<algorithm>
+	<cstdlib>
+	<ctime>
 
 1739454342 c:\users\dell_pc\desktop\dev\sdl_game\logic.h
 
@@ -44,11 +48,11 @@
 	"commonFunc.h"
 	"Player.h"
 
-1745677022 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+1745767137 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
 	"commonFunc.h"
 	"Player.h"
 
-1745502144 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+1745767176 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
 	"MainObject.h"
 	"commonFunc.h"
 
@@ -77,11 +81,11 @@
 	"Player.h"
 	"MainObject.h"
 
-1745502320 source:c:\users\dell_pc\desktop\dev\sdl_game\gun.cpp
+1745765498 source:c:\users\dell_pc\desktop\dev\sdl_game\gun.cpp
 	"Gun.h"
 	"commonFunc.h"
 
-1745466467 c:\users\dell_pc\desktop\dev\sdl_game\gun.h
+1745765937 c:\users\dell_pc\desktop\dev\sdl_game\gun.h
 	"commonFunc.h"
 	"MainObject.h"
 
@@ -114,7 +118,7 @@
 	"Player.h"
 	"commonFunc.h"
 
-1745676714 c:\users\dell_pc\desktop\dev\sdl_game\game.h
+1745770269 c:\users\dell_pc\desktop\dev\sdl_game\game.h
 	"commonFunc.h"
 	"MainObject.h"
 	"Gun.h"
@@ -122,12 +126,12 @@
 	"SmallEnemy.h"
 	"Nuke.h"
 
-1745677328 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
+1745770362 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
 	"Game.h"
 
-1745677223 source:c:\users\dell_pc\desktop\dev\sdl_game\nuke.cpp
+1745677563 source:c:\users\dell_pc\desktop\dev\sdl_game\nuke.cpp
 	"Nuke.h"
 
-1745677360 c:\users\dell_pc\desktop\dev\sdl_game\nuke.h
+1745677563 c:\users\dell_pc\desktop\dev\sdl_game\nuke.h
 	"commonFunc.h"
 

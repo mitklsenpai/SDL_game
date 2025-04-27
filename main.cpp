@@ -90,23 +90,18 @@ int main(int argc, char* argv[])
     if(LoadBackground() == false)
         return -1;
 
-    // Nhan vat
     MainObject p_player(g_screen);
     p_player.LoadImg("images//4_direct_move.png", g_screen);
     p_player.set_clips();
-    // sung
     Gun gun(g_screen);
     gun.LoadImg("images//shot_gun.png", g_screen);
-    // Spawn Small_enemy
     std::vector<SmallEnemy*> SmallSpawner = smallenemy.Make_S_Spawner();
     std::vector<Exp*> Exp_List;
-    // Load map anh
     GameMap game_map;
     game_map.LoadMap("map/map01.dat");
     game_map.LoadTiles(g_screen);
-    Game game;
+    Game game(g_screen);
     Collision collision;
-    // Nuke
     NukeManager nukemanager(g_screen);
     // Vong lap game
     bool is_quit = false;
@@ -142,7 +137,6 @@ int main(int argc, char* argv[])
         }
         else if(!game.Is_Menu())
         {
-
             SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
             SDL_RenderClear(g_screen);
 
@@ -186,8 +180,9 @@ int main(int argc, char* argv[])
 
                     SmallSpawner.insert(SmallSpawner.end(), newSpawner.begin(), newSpawner.begin() + numToAdd);
                 }
-                game.RenderPaused(g_screen);
                 nukemanager.updateBomb(p_player.GetLEVEL());
+                game.RenderPaused(g_screen);
+                game.ApplyBuff(p_player, gun);
             }
             else
             {
@@ -195,7 +190,12 @@ int main(int argc, char* argv[])
                 {
                     if(smallenemy != nullptr) smallenemy->SetMove(false);
                 }
-                game.RenderPausedList(g_screen, is_quit, player_event);
+                p_player.ResetInput();
+                if(game.is_buff())
+                    game.RenderBuff(g_screen);
+                else
+                    game.RenderPausedList(g_screen, is_quit, player_event);
+
             }
             if(p_player.Dead())
             {

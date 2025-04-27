@@ -4,8 +4,6 @@
 #include "commonFunc.h"
 #include "Player.h"
 
-#define PLAYER_SPEED 5
-
 class MainObject : public Player
 {
 public:
@@ -55,9 +53,14 @@ public:
         MAX_EXP = 10;
         G_EXP = 0;
     }
-
+    void ResetInput();
     void SetExp(int x) {G_EXP += x;}
     int GetLEVEL() {return LEVEL;}
+    int GetExp() {return G_EXP;}
+    int GetMaxExp() {return MAX_EXP;}
+//buff
+    void IncreaseSpeed();
+    void IncreaseMaxHealth();
 private:
     float x_val_;
     float y_val_;
@@ -67,7 +70,7 @@ private:
 
     int width_frame_;
     int height_frame_;
-    int hp;
+
     bool is_dead;
 
     SDL_Rect frame_clip_[4];
@@ -78,6 +81,9 @@ private:
     int G_EXP;
     int MAX_EXP;
     int LEVEL;
+
+    int PLAYER_SPEED = 5;
+    int hp = 210;
 
     SDL_Texture *HP_Bar_Inner;
     SDL_Texture *HP_Bar_Outer;
@@ -95,7 +101,6 @@ private:
         SDL_Rect Exp_Inner;
         const SDL_Rect Exp_Outer = {0,30,254,8};
     }Exp_Bar;
-
 };
 
 

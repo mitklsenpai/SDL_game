@@ -4,7 +4,6 @@
 
 MainObject::MainObject(SDL_Renderer *des)
 {
-    hp = 210;
     score = 0;
     frame_ = 0;
     x_pos_ = 570;
@@ -28,9 +27,17 @@ MainObject::MainObject(SDL_Renderer *des)
     Exp_Bar_Inner = IMG_LoadTexture(des, "images//experience_bar_progress.png");
 }
 
-
 MainObject::~MainObject()
 {
+}
+
+void MainObject::ResetInput()
+{
+    status_ = -1;
+    input_type_.left_ = 0;
+    input_type_.rigth_ = 0;
+    input_type_.down_ = 0;
+    input_type_.up_ = 0;
 }
 
 void MainObject::Normalize_Motion(float &x_val, float &y_val)
@@ -116,7 +123,6 @@ void MainObject::Show(SDL_Renderer* des)
     SDL_RenderCopy(des, p_object_, current_clip, &renderQuad);
 }
 
-
 void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 {
     if(events.type == SDL_KEYDOWN)
@@ -181,7 +187,6 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
     }
 }
 
-// xử lý chuyển động
 void MainObject::DoPlayer()
 {
     x_val_ = 0;
@@ -259,8 +264,6 @@ void MainObject::DoPlayer()
 
 void MainObject::ShowBar(SDL_Renderer *des)
 {
-
-
     SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
     SDL_RenderCopy(des, Exp_Bar_Outer, NULL, &Exp_Bar.Exp_Outer);
 
@@ -314,3 +317,14 @@ void MainObject::Score(SDL_Renderer *des, TTF_Font *font)
     SDL_FreeSurface(Surface);
 }
 
+void MainObject::IncreaseSpeed()
+{
+    int percent = PLAYER_SPEED*0.02;
+    PLAYER_SPEED += percent;
+}
+
+void MainObject::IncreaseMaxHealth()
+{
+    int percent = hp*0.1;
+    hp += percent;
+}

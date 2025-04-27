@@ -1,13 +1,36 @@
 
 #include "Game.h"
 
-Game::Game()
+Game::Game(SDL_Renderer *des)
 {
     p_play.x = 544; p_play.y = 400;
     p_replay.x = 544; p_replay.y = 272;
     p_quit.x = 544; p_quit.y = 388;
     P_YouLose.x = 544; P_YouLose.y = 100;
-    p_pause_button.x = 1200, p_pause_button.y = 0;
+    p_pause_button.x = SCREEN_WIDTH-32, p_pause_button.y = 0;
+    //buff
+    frame = IMG_LoadTexture(des, "images//Buff_window.png");
+    info = IMG_LoadTexture(des, "images//Info_table.png");
+    for(int i=0;i<MAIN_BUFFS;i++)
+    {
+        Main_buffs_texture[i] = nullptr;
+    }
+
+    Buffs["dame"] = "images//Dame.png";
+    Buffs["total_bullets"] = "images//total_bullets.png";
+    Buffs["speed"] = "images//Speed.png";
+    Buffs["bullet_speed"] = "images//Bullet_speed.png";
+    Buffs["max_health"] = "images//health.png";
+
+    p_frame = {512, 235};
+    p_info = {131, 209};
+    Points["first"] = {564, 329};
+    Points["second"] = {624, 329};
+    Points["third"] = {684, 329};
+
+    Press["first"] = false;
+    Press["second"] = false;
+    Press["third"] = false;
 }
 
 Game::~Game()
@@ -30,6 +53,13 @@ void Game::HandleMouseHover(SDL_Event event)
 {
 switch(event.type)
     {
+        case SDL_KEYDOWN:
+        {
+            if(event.key.keysym.sym == SDLK_ESCAPE)
+            {
+                setting_pressed[0] = true;
+            }
+        }
         case SDL_MOUSEBUTTONDOWN:
         {
             if(event.button.button == SDL_BUTTON_LEFT)
@@ -72,6 +102,24 @@ switch(event.type)
                         setting_pressed[2] = true;
                     }
                 }
+                if(buff)
+                {
+                    if(CheckButton(Points["first"], WIDTH_BUFF, HEIGHT_BUFF))
+                    {
+                        Press["first"] = true;
+                        selected_buff = Main_buffs_name[0];
+                    }
+                    else if(CheckButton(Points["second"], WIDTH_BUFF, HEIGHT_BUFF))
+                    {
+                        Press["second"] = true;
+                        selected_buff = Main_buffs_name[1];
+                    }
+                    else if(CheckButton(Points["third"], WIDTH_BUFF, HEIGHT_BUFF))
+                    {
+                        Press["third"] = true;
+                        selected_buff = Main_buffs_name[2];
+                    }
+                }
             }
             break;
         }
@@ -85,6 +133,9 @@ switch(event.type)
             {
                 setting_pressed[i] = false;
             }
+            Press["first"] = false;
+            Press["second"] = false;
+            Press["third"] = false;
             break;
         }
         case SDL_MOUSEMOTION:
@@ -167,6 +218,39 @@ switch(event.type)
                     quit_frame = 0;
                 }
             }
+            if(buff)
+            {
+                if(CheckButton(Points["first"], WIDTH_BUFF, HEIGHT_BUFF))
+                {
+                    first_buff_frame++;
+                    if(first_buff_frame == 2)
+                        first_buff_frame = 1;
+                }
+                else
+                {
+                    first_buff_frame = 0;
+                }
+                if(CheckButton(Points["second"], WIDTH_BUFF, HEIGHT_BUFF))
+                {
+                    second_buff_frame++;
+                    if(second_buff_frame == 2)
+                        second_buff_frame = 1;
+                }
+                else
+                {
+                    second_buff_frame = 0;
+                }
+                if(CheckButton(Points["third"], WIDTH_BUFF, HEIGHT_BUFF))
+                {
+                    third_buff_frame++;
+                    if(third_buff_frame == 2)
+                        third_buff_frame = 1;
+                }
+                else
+                {
+                    third_buff_frame = 0;
+                }
+            }
             break;
         }
     }
@@ -177,6 +261,12 @@ switch(event.type)
     if(setting_pressed[0])
     {
         paused = true;
+    }
+    if(Press["first"] || Press["second"] || Press["third"])
+    {
+        buff = false;
+        paused = false;
+        buff_active = false;
     }
 }
 
@@ -283,13 +373,93 @@ void Game::RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event)
     if(setting_pressed[1] == true)
     {
         FreeButton(Resume_button);
+        FreeButton(Quit_button_setting);
+        FreeButton(Pause_button);
         paused = false;
         setting_pressed[1] = false;
     }
     else if(setting_pressed[2] == true)
     {
+        FreeButton(Resume_button);
         FreeButton(Quit_button_setting);
+        FreeButton(Pause_button);
         is_quit = true;
         setting_pressed[2] = false;
     }
 }
+
+void Game::ApplyBuff(MainObject &player, Gun &gun)
+{
+    if(player.GetExp() >= player.GetMaxExp())
+    {
+        paused = true;
+        buff = true;
+        buff_active = true;
+        RandomPick();
+    }
+    if(buff_active && !selected_buff.empty())
+    {
+        if(selected_buff == "images//Dame.png")
+        {
+            gun.IncreaseDame();
+        }
+        else if(selected_buff == "images//total_bullets.png")
+        {
+            gun.IncreaseTotalBullets();
+        }
+        else if(selected_buff == "images//Speed.png")
+        {
+            player.IncreaseSpeed();
+        }
+        else if(selected_buff == "images//Bullet_speed.png")
+        {
+            gun.IncreaseBulletSpeed();
+        }
+        else if(selected_buff == "images//health.png")
+        {
+            player.IncreaseMaxHealth();
+        }
+        for(int i=0;i<MAIN_BUFFS;i++)
+        {
+            FreeButton(Main_buffs_texture[i]);
+        }
+        selected_buff.clear();
+        buff_active = false;
+    }
+}
+
+void Game::RandomPick()
+{
+    std::vector<char*> availableBuffs = {
+        "dame", "total_bullets", "speed", "bullet_speed", "max_health"
+    };
+    std::srand(std::time(0));
+    std::random_shuffle(availableBuffs.begin(), availableBuffs.end());
+    for(int i = 0; i < MAIN_BUFFS; i++) {
+        if (i < availableBuffs.size())
+        {
+            Main_buffs_name[i] = Buffs[availableBuffs[i]];
+        }
+    }
+}
+
+void Game::RenderBuff(SDL_Renderer *des)
+{
+    SDL_Rect renderquad = {p_frame.x, p_frame.y, 255, 170};
+    SDL_RenderCopy(des, frame, NULL, &renderquad);
+    SDL_Rect renderquad2 = {p_info.x, p_info.y, 237, 223};
+    SDL_RenderCopy(des, info, NULL, &renderquad2);
+
+    for (int i = 0; i < MAIN_BUFFS; i++) {
+        if (Main_buffs_texture[i] == nullptr) {
+            Main_buffs_texture[i] = IMG_LoadTexture(des, Main_buffs_name[i]);
+        }
+    }
+
+    // Render 3 buff
+    Setclip_and_Render(des, Points["first"], Main_buffs_texture[0], first_buff_frame, 2, "", WIDTH_BUFF, HEIGHT_BUFF);
+    Setclip_and_Render(des, Points["second"], Main_buffs_texture[1], second_buff_frame, 2, "", WIDTH_BUFF, HEIGHT_BUFF);
+    Setclip_and_Render(des, Points["third"], Main_buffs_texture[2], third_buff_frame, 2, "", WIDTH_BUFF, HEIGHT_BUFF);
+}
+
+

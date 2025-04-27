@@ -5,10 +5,14 @@
 #include <string>
 #include <cmath>
 #include <vector>
+#include <map>
 #include <iomanip>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
 
 
 const int SMALL_ENEMY_FRAME_OFFSET = 30;

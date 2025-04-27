@@ -6,8 +6,7 @@
 #include "MainObject.h"
 
 #define GUN_OFFSET 20
-#define BULLET_DAME 2
-#define FIRERATE 20
+
 
 class BulletBase
 {
@@ -44,6 +43,10 @@ public:
     SDL_Rect GetRect() {return BulletRect_;}
     void update();
 
+    void IncreaseDame() {BULLET_DAME += BULLET_DAME*0.05;}
+    void IncreaseTotalBullets() {MAX_BULLETS_PER_BURST++;}
+    void IncreaseBulletSpeed() {FIRERATE += FIRERATE*0.1;}
+
 private:
     bool is_shot;
     float x_pos;
@@ -52,6 +55,10 @@ private:
     int x_target;
     int y_target;
 
+    int BULLET_DAME = 2;
+    int FIRERATE = 20;
+    int MAX_BULLETS_PER_BURST = 3;
+
     SDL_Texture *bullet_texture;
     std::vector<BulletBase*> bullets;
     SDL_Rect BulletRect_;
@@ -59,7 +66,7 @@ private:
     int last_bullet;
     Uint32 last_shot;
     Uint32 bullet_delay;
-    const int MAX_BULLETS_PER_BURST = 3;
+
 };
 
 
