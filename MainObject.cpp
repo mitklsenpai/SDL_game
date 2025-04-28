@@ -5,8 +5,8 @@
 MainObject::MainObject(SDL_Renderer *des)
 {
     PLAYER_SPEED = 5;
-    hp = 210;
-    MAX_HP = hp + 44;
+    hp = 100;
+    MAX_HP = 100;
     score = 0;
     frame_ = 0;
     x_pos_ = 570;
@@ -272,8 +272,8 @@ void MainObject::ShowBar(SDL_Renderer *des)
     HP_Bar.HP_Inner.x = 40;
     HP_Bar.HP_Inner.y = 10;
     HP_Bar.HP_Inner.h = 12;
-    HP_Bar.HP_Inner.w = hp;
-    HP_Bar.HP_Outer = {0, 0, MAX_HP, 32};
+    HP_Bar.HP_Inner.w = hp*2.1;
+    HP_Bar.HP_Outer = {0, 0, MAX_HP*2.1 + 44, 32};
 
     double percent_progress = (double)G_EXP/MAX_EXP;
     double progress = 254.0*percent_progress;
@@ -303,8 +303,8 @@ bool MainObject::Dead()
 
 void MainObject::Reset_status()
 {
-    hp = 210;
-    MAX_HP = hp + 44;
+    hp = 100;
+    MAX_HP = 100;
     PLAYER_SPEED = 5;
     score = 0;
     frame_ = 0;
@@ -335,7 +335,7 @@ void MainObject::Score(SDL_Renderer *des, TTF_Font *font)
     SDL_Texture* Scores = SDL_CreateTextureFromSurface(des, Surface);
 
     SDL_Rect textRect = {1000, 0, textSurface->w, textSurface->h };
-    SDL_Rect ScoreRect = {1100, 0, Surface->w, Surface->h };
+    SDL_Rect ScoreRect = {1060, 0, Surface->w, Surface->h };
 
     SDL_RenderCopy(des, textTexture, NULL, &textRect);
     SDL_RenderCopy(des, Scores, NULL, &ScoreRect);
@@ -352,7 +352,6 @@ void MainObject::IncreaseSpeed()
 
 void MainObject::IncreaseMaxHealth()
 {
-    int percent = hp*0.1;
-    hp += percent;
-    MAX_HP = hp + 44;
+    int percent = MAX_HP*0.1;
+    MAX_HP += percent;
 }

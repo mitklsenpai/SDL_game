@@ -3,17 +3,23 @@
 
 Game::Game(SDL_Renderer *des, Gun &gun, MainObject &player) : gun_(gun), player_(player)
 {
-    p_play.x = 544; p_play.y = 400;
-    p_replay.x = 544; p_replay.y = 272;
-    p_quit.x = 544; p_quit.y = 388;
-    P_YouLose.x = 544; P_YouLose.y = 100;
-    p_pause_button.x = SCREEN_WIDTH-32, p_pause_button.y = 0;
-    //buff
+    p_play = {544, 400};
+    p_replay = {544, 272};
+    p_quit = {544, 388};
+    P_YouLose = {544, 100};
+    P_YouLose = {580,200};
+    p_pause_button = {SCREEN_WIDTH-WIDTH_BUTTON_SETTING, 0};
+
     frame = IMG_LoadTexture(des, "images//Buff_window.png");
     info = IMG_LoadTexture(des, "images//Info_table.png");
     for(int i=0;i<MAIN_BUFFS;i++)
     {
         Main_buffs_texture[i] = nullptr;
+    }
+
+    for(int i=0;i<TOTAL_BUFFS;i++)
+    {
+        Note_table[i] = nullptr;
     }
 
     Buffs["dame"] = "images//Dame.png";
@@ -311,10 +317,8 @@ void Game::FreeButton(SDL_Texture*& texture)
     }
 }
 
-SDL_Texture* Game::Render_Text(SDL_Renderer *des, TTF_Font *font, const char *text, SDL_Point point)
+SDL_Texture* Game::Render_Text(SDL_Renderer *des, TTF_Font *font, const char *text, SDL_Point point, SDL_Color textColor)
 {
-    SDL_Color textColor = { 255, 0, 0 }; // Màu đỏ
-
     SDL_Surface* textSurface = TTF_RenderText_Solid(font, text, textColor);
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(des, textSurface);
 
@@ -328,7 +332,7 @@ SDL_Texture* Game::Render_Text(SDL_Renderer *des, TTF_Font *font, const char *te
 
 void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner, std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list)
 {
-    SDL_Texture* Youlose = Render_Text(des, font, "YOU LOSE", P_YouLose);
+    SDL_Texture* Youlose = Render_Text(des, font, "YOU LOSE", P_YouLose, textColor);
     Setclip_and_Render(des, p_replay, Replay_button, replay_button_frame,3, "images//Replay_button.png", WIDTH_BUTTON, HEIGH_BUTTON);
     Setclip_and_Render(des, p_quit, Quit_button, quit_button_frame,3, "images//Quit_button.png", WIDTH_BUTTON, HEIGH_BUTTON);
     game_event = false;
@@ -450,6 +454,11 @@ void Game::RandomPick()
 
 void Game::RenderBuff(SDL_Renderer *des)
 {
+    SDL_SetRenderDrawBlendMode(des, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(des, 0, 0, 0, 100);
+    SDL_Rect overlay = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    SDL_RenderFillRect(des, &overlay);
+
     SDL_Rect renderquad = {p_frame.x, p_frame.y, 255, 170};
     SDL_RenderCopy(des, frame, NULL, &renderquad);
     SDL_Rect renderquad2 = {p_info.x, p_info.y, 237, 223};

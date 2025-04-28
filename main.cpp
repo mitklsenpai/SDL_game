@@ -17,29 +17,18 @@ bool InitData()
     int ret = SDL_Init(SDL_INIT_VIDEO);
     int res = TTF_Init();
     if(ret<0)
-    {
         return false;
-    }
     if(res < 0)
-    {
         return false;
-    }
-
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
-
     g_window = SDL_CreateWindow("MITKL'S SDL2 GAME", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-
     if(g_window == NULL)
-    {
         success = false;
-    }
     else
     {
         g_screen = SDL_CreateRenderer(g_window, -1, SDL_RENDERER_ACCELERATED);
         if(g_screen == NULL)
-        {
             success = false;
-        }
         else
         {
             SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
@@ -47,11 +36,10 @@ bool InitData()
             if(!(IMG_Init(imgFlags)&& imgFlags))
                 success = false;
         }
-        g_font = TTF_OpenFont("Ubuntu-Bold.ttf", 28);
+        g_font = TTF_OpenFont("Pixel Game.otf", 28);
         if(g_font == NULL)
         {
             std::cout << "TTF_OpenFont Error: " << TTF_GetError() << std::endl;
-            return false;
             success = false;
         }
     }
@@ -129,7 +117,6 @@ int main(int argc, char* argv[])
                 game.HandleMouseHover(g_event);
             }
         }
-
         if(game.Is_Menu())
         {
             g_background.Render(g_screen, NULL);

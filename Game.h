@@ -23,7 +23,7 @@ public:
     bool is_buff() {return buff;}
     bool is_buff_active() {return buff_active;}
     void FreeButton(SDL_Texture *&texture);
-    SDL_Texture* Render_Text(SDL_Renderer *des, TTF_Font *font, const char* text, SDL_Point point);
+    SDL_Texture* Render_Text(SDL_Renderer *des, TTF_Font *font, const char* text, SDL_Point point, SDL_Color textColor);
     void Setclip_and_Render(SDL_Renderer *des, SDL_Point &point, SDL_Texture *&texture, int &frame, int NUMBER_OF_FRAMES, const char* name, int wid, int hei);
 
     void HandleMouseHover(SDL_Event event);
@@ -54,7 +54,7 @@ private:
     MainObject &player_;
 
     int mouse_x, mouse_y;
-
+    SDL_Color textColor = { 255, 0, 0 }; // Màu đỏ
     // menu
     const int WIDTH_BUTTON = 192;
     const int HEIGH_BUTTON = 96;
@@ -117,6 +117,7 @@ private:
     std::string selected_buff;
     std::map<char*, char*> Buffs;
     SDL_Texture* Main_buffs_texture[3];
+    SDL_Texture* Note_table[5];
     std::map<int, char*> Main_buffs_name;
     std::map<char*, SDL_Point> Points;
     std::map<char*, bool> Press;
