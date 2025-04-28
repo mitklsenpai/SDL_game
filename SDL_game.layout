@@ -2,45 +2,32 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="Game.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Game.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="648" topLine="6" />
+			<Cursor1 position="395" topLine="18" />
 		</Cursor>
 	</File>
-	<File name="Player.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Nuke.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="589" topLine="5" />
+			<Cursor1 position="2692" topLine="117" />
 		</Cursor>
 	</File>
-	<File name="Game.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="SmallEnemy.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4117" topLine="65" />
+			<Cursor1 position="511" topLine="24" />
 		</Cursor>
 		<Folding>
-			<Collapse line="78" />
-			<Collapse line="213" />
-			<Collapse line="222" />
-			<Collapse line="237" />
+			<Collapse line="41" />
 		</Folding>
 	</File>
-	<File name="Gun.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="828" topLine="41" />
+			<Cursor1 position="5802" topLine="197" />
 		</Cursor>
 	</File>
-	<File name="Nuke.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Gun.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="722" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="commonFunc.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="943" topLine="39" />
-		</Cursor>
-	</File>
-	<File name="Gun.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3328" topLine="118" />
+			<Cursor1 position="3497" topLine="119" />
 		</Cursor>
 	</File>
 	<File name="Timer.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -48,35 +35,24 @@
 			<Cursor1 position="944" topLine="38" />
 		</Cursor>
 	</File>
-	<File name="MainObject.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Game.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="7532" topLine="26" />
+			<Cursor1 position="12561" topLine="274" />
 		</Cursor>
 		<Folding>
-			<Collapse line="36" />
-			<Collapse line="49" />
-			<Collapse line="61" />
-			<Collapse line="87" />
-			<Collapse line="120" />
-			<Collapse line="185" />
-			<Collapse line="260" />
-			<Collapse line="290" />
-			<Collapse line="297" />
+			<Collapse line="126" />
+			<Collapse line="273" />
+			<Collapse line="280" />
+			<Collapse line="303" />
+			<Collapse line="312" />
+			<Collapse line="327" />
+			<Collapse line="353" />
+			<Collapse line="358" />
 		</Folding>
 	</File>
-	<File name="Player.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+	<File name="Nuke.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1621" topLine="49" />
-		</Cursor>
-	</File>
-	<File name="Collision.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2714" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4271" topLine="153" />
+			<Cursor1 position="722" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="Collision.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -84,14 +60,9 @@
 			<Cursor1 position="302" topLine="1" />
 		</Cursor>
 	</File>
-	<File name="commonFunc.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Map.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="27" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="MainObject.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1534" topLine="80" />
+			<Cursor1 position="213" topLine="9" />
 		</Cursor>
 	</File>
 	<File name="Timer.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -99,22 +70,46 @@
 			<Cursor1 position="272" topLine="6" />
 		</Cursor>
 	</File>
-	<File name="SmallEnemy.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Gun.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="547" topLine="24" />
+			<Cursor1 position="881" topLine="39" />
+		</Cursor>
+	</File>
+	<File name="MainObject.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="7171" topLine="62" />
 		</Cursor>
 		<Folding>
-			<Collapse line="41" />
+			<Collapse line="43" />
+			<Collapse line="56" />
+			<Collapse line="68" />
+			<Collapse line="94" />
+			<Collapse line="126" />
+			<Collapse line="190" />
+			<Collapse line="294" />
+			<Collapse line="301" />
+			<Collapse line="321" />
+			<Collapse line="327" />
 		</Folding>
 	</File>
-	<File name="Nuke.cpp" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Player.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2692" topLine="138" />
+			<Cursor1 position="589" topLine="5" />
 		</Cursor>
 	</File>
-	<File name="Map.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Player.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="213" topLine="9" />
+			<Cursor1 position="1621" topLine="49" />
+		</Cursor>
+	</File>
+	<File name="MainObject.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2073" topLine="72" />
+		</Cursor>
+	</File>
+	<File name="commonFunc.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="27" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="SmallEnemy.cpp" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
@@ -125,6 +120,16 @@
 	<File name="Map.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2254" topLine="82" />
+		</Cursor>
+	</File>
+	<File name="Collision.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2714" topLine="12" />
+		</Cursor>
+	</File>
+	<File name="commonFunc.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="79" topLine="18" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

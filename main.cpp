@@ -95,12 +95,12 @@ int main(int argc, char* argv[])
     p_player.set_clips();
     Gun gun(g_screen);
     gun.LoadImg("images//shot_gun.png", g_screen);
+    Game game(g_screen, gun, p_player);
     std::vector<SmallEnemy*> SmallSpawner = smallenemy.Make_S_Spawner();
     std::vector<Exp*> Exp_List;
     GameMap game_map;
     game_map.LoadMap("map/map01.dat");
     game_map.LoadTiles(g_screen);
-    Game game(g_screen);
     Collision collision;
     NukeManager nukemanager(g_screen);
     // Vong lap game
@@ -160,6 +160,7 @@ int main(int argc, char* argv[])
             if(!game.Is_Paused())
             {
                 p_player.DoPlayer();
+
                 gun.update();
                 for(auto *smallenemy : SmallSpawner)
                 {
@@ -195,8 +196,8 @@ int main(int argc, char* argv[])
                     game.RenderBuff(g_screen);
                 else
                     game.RenderPausedList(g_screen, is_quit, player_event);
-
             }
+
             if(p_player.Dead())
             {
                 std::vector<Nuke*> nuke_list = nukemanager.Get_Nuke_List();

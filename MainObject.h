@@ -1,3 +1,4 @@
+
 #ifndef MAIN_OBJECT_H_
 #define MAIN_OBJECT_H_
 
@@ -61,7 +62,12 @@ public:
 //buff
     void IncreaseSpeed();
     void IncreaseMaxHealth();
+
+    int G_EXP;
+    int MAX_EXP;
+    int LEVEL;
 private:
+
     float x_val_;
     float y_val_;
 
@@ -78,12 +84,10 @@ private:
     int frame_;
     int status_;
     int score;
-    int G_EXP;
-    int MAX_EXP;
-    int LEVEL;
 
     int PLAYER_SPEED = 5;
     int hp = 210;
+    const int maxhp = hp + 44;
 
     SDL_Texture *HP_Bar_Inner;
     SDL_Texture *HP_Bar_Outer;
@@ -93,7 +97,7 @@ private:
     struct HP_Bar
     {
         SDL_Rect HP_Inner;
-        const SDL_Rect HP_Outer ={0,0,254,32};
+        SDL_Rect HP_Outer;
     }HP_Bar;
 
     struct Exp_Bar

@@ -1,4 +1,4 @@
-
+#pragma once
 #ifndef GAME_H_
 #define GAME_H_
 
@@ -9,15 +9,19 @@
 #include "SmallEnemy.h"
 #include "Nuke.h"
 
+class Gun;
+class MainObject;
 
 class Game
 {
 public:
-    Game(SDL_Renderer *des);
+    Game(SDL_Renderer *des, Gun &gun, MainObject &player);
     ~Game();
+
     bool Is_Menu() {return menu;}
     bool Is_Paused() {return paused;}
     bool is_buff() {return buff;}
+    bool is_buff_active() {return buff_active;}
     void FreeButton(SDL_Texture *&texture);
     SDL_Texture* Render_Text(SDL_Renderer *des, TTF_Font *font, const char* text, SDL_Point point);
     void Setclip_and_Render(SDL_Renderer *des, SDL_Point &point, SDL_Texture *&texture, int &frame, int NUMBER_OF_FRAMES, const char* name, int wid, int hei);
@@ -37,7 +41,18 @@ public:
     void ApplyBuff(MainObject &player, Gun &gun);
     void RandomPick();
 
+    void TriggerBuff()
+    {
+        paused = true;
+        buff = true;
+        buff_active = true;
+        RandomPick();
+    }
+
 private:
+    Gun &gun_;
+    MainObject &player_;
+
     int mouse_x, mouse_y;
 
     // menu

@@ -264,13 +264,13 @@ void MainObject::DoPlayer()
 
 void MainObject::ShowBar(SDL_Renderer *des)
 {
-    SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
     SDL_RenderCopy(des, Exp_Bar_Outer, NULL, &Exp_Bar.Exp_Outer);
 
     HP_Bar.HP_Inner.x = 40;
     HP_Bar.HP_Inner.y = 10;
     HP_Bar.HP_Inner.h = 12;
     HP_Bar.HP_Inner.w = hp;
+    HP_Bar.HP_Outer = {0, 0, maxhp, 32};
 
     double percent_progress = (double)G_EXP/MAX_EXP;
     double progress = 254.0*percent_progress;
@@ -280,6 +280,7 @@ void MainObject::ShowBar(SDL_Renderer *des)
     Exp_Bar.Exp_Inner.w = (int)progress;
     Exp_Bar.Exp_Inner.h = 8;
 
+    SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
     SDL_RenderCopy(des, Exp_Bar_Inner, NULL, &Exp_Bar.Exp_Inner);
     SDL_RenderCopy(des, HP_Bar_Inner, NULL, &HP_Bar.HP_Inner);
     if(G_EXP >= MAX_EXP)
@@ -287,6 +288,7 @@ void MainObject::ShowBar(SDL_Renderer *des)
         LEVEL++;
         G_EXP = 0;
         MAX_EXP = MAX_EXP * pow(1.5f, LEVEL - 1);
+
     }
 }
 

@@ -1,7 +1,7 @@
 
 #include "Game.h"
 
-Game::Game(SDL_Renderer *des)
+Game::Game(SDL_Renderer *des, Gun &gun, MainObject &player) : gun_(gun), player_(player)
 {
     p_play.x = 544; p_play.y = 400;
     p_replay.x = 544; p_replay.y = 272;
@@ -32,6 +32,7 @@ Game::Game(SDL_Renderer *des)
     Press["second"] = false;
     Press["third"] = false;
 }
+
 
 Game::~Game()
 {
@@ -264,6 +265,7 @@ switch(event.type)
     }
     if(Press["first"] || Press["second"] || Press["third"])
     {
+        ApplyBuff(player_, gun_);
         buff = false;
         paused = false;
         buff_active = false;
@@ -390,12 +392,15 @@ void Game::RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event)
 
 void Game::ApplyBuff(MainObject &player, Gun &gun)
 {
-    if(player.GetExp() >= player.GetMaxExp())
+    if(player.G_EXP >= player.MAX_EXP)
     {
         paused = true;
         buff = true;
         buff_active = true;
         RandomPick();
+        player.LEVEL++;
+        player.G_EXP = 0;
+        player.MAX_EXP = player.MAX_EXP * pow(1.5f, player.LEVEL - 1);
     }
     if(buff_active && !selected_buff.empty())
     {
