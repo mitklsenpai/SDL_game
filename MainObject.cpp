@@ -4,6 +4,9 @@
 
 MainObject::MainObject(SDL_Renderer *des)
 {
+    PLAYER_SPEED = 5;
+    hp = 210;
+    MAX_HP = hp + 44;
     score = 0;
     frame_ = 0;
     x_pos_ = 570;
@@ -270,7 +273,7 @@ void MainObject::ShowBar(SDL_Renderer *des)
     HP_Bar.HP_Inner.y = 10;
     HP_Bar.HP_Inner.h = 12;
     HP_Bar.HP_Inner.w = hp;
-    HP_Bar.HP_Outer = {0, 0, maxhp, 32};
+    HP_Bar.HP_Outer = {0, 0, MAX_HP, 32};
 
     double percent_progress = (double)G_EXP/MAX_EXP;
     double progress = 254.0*percent_progress;
@@ -288,7 +291,6 @@ void MainObject::ShowBar(SDL_Renderer *des)
         LEVEL++;
         G_EXP = 0;
         MAX_EXP = MAX_EXP * pow(1.5f, LEVEL - 1);
-
     }
 }
 
@@ -297,6 +299,29 @@ bool MainObject::Dead()
     if(hp<=0)
         return true;
     return false;
+}
+
+void MainObject::Reset_status()
+{
+    hp = 210;
+    MAX_HP = hp + 44;
+    PLAYER_SPEED = 5;
+    score = 0;
+    frame_ = 0;
+    x_pos_ = 570;
+    y_pos_ = 270;
+    x_val_ = 0;
+    y_val_ = 0;
+    width_frame_ = 0;
+    height_frame_ = 0;
+    status_ = -1;
+    input_type_.left_ = 0;
+    input_type_.rigth_ = 0;
+    input_type_.down_ = 0;
+    input_type_.up_ = 0;
+    LEVEL = 0;
+    MAX_EXP = 10;
+    G_EXP = 0;
 }
 
 void MainObject::Score(SDL_Renderer *des, TTF_Font *font)
@@ -329,4 +354,5 @@ void MainObject::IncreaseMaxHealth()
 {
     int percent = hp*0.1;
     hp += percent;
+    MAX_HP = hp + 44;
 }
