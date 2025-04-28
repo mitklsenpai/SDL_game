@@ -346,12 +346,12 @@ void MainObject::Score(SDL_Renderer *des, TTF_Font *font)
 
 void MainObject::IncreaseSpeed()
 {
-    int percent = PLAYER_SPEED*0.02;
+    int percent = round(PLAYER_SPEED*0.2);
     PLAYER_SPEED += percent;
 }
 
 void MainObject::IncreaseMaxHealth()
 {
-    int percent = MAX_HP*0.1;
+    int percent = round(MAX_HP*0.1);
     MAX_HP += percent;
 }

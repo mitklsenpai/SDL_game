@@ -41,6 +41,9 @@ public:
     int GetLEVEL() {return LEVEL;}
     int GetExp() {return G_EXP;}
     int GetMaxExp() {return MAX_EXP;}
+
+    int GetSpeed() {return PLAYER_SPEED;}
+    int GetMaxHp() {return MAX_HP;}
 //buff
     void IncreaseSpeed();
     void IncreaseMaxHealth();

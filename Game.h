@@ -40,6 +40,8 @@ public:
     void RenderBuff(SDL_Renderer *des);
     void ApplyBuff(MainObject &player, Gun &gun);
     void RandomPick();
+    void RenderNoteTB(SDL_Renderer *des, TTF_Font *game_font);
+    void RenderPreview(SDL_Renderer *des, TTF_Font *game_font, MainObject &player, Gun &gun);
 
     void TriggerBuff()
     {
@@ -55,6 +57,7 @@ private:
 
     int mouse_x, mouse_y;
     SDL_Color textColor = { 255, 0, 0 }; // Màu đỏ
+    SDL_Color gameColor = { 255, 255, 255};
     // menu
     const int WIDTH_BUTTON = 192;
     const int HEIGH_BUTTON = 96;
@@ -114,10 +117,14 @@ private:
     SDL_Texture *info;
     SDL_Point p_info;
 
+    std::string hover_buff;
+    SDL_Texture* NoteTB[5];
+    SDL_Point NotePos[5];
+    int NoteText[5];
+
     std::string selected_buff;
     std::map<char*, char*> Buffs;
     SDL_Texture* Main_buffs_texture[3];
-    SDL_Texture* Note_table[5];
     std::map<int, char*> Main_buffs_name;
     std::map<char*, SDL_Point> Points;
     std::map<char*, bool> Press;

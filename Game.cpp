@@ -19,8 +19,20 @@ Game::Game(SDL_Renderer *des, Gun &gun, MainObject &player) : gun_(gun), player_
 
     for(int i=0;i<TOTAL_BUFFS;i++)
     {
-        Note_table[i] = nullptr;
+        NoteTB[i] = nullptr;
     }
+
+    NotePos[0] = {140, 230};
+    NotePos[1] = {140, 258};
+    NotePos[2] = {140, 286};
+    NotePos[3] = {140, 314};
+    NotePos[4] = {140, 342};
+
+    NoteText[0] = gun.GetDame();
+    NoteText[1] = gun.GetTotalBullets();
+    NoteText[2] = player.GetSpeed();
+    NoteText[3] = gun.GetBulletSpeed();
+    NoteText[4] = player.GetMaxHp();
 
     Buffs["dame"] = "images//Dame.png";
     Buffs["total_bullets"] = "images//total_bullets.png";
@@ -58,7 +70,7 @@ bool Game::CheckButton(SDL_Point &point, int wid, int hei)
 
 void Game::HandleMouseHover(SDL_Event event)
 {
-switch(event.type)
+    switch(event.type)
     {
         case SDL_KEYDOWN:
         {
@@ -225,36 +237,34 @@ switch(event.type)
                     quit_frame = 0;
                 }
             }
-            if(buff)
+            if (buff)
             {
-                if(CheckButton(Points["first"], WIDTH_BUFF, HEIGHT_BUFF))
+                if (CheckButton(Points["first"], WIDTH_BUFF, HEIGHT_BUFF))
                 {
+                    hover_buff = Main_buffs_name[0];
                     first_buff_frame++;
-                    if(first_buff_frame == 2)
+                    if (first_buff_frame == 2)
                         first_buff_frame = 1;
                 }
-                else
+                else if (CheckButton(Points["second"], WIDTH_BUFF, HEIGHT_BUFF)) // Thêm else
                 {
-                    first_buff_frame = 0;
-                }
-                if(CheckButton(Points["second"], WIDTH_BUFF, HEIGHT_BUFF))
-                {
+                    hover_buff = Main_buffs_name[1];
                     second_buff_frame++;
-                    if(second_buff_frame == 2)
+                    if (second_buff_frame == 2)
                         second_buff_frame = 1;
                 }
-                else
+                else if (CheckButton(Points["third"], WIDTH_BUFF, HEIGHT_BUFF)) // Thêm else
                 {
-                    second_buff_frame = 0;
-                }
-                if(CheckButton(Points["third"], WIDTH_BUFF, HEIGHT_BUFF))
-                {
+                    hover_buff = Main_buffs_name[2];
                     third_buff_frame++;
-                    if(third_buff_frame == 2)
+                    if (third_buff_frame == 2)
                         third_buff_frame = 1;
                 }
                 else
                 {
+                    hover_buff.clear();
+                    first_buff_frame = 0;
+                    second_buff_frame = 0;
                     third_buff_frame = 0;
                 }
             }
@@ -411,28 +421,34 @@ void Game::ApplyBuff(MainObject &player, Gun &gun)
         if(selected_buff == "images//Dame.png")
         {
             gun.IncreaseDame();
+            NoteText[0] = gun.GetDame();
         }
         else if(selected_buff == "images//total_bullets.png")
         {
             gun.IncreaseTotalBullets();
+            NoteText[1] = gun.GetTotalBullets();
         }
         else if(selected_buff == "images//Speed.png")
         {
             player.IncreaseSpeed();
+            NoteText[2] = player.GetSpeed();
         }
         else if(selected_buff == "images//Bullet_speed.png")
         {
             gun.IncreaseBulletSpeed();
+            NoteText[3] = gun.GetBulletSpeed();
         }
         else if(selected_buff == "images//health.png")
         {
             player.IncreaseMaxHealth();
+            NoteText[4] = player.GetMaxHp();
         }
         for(int i=0;i<MAIN_BUFFS;i++)
         {
             FreeButton(Main_buffs_texture[i]);
         }
         selected_buff.clear();
+        hover_buff.clear();
         buff_active = false;
     }
 }
@@ -461,8 +477,6 @@ void Game::RenderBuff(SDL_Renderer *des)
 
     SDL_Rect renderquad = {p_frame.x, p_frame.y, 255, 170};
     SDL_RenderCopy(des, frame, NULL, &renderquad);
-    SDL_Rect renderquad2 = {p_info.x, p_info.y, 237, 223};
-    SDL_RenderCopy(des, info, NULL, &renderquad2);
 
     for (int i = 0; i < MAIN_BUFFS; i++) {
         if (Main_buffs_texture[i] == nullptr) {
@@ -476,4 +490,61 @@ void Game::RenderBuff(SDL_Renderer *des)
     Setclip_and_Render(des, Points["third"], Main_buffs_texture[2], third_buff_frame, 2, "", WIDTH_BUFF, HEIGHT_BUFF);
 }
 
+void Game::RenderNoteTB(SDL_Renderer *des, TTF_Font *game_font)
+{
+    SDL_Rect renderquad2 = {p_info.x, p_info.y, 237, 223};
+    SDL_RenderCopy(des, info, NULL, &renderquad2);
+    std::string name[5] = {"DAMAGE: ", "BULLET/BURST: ", "MOVE SPEED: ", "BULLET SPEED: ", "HP: "};
+    for(int i=0;i<TOTAL_BUFFS;i++)
+    {
+        std::string text = name[i] + std::to_string(NoteText[i]);
+        NoteTB[i] = Render_Text(des, game_font, text.c_str(), NotePos[i], gameColor);
+    }
+}
 
+void Game::RenderPreview(SDL_Renderer *des, TTF_Font *game_font, MainObject& player, Gun &gun)
+{
+    std::string text = "";
+    SDL_Point position = {0, 0};
+    SDL_Texture *preview = nullptr;
+
+    if(!hover_buff.empty())
+    {
+        if(hover_buff == "images//Dame.png")
+        {
+            int newDame = gun.GetDame() + 1;
+            text = "-> " + std::to_string(newDame);
+            position = {NotePos[0].x + 100, NotePos[0].y};
+        }
+        else if(hover_buff == "images//total_bullets.png")
+        {
+            int newBullets = gun.GetTotalBullets() + 1;
+            text = "-> " + std::to_string(newBullets);
+            position = {NotePos[1].x + 167, NotePos[1].y};
+        }
+        else if(hover_buff == "images//Speed.png")
+        {
+            int newSpeed = player.GetSpeed() * 1.2;
+            text = "-> " + std::to_string(newSpeed);
+            position = {NotePos[2].x + 140, NotePos[2].y};
+        }
+        else if(hover_buff == "images//Bullet_speed.png")
+        {
+            int newBulletSpeed = gun.GetBulletSpeed() * 1.1;
+            text = "-> " + std::to_string(newBulletSpeed);
+            position = {NotePos[3].x + 170, NotePos[3].y};
+        }
+        else if(hover_buff == "images//health.png")
+        {
+            int newHP = player.GetMaxHp() * 1.1;
+            text = "-> " + std::to_string(newHP);
+            position = {NotePos[4].x + 70, NotePos[4].y};
+        }
+        if (!text.empty()) {
+            preview = Render_Text(des, game_font, text.c_str(), position, textColor);
+        }
+    }
+    if (preview) {
+        SDL_DestroyTexture(preview);
+    }
+}

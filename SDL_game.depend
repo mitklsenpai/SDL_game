@@ -5,7 +5,7 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1745828723 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1745844620 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
@@ -48,11 +48,11 @@
 	"commonFunc.h"
 	"Player.h"
 
-1745815370 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+1745833998 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
 	"commonFunc.h"
 	"Player.h"
 
-1745828818 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+1745843587 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
 	"MainObject.h"
 	"commonFunc.h"
 
@@ -85,7 +85,7 @@
 	"Gun.h"
 	"commonFunc.h"
 
-1745765937 c:\users\dell_pc\desktop\dev\sdl_game\gun.h
+1745844005 c:\users\dell_pc\desktop\dev\sdl_game\gun.h
 	"commonFunc.h"
 	"MainObject.h"
 
@@ -118,7 +118,7 @@
 	"Player.h"
 	"commonFunc.h"
 
-1745829919 c:\users\dell_pc\desktop\dev\sdl_game\game.h
+1745844722 c:\users\dell_pc\desktop\dev\sdl_game\game.h
 	"commonFunc.h"
 	"MainObject.h"
 	"Gun.h"
@@ -126,7 +126,7 @@
 	"SmallEnemy.h"
 	"Nuke.h"
 
-1745827486 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
+1745844366 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
 	"Game.h"
 
 1745677563 source:c:\users\dell_pc\desktop\dev\sdl_game\nuke.cpp

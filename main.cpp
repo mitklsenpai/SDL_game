@@ -91,6 +91,7 @@ int main(int argc, char* argv[])
     game_map.LoadTiles(g_screen);
     Collision collision;
     NukeManager nukemanager(g_screen);
+    std::vector<Nuke*> nuke_list = nukemanager.Get_Nuke_List();
     // Vong lap game
     bool is_quit = false;
     bool player_event = true;
@@ -180,14 +181,20 @@ int main(int argc, char* argv[])
                 }
                 p_player.ResetInput();
                 if(game.is_buff())
+                {
                     game.RenderBuff(g_screen);
+                    game.RenderNoteTB(g_screen, g_font);
+                    game.RenderPreview(g_screen, g_font, p_player, gun);
+                }
                 else
+                {
                     game.RenderPausedList(g_screen, is_quit, player_event);
+                    game.RenderNoteTB(g_screen, g_font);
+                }
             }
 
             if(p_player.Dead())
             {
-                std::vector<Nuke*> nuke_list = nukemanager.Get_Nuke_List();
                 game.Replay(g_screen, g_font, player_event, is_quit, p_player, SmallSpawner, Exp_List, nuke_list);
             }
         }

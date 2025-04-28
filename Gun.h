@@ -43,9 +43,13 @@ public:
     SDL_Rect GetRect() {return BulletRect_;}
     void update();
 
-    void IncreaseDame() {BULLET_DAME += BULLET_DAME*0.05;}
+    int GetDame() {return BULLET_DAME;}
+    int GetTotalBullets() {return MAX_BULLETS_PER_BURST;}
+    int GetBulletSpeed() {return FIRERATE;}
+
+    void IncreaseDame() {BULLET_DAME++;}
     void IncreaseTotalBullets() {MAX_BULLETS_PER_BURST++;}
-    void IncreaseBulletSpeed() {FIRERATE += FIRERATE*0.1;}
+    void IncreaseBulletSpeed() {FIRERATE += round(FIRERATE*0.1);}
 
 private:
     bool is_shot;
