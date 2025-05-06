@@ -9,12 +9,34 @@ SmallEnemy::SmallEnemy()
     frame_ = 0;
     width_frame_ = 0;
     height_frame_ = 0;
+    MAX_HP = 10;
+    Hp = 10;
 
     is_move = false;
 }
 
 SmallEnemy::~SmallEnemy()
 {
+}
+
+void SmallEnemy::MinusHP(int dame)
+{
+    Hp-=dame;
+}
+
+void SmallEnemy::ShowHpBar(SDL_Renderer *des)
+{
+    double progress = Hp*1.6;
+    SDL_Rect rect2 = {x_pos + 17, y_pos + 34, progress, 2};
+    SDL_SetRenderDrawColor(des, 144, 238, 144, 255);
+    SDL_RenderDrawRect(des, &rect2);
+}
+
+bool SmallEnemy::IsDead()
+{
+    if(Hp <= 0)
+        return true;
+    return false;
 }
 
 bool SmallEnemy::LoadImg(std::string path, SDL_Renderer *des)
@@ -27,6 +49,7 @@ bool SmallEnemy::LoadImg(std::string path, SDL_Renderer *des)
     }
     return ret;
 }
+
 
 void SmallEnemy::SetSpawnPoint(SDL_Point &position)
 {
@@ -62,31 +85,17 @@ void SmallEnemy::set_clips()
 
 void SmallEnemy::Show(SDL_Renderer* screen)
 {
-    if(is_move)
-    {
-        LoadImg("images//Run_Right.png", screen);
-    }
-
-    if(is_move)
-    {
-        frame_++;
-        if(frame_ > 5)
-        {
-            frame_ = 0;
-        }
-    }
-
     rect_.x = x_pos;
     rect_.y = y_pos;
 
-    SDL_Rect* current_clip = &frame_clips[frame_];  // hàm lấy thông tin của frame hiện tại
+    SDL_Rect* current_clip = &frame_clips[frame_];
 
-//    SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};  // hàm lấy thông tin của frame (vị trí frame, kích thước)
+//    SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};
     SDL_Rect renderQuad = {rect_.x, rect_.y, 48, 48};
     SDL_RenderCopy(screen, p_object_, current_clip, &renderQuad);
 }
 
-void SmallEnemy::Follow(MainObject &player)
+void SmallEnemy::Follow(MainObject &player, float deltaTime)
 {
     // set vi tri cua nguoi choi
     int player_x_ = player.Get_x_pos();
@@ -105,14 +114,25 @@ void SmallEnemy::Follow(MainObject &player)
 
         enemy_move_x = normalize_x * SMALL_ENEMY_SPEED;
         enemy_move_y = normalize_y * SMALL_ENEMY_SPEED;
-        if(x_pos+=enemy_move_x)
-        {
-            is_move = true;
+        x_pos+=enemy_move_x;
+        y_pos += enemy_move_y;
+        is_move = true;
+
+        animationTimer += deltaTime;
+        if (animationTimer >= FRAME_DURATION) {
+            animationTimer = 0.0f;
+            if (isForward) {
+                frame_++;
+                if (frame_ >= 5) isForward = false;
+            } else {
+                frame_--;
+                if (frame_ <= 0) isForward = true;
+            }
         }
-        if(y_pos += enemy_move_y)
-        {
-            is_move = true;
-        }
+    }
+    else
+    {
+        is_move = false;
     }
 }
 

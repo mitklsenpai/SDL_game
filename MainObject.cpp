@@ -4,9 +4,7 @@
 
 MainObject::MainObject(SDL_Renderer *des)
 {
-    PLAYER_SPEED = 5;
-    hp = 100;
-    MAX_HP = 100;
+
     score = 0;
     frame_ = 0;
     x_pos_ = 570;
@@ -27,7 +25,6 @@ MainObject::MainObject(SDL_Renderer *des)
     HP_Bar_Inner = IMG_LoadTexture(des, "images//hp_bar_inner.png");
     HP_Bar_Outer = IMG_LoadTexture(des, "images//hp_bar_outer.png");
     Exp_Bar_Outer = IMG_LoadTexture(des, "images//experience_bar_background.png");
-    Exp_Bar_Inner = IMG_LoadTexture(des, "images//experience_bar_progress.png");
 }
 
 MainObject::~MainObject()
@@ -279,12 +276,15 @@ void MainObject::ShowBar(SDL_Renderer *des)
     double progress = 254.0*percent_progress;
 
     Exp_Bar.Exp_Inner.x = 0;
-    Exp_Bar.Exp_Inner.y = 30;
+    Exp_Bar.Exp_Inner.y = 31;
     Exp_Bar.Exp_Inner.w = (int)progress;
-    Exp_Bar.Exp_Inner.h = 8;
+    Exp_Bar.Exp_Inner.h = 6;
+
+    SDL_SetRenderDrawColor(des, 255, 255, 0, 255);
+    SDL_RenderFillRect(des, &Exp_Bar.Exp_Inner);
 
     SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
-    SDL_RenderCopy(des, Exp_Bar_Inner, NULL, &Exp_Bar.Exp_Inner);
+//    SDL_RenderCopy(des, Exp_Bar_Inner, NULL, &Exp_Bar.Exp_Inner);
     SDL_RenderCopy(des, HP_Bar_Inner, NULL, &HP_Bar.HP_Inner);
     if(G_EXP >= MAX_EXP)
     {

@@ -51,22 +51,26 @@ void Collision::Col_bullet_enemy(MainObject &player, std::vector<SmallEnemy*> &S
                 if(enemy_bullet)
                 {
                     gun.RemoveBullet(i);
-                    smallenemy->Free();
-                    exp->Load("images//exp_orb.png", des);
-                    exp->Set_Position(r_small_enemy.x+31, r_small_enemy.y+31);
-                    Exp_List.push_back(exp);
+                    smallenemy->MinusHP(gun.BULLET_DAME);
+                    if(smallenemy->IsDead())
+                    {
+                        smallenemy->Free();
+                        SmallSpawner.erase(SmallSpawner.begin() + j);
+                        smallenemy = NULL;
 
-                    SmallSpawner.erase(SmallSpawner.begin() + j);
-                    smallenemy = NULL;
-
-                    player.Set_score();
+                        exp->Load("images//exp_orb.png", des);
+                        exp->Set_Position(r_small_enemy.x+31, r_small_enemy.y+31);
+                        Exp_List.push_back(exp);
+                        player.Set_score();
+                        break;
+                    }
                 }
             }
         }
     }
 }
 
-void Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObject &p_player)
+void Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObject &p_player, AudioManager &audio)
 {
     for(int i=0;i<(int) SmallSpawner.size(); i++)
     {
@@ -85,6 +89,7 @@ void Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObj
         if(enemy_player)
         {
             p_player.Minus_Hp_When_Hit(smallenemy->SMALL_ENEMY_DAME);
+            audio.PlaySound("hit");
         }
     }
 }

@@ -1,12 +1,12 @@
-
+#pragma once
 #ifndef GUN_H_
 #define GUN_H_
 
 #include "commonFunc.h"
 #include "MainObject.h"
+#include "AudioManager.h"
 
 #define GUN_OFFSET 20
-
 
 class BulletBase
 {
@@ -41,7 +41,7 @@ public:
     std::vector<BulletBase*> Get_Bullets() {return bullets;}
     void RemoveBullet(const int &index);
     SDL_Rect GetRect() {return BulletRect_;}
-    void update();
+    void update(AudioManager &audio);
 
     int GetDame() {return BULLET_DAME;}
     int GetTotalBullets() {return MAX_BULLETS_PER_BURST;}
@@ -50,8 +50,13 @@ public:
     void IncreaseDame() {BULLET_DAME++;}
     void IncreaseTotalBullets() {MAX_BULLETS_PER_BURST++;}
     void IncreaseBulletSpeed() {FIRERATE += round(FIRERATE*0.1);}
+    bool IsShot() {return is_shot;}
 
+    int BULLET_DAME = 2;
+    int FIRERATE = 20;
+    int MAX_BULLETS_PER_BURST = 3;
 private:
+
     bool is_shot;
     float x_pos;
     float y_pos;
@@ -59,9 +64,7 @@ private:
     int x_target;
     int y_target;
 
-    int BULLET_DAME = 2;
-    int FIRERATE = 20;
-    int MAX_BULLETS_PER_BURST = 3;
+
 
     SDL_Texture *bullet_texture;
     std::vector<BulletBase*> bullets;

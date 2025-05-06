@@ -70,14 +70,13 @@ private:
     int status_;
     int score;
 
-    int PLAYER_SPEED;
-    int hp;
-    int MAX_HP;
+    int PLAYER_SPEED = 5;
+    int hp = 100;
+    int MAX_HP = 100;
 
     SDL_Texture *HP_Bar_Inner;
     SDL_Texture *HP_Bar_Outer;
     SDL_Texture *Exp_Bar_Outer;
-    SDL_Texture *Exp_Bar_Inner;
 
     struct HP_Bar
     {

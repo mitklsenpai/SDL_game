@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "SmallEnemy.h"
 #include "Nuke.h"
+#include "AudioManager.h"
 
 class Gun;
 class MainObject;
@@ -22,6 +23,7 @@ public:
     bool Is_Paused() {return paused;}
     bool is_buff() {return buff;}
     bool is_buff_active() {return buff_active;}
+    bool is_music() {return music;}
     void FreeButton(SDL_Texture *&texture);
     SDL_Texture* Render_Text(SDL_Renderer *des, TTF_Font *font, const char* text, SDL_Point point, SDL_Color textColor);
     void Setclip_and_Render(SDL_Renderer *des, SDL_Point &point, SDL_Texture *&texture, int &frame, int NUMBER_OF_FRAMES, const char* name, int wid, int hei);
@@ -32,7 +34,7 @@ public:
     void RenderStartMenu(SDL_Renderer *des);
     //setting
     void RenderPaused(SDL_Renderer *des);
-    void RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event);
+    void RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event, AudioManager &audio);
     // replay & quit
     void YouLose(SDL_Renderer *des, TTF_Font *font);
     void Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner, std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list);
@@ -42,14 +44,6 @@ public:
     void RandomPick();
     void RenderNoteTB(SDL_Renderer *des, TTF_Font *game_font);
     void RenderPreview(SDL_Renderer *des, TTF_Font *game_font, MainObject &player, Gun &gun);
-
-    void TriggerBuff()
-    {
-        paused = true;
-        buff = true;
-        buff_active = true;
-        RandomPick();
-    }
 
 private:
     Gun &gun_;
@@ -85,16 +79,21 @@ private:
 	// settings
 	const int WIDTH_BUTTON_SETTING = 32;
 	const int HEIGH_BUTTON_SETTING = 32;
-	bool setting_pressed[4] = {false};
+	bool setting_pressed[5] = {false};
     bool paused = false;
+    bool music = true;
+    bool isHovermusic = false;
+    bool isResume = false;
 
     SDL_Texture *Pause_button = NULL;
     SDL_Texture *Resume_button = NULL;
     SDL_Texture *Quit_button_setting = NULL;
+    SDL_Texture *Sound_button[4] = {NULL};
 
     SDL_Point p_pause_button;
     SDL_Point p_resume_button;
     SDL_Point p_quit_button_setting;
+    SDL_Point p_music_button;
 
     int paused_frame = 0;
     int resume_frame = 0;

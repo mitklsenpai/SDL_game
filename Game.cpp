@@ -1,17 +1,26 @@
 
 #include "Game.h"
 
+
 Game::Game(SDL_Renderer *des, Gun &gun, MainObject &player) : gun_(gun), player_(player)
 {
+
     p_play = {544, 400};
     p_replay = {544, 272};
     p_quit = {544, 388};
     P_YouLose = {544, 100};
     P_YouLose = {580,200};
     p_pause_button = {SCREEN_WIDTH-WIDTH_BUTTON_SETTING, 0};
+    p_music_button = {544, 300};
 
     frame = IMG_LoadTexture(des, "images//Buff_window.png");
     info = IMG_LoadTexture(des, "images//Info_table.png");
+
+    Sound_button[0] = IMG_LoadTexture(des,"images//music_off.png");
+    Sound_button[1] = IMG_LoadTexture(des,"images//music_off_hover.png");
+    Sound_button[2] = IMG_LoadTexture(des,"images//music_on.png");
+    Sound_button[3] = IMG_LoadTexture(des,"images//music_on_hover.png");
+
     for(int i=0;i<MAIN_BUFFS;i++)
     {
         Main_buffs_texture[i] = nullptr;
@@ -28,11 +37,11 @@ Game::Game(SDL_Renderer *des, Gun &gun, MainObject &player) : gun_(gun), player_
     NotePos[3] = {140, 314};
     NotePos[4] = {140, 342};
 
-    NoteText[0] = gun.GetDame();
-    NoteText[1] = gun.GetTotalBullets();
-    NoteText[2] = player.GetSpeed();
-    NoteText[3] = gun.GetBulletSpeed();
-    NoteText[4] = player.GetMaxHp();
+    NoteText[0] = 2;
+    NoteText[1] = 3;
+    NoteText[2] = 5;
+    NoteText[3] = 20;
+    NoteText[4] = 100;
 
     Buffs["dame"] = "images//Dame.png";
     Buffs["total_bullets"] = "images//total_bullets.png";
@@ -54,6 +63,7 @@ Game::Game(SDL_Renderer *des, Gun &gun, MainObject &player) : gun_(gun), player_
 
 Game::~Game()
 {
+
 }
 
 bool Game::CheckButton(SDL_Point &point, int wid, int hei)
@@ -96,6 +106,7 @@ void Game::HandleMouseHover(SDL_Event event)
                     if(CheckButton(p_replay, WIDTH_BUTTON, HEIGH_BUTTON))
                     {
                         pressed[1] = true;
+                        isResume = true;
                     }
                     else if(CheckButton(p_quit, WIDTH_BUTTON, HEIGH_BUTTON))
                     {
@@ -119,6 +130,10 @@ void Game::HandleMouseHover(SDL_Event event)
                     else if(CheckButton(p_quit_button_setting, WIDTH_BUTTON_SETTING, HEIGH_BUTTON_SETTING))
                     {
                         setting_pressed[2] = true;
+                    }
+                    else if(CheckButton(p_music_button, WIDTH_BUTTON_SETTING, HEIGH_BUTTON_SETTING))
+                    {
+                        music = !music;
                     }
                 }
                 if(buff)
@@ -179,16 +194,12 @@ void Game::HandleMouseHover(SDL_Event event)
             {
                 if(CheckButton(p_replay, WIDTH_BUTTON, HEIGH_BUTTON))
                 {
+                    isResume = true;
                    replay_button_frame++;
                    if(replay_button_frame == 3)
                         replay_button_frame = 2;
                 }
-                else
-                {
-                    replay_button_frame = 0;
-                }
-
-                if(CheckButton(p_quit, WIDTH_BUTTON, HEIGH_BUTTON))
+                else if(CheckButton(p_quit, WIDTH_BUTTON, HEIGH_BUTTON))
                 {
                     quit_button_frame++;
                     if(quit_button_frame == 3)
@@ -196,6 +207,7 @@ void Game::HandleMouseHover(SDL_Event event)
                 }
                 else
                 {
+                    replay_button_frame = 0;
                     quit_button_frame = 0;
                 }
             }
@@ -222,22 +234,24 @@ void Game::HandleMouseHover(SDL_Event event)
                     if(resume_frame == 2)
                         resume_frame = 1;
                 }
-                else
-                {
-                    resume_frame = 0;
-                }
-                if(CheckButton(p_quit_button_setting, WIDTH_BUTTON_SETTING, HEIGH_BUTTON_SETTING))
+                else if(CheckButton(p_quit_button_setting, WIDTH_BUTTON_SETTING, HEIGH_BUTTON_SETTING))
                 {
                     quit_frame++;
                     if(quit_frame == 2)
                         quit_frame = 1;
                 }
+                else if(CheckButton(p_music_button, WIDTH_BUTTON_SETTING, HEIGH_BUTTON_SETTING))
+                {
+                    isHovermusic = true;
+                }
                 else
                 {
+                    resume_frame = 0;
                     quit_frame = 0;
+                    isHovermusic = false;
                 }
             }
-            if (buff)
+            if(buff)
             {
                 if (CheckButton(Points["first"], WIDTH_BUFF, HEIGHT_BUFF))
                 {
@@ -346,6 +360,22 @@ void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_q
     Setclip_and_Render(des, p_replay, Replay_button, replay_button_frame,3, "images//Replay_button.png", WIDTH_BUTTON, HEIGH_BUTTON);
     Setclip_and_Render(des, p_quit, Quit_button, quit_button_frame,3, "images//Quit_button.png", WIDTH_BUTTON, HEIGH_BUTTON);
     game_event = false;
+    for(auto *smallenemy : Spawner)
+    {
+        if(smallenemy != nullptr) delete smallenemy;
+    }
+
+    for(auto *exp : exp_list)
+    {
+        if(exp != nullptr) delete exp;
+    }
+
+    for(auto *nuke : nuke_list)
+    {
+        if(nuke != nullptr)
+            delete nuke;
+    }
+
     Spawner.clear();
     exp_list.clear();
     nuke_list.clear();
@@ -363,6 +393,8 @@ void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_q
     if(pressed[2] == true)
     {
         is_quit = true;
+        player.Free();
+
     }
 }
 
@@ -371,7 +403,7 @@ void Game::RenderPaused(SDL_Renderer *des)
     Setclip_and_Render(des, p_pause_button, Pause_button, paused_frame,2, "images//Paused_button.png", 32, 32);
 }
 
-void Game::RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event)
+void Game::RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event, AudioManager &audio)
 {
 
     SDL_SetRenderDrawBlendMode(des, SDL_BLENDMODE_BLEND);
@@ -401,6 +433,22 @@ void Game::RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event)
         FreeButton(Pause_button);
         is_quit = true;
         setting_pressed[2] = false;
+    }
+
+    SDL_Texture *target = nullptr;
+    if(!music)
+    {
+        target = isHovermusic ? Sound_button[1] : Sound_button[0];
+    }
+    else
+    {
+        target = isHovermusic ? Sound_button[3] : Sound_button[2];
+    }
+    audio.ToggleMute(music);
+    if(target != NULL)
+    {
+        SDL_Rect RenderQuad = {p_music_button.x, p_music_button.y, WIDTH_BUTTON_SETTING, HEIGH_BUTTON_SETTING};
+        SDL_RenderCopy(des, target, NULL, &RenderQuad);
     }
 }
 
@@ -548,3 +596,5 @@ void Game::RenderPreview(SDL_Renderer *des, TTF_Font *game_font, MainObject& pla
         SDL_DestroyTexture(preview);
     }
 }
+
+

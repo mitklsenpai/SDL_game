@@ -16,7 +16,8 @@ Gun::Gun(SDL_Renderer *des)
 
 Gun::~Gun()
 {
-    Free();
+    SDL_DestroyTexture(bullet_texture);
+    for(auto bullet : bullets) delete bullet;
 }
 
 void Gun::HandleMouseEvents(SDL_Event event, SDL_Renderer* screen)
@@ -37,7 +38,7 @@ void Gun::HandleMouseEvents(SDL_Event event, SDL_Renderer* screen)
     }
 }
 
-void Gun::update()
+void Gun::update(AudioManager &audio)
 {
     if(is_shot)
     {
@@ -47,6 +48,7 @@ void Gun::update()
             if(last_bullet < MAX_BULLETS_PER_BURST)
             {
                 SetBullet();
+                audio.PlaySound("gun");
                 last_shot = currentTime;
                 last_bullet++;
             }
@@ -55,6 +57,16 @@ void Gun::update()
                 is_shot = false;
                 last_bullet = 0;
             }
+        }
+    }
+
+    for(int i = bullets.size() - 1; i>=0; i--)
+    {
+        BulletBase *bullet = bullets.at(i);
+        if(bullet!=nullptr || !is_shot)
+        {
+            bullet->x_pos += cos(bullet->angle) * FIRERATE;
+            bullet->y_pos += sin(bullet->angle) * FIRERATE;
         }
     }
 }
@@ -105,8 +117,6 @@ void Gun::ShowBullet(SDL_Renderer *des)
         BulletBase* bullet = bullets.at(i);
         if(bullet != NULL)
         {
-            bullet->x_pos += cos(bullet->angle) * FIRERATE;
-            bullet->y_pos += sin(bullet->angle) * FIRERATE;
 
             BulletRect_.x = bullet->x_pos;
             BulletRect_.y = bullet->y_pos;

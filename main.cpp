@@ -9,16 +9,22 @@
 #include "Collision.h"
 #include "Game.h"
 #include "Nuke.h"
+#include "AudioManager.h"
 
 Player g_background;
 bool InitData()
 {
+    int flags = MIX_INIT_MP3 | MIX_INIT_OGG;
     bool success = true;
     int ret = SDL_Init(SDL_INIT_VIDEO);
     int res = TTF_Init();
-    if(ret<0)
+    int initted = Mix_Init(flags);
+    if ((initted & flags) != flags)
+    {
+        std::cout << "Mix_Init Error: " << Mix_GetError() << std::endl;
         return false;
-    if(res < 0)
+    }
+    if(ret<0 || res < 0)
         return false;
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
     g_window = SDL_CreateWindow("MITKL'S SDL2 GAME", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
@@ -68,23 +74,25 @@ void close()
     SDL_QUIT;
 }
 
+
 //Ham main
 int main(int argc, char* argv[])
 {
     ImpTimer fps_timer;
-    SmallEnemy smallenemy;
     if(InitData()==false)
         return -1;
     if(LoadBackground() == false)
         return -1;
-
+    AudioManager audioManager;
+    audioManager.PlayMusic();
     MainObject p_player(g_screen);
     p_player.LoadImg("images//4_direct_move.png", g_screen);
     p_player.set_clips();
     Gun gun(g_screen);
     gun.LoadImg("images//shot_gun.png", g_screen);
     Game game(g_screen, gun, p_player);
-    std::vector<SmallEnemy*> SmallSpawner = smallenemy.Make_S_Spawner();
+    SmallEnemy smallenemy;
+    std::vector<SmallEnemy*> SmallSpawner;
     std::vector<Exp*> Exp_List;
     GameMap game_map;
     game_map.LoadMap("map/map01.dat");
@@ -95,6 +103,9 @@ int main(int argc, char* argv[])
     // Vong lap game
     bool is_quit = false;
     bool player_event = true;
+
+    Uint32 lastTime = 0;
+    Uint32 lastFrameTime = SDL_GetTicks();
     while(!is_quit)
     {
         fps_timer.start(); // chay dong ho
@@ -127,7 +138,6 @@ int main(int argc, char* argv[])
         {
             SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
             SDL_RenderClear(g_screen);
-
             game_map.DrawMap(g_screen);
             p_player.Show(g_screen);
             p_player.ShowBar(g_screen);
@@ -137,7 +147,11 @@ int main(int argc, char* argv[])
             for(auto *smallenemy : SmallSpawner)
             {
                 if(smallenemy != nullptr)
+                {
                     smallenemy->Show(g_screen);
+                    if(!smallenemy->IsDead())
+                        smallenemy->ShowHpBar(g_screen);
+                }
             }
             for(auto *exp : Exp_List)
             {
@@ -148,26 +162,33 @@ int main(int argc, char* argv[])
             if(!game.Is_Paused())
             {
                 p_player.DoPlayer();
+                gun.update(audioManager);
 
-                gun.update();
+                Uint32 currentTime = SDL_GetTicks();
+                float deltaTime = (currentTime - lastFrameTime) / 1000.0f; // Chuyển sang giây
+                lastFrameTime = currentTime;
+
                 for(auto *smallenemy : SmallSpawner)
                 {
-                    if(smallenemy != nullptr)
-                        smallenemy->Follow(p_player);
+                    if(smallenemy != nullptr) smallenemy->Follow(p_player, deltaTime);
                 }
                 collision.Col_bullet_enemy(p_player, SmallSpawner,gun, Exp_List, g_screen);
-                collision.Col_player_enemy(SmallSpawner,p_player);
+                collision.Col_player_enemy(SmallSpawner,p_player, audioManager);
                 collision.Col_player_exp(Exp_List, p_player, g_screen);
                 collision.Col_enemy_nuke(SmallSpawner, nukemanager.Get_Nuke_List());
                 collision.Col_player_nuke(p_player, nukemanager.Get_Nuke_List());
 
-                if(SmallSpawner.size() < 0.1 * MAX_SMALL_ENEMIES && !p_player.Dead())
+//                Uint32 currentTime = SDL_GetTicks();
+                if(!p_player.Dead() && currentTime - lastTime >= 500 && SmallSpawner.size() < smallenemy.MAX_SMALL_ENEMIES)
                 {
-                    std::vector<SmallEnemy*> newSpawner = smallenemy.Make_S_Spawner();
-                    int maxSpawn = 20;
-                    int numToAdd = std::min((int)newSpawner.size(), maxSpawn);
-
-                    SmallSpawner.insert(SmallSpawner.end(), newSpawner.begin(), newSpawner.begin() + numToAdd);
+//                    std::vector<SmallEnemy*> newSpawner = smallenemy.Make_S_Spawner();
+//                    int maxSpawn = 20;
+//                    int numToAdd = std::min((int)newSpawner.size(), maxSpawn);
+//
+//                    SmallSpawner.insert(SmallSpawner.end(), newSpawner.begin(), newSpawner.begin() + numToAdd);
+                        SmallEnemy* newEnemy = smallenemy.SpawnNewEnemy();
+                        SmallSpawner.push_back(newEnemy);
+                        lastTime = currentTime;
                 }
                 nukemanager.updateBomb(p_player.GetLEVEL());
                 game.RenderPaused(g_screen);
@@ -188,7 +209,7 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    game.RenderPausedList(g_screen, is_quit, player_event);
+                    game.RenderPausedList(g_screen, is_quit, player_event, audioManager);
                     game.RenderNoteTB(g_screen, g_font);
                 }
             }
