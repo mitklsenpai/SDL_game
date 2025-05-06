@@ -284,14 +284,14 @@ void MainObject::ShowBar(SDL_Renderer *des)
     SDL_RenderFillRect(des, &Exp_Bar.Exp_Inner);
 
     SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
-//    SDL_RenderCopy(des, Exp_Bar_Inner, NULL, &Exp_Bar.Exp_Inner);
     SDL_RenderCopy(des, HP_Bar_Inner, NULL, &HP_Bar.HP_Inner);
-    if(G_EXP >= MAX_EXP)
-    {
-        LEVEL++;
-        G_EXP = 0;
-        MAX_EXP = MAX_EXP * pow(1.5f, LEVEL - 1);
-    }
+//    SDL_RenderCopy(des, Exp_Bar_Inner, NULL, &Exp_Bar.Exp_Inner);
+//    if(G_EXP >= MAX_EXP)
+//    {
+//        LEVEL++;
+//        G_EXP = 0;
+//        MAX_EXP = MAX_EXP * pow(1.5f, LEVEL - 1);
+//    }
 }
 
 bool MainObject::Dead()
@@ -354,4 +354,10 @@ void MainObject::IncreaseMaxHealth()
 {
     int percent = round(MAX_HP*0.1);
     MAX_HP += percent;
+}
+
+void MainObject::Healing()
+{
+    float healHp = 0.15*MAX_HP;
+    hp += healHp;
 }

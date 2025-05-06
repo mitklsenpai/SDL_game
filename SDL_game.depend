@@ -5,7 +5,7 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1746514333 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1746539749 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
@@ -50,11 +50,11 @@
 	"commonFunc.h"
 	"Player.h"
 
-1746515300 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+1746541182 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
 	"commonFunc.h"
 	"Player.h"
 
-1746019247 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+1746541182 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
 	"MainObject.h"
 	"commonFunc.h"
 
@@ -74,7 +74,7 @@
 1741314498 c:\users\dell_pc\desktop\dev\sdl_game\small_enemy.h
 	"commonFunc.h"
 
-1746514841 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
+1746541182 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
 	"SmallEnemy.h"
 	"commonFunc.h"
 
@@ -122,7 +122,7 @@
 	"Player.h"
 	"commonFunc.h"
 
-1746443175 c:\users\dell_pc\desktop\dev\sdl_game\game.h
+1746537379 c:\users\dell_pc\desktop\dev\sdl_game\game.h
 	"commonFunc.h"
 	"MainObject.h"
 	"Gun.h"
@@ -131,7 +131,7 @@
 	"Nuke.h"
 	"AudioManager.h"
 
-1746507940 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
+1746537571 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
 	"Game.h"
 
 1745677563 source:c:\users\dell_pc\desktop\dev\sdl_game\nuke.cpp
@@ -140,9 +140,9 @@
 1745677563 c:\users\dell_pc\desktop\dev\sdl_game\nuke.h
 	"commonFunc.h"
 
-1746443428 source:c:\users\dell_pc\desktop\dev\sdl_game\audiomanager.cpp
+1746538813 source:c:\users\dell_pc\desktop\dev\sdl_game\audiomanager.cpp
 	"AudioManager.h"
 
-1746443476 c:\users\dell_pc\desktop\dev\sdl_game\audiomanager.h
+1746538813 c:\users\dell_pc\desktop\dev\sdl_game\audiomanager.h
 	"commonFunc.h"
 

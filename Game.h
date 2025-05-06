@@ -28,7 +28,7 @@ public:
     SDL_Texture* Render_Text(SDL_Renderer *des, TTF_Font *font, const char* text, SDL_Point point, SDL_Color textColor);
     void Setclip_and_Render(SDL_Renderer *des, SDL_Point &point, SDL_Texture *&texture, int &frame, int NUMBER_OF_FRAMES, const char* name, int wid, int hei);
 
-    void HandleMouseHover(SDL_Event event);
+    void HandleMouseHover(SDL_Event event, AudioManager &audio);
     bool CheckButton(SDL_Point &point, int wid, int hei);
     //menu
     void RenderStartMenu(SDL_Renderer *des);
@@ -40,7 +40,7 @@ public:
     void Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner, std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list);
     //buff
     void RenderBuff(SDL_Renderer *des);
-    void ApplyBuff(MainObject &player, Gun &gun);
+    void ApplyBuff(MainObject &player, Gun &gun, AudioManager &audio);
     void RandomPick();
     void RenderNoteTB(SDL_Renderer *des, TTF_Font *game_font);
     void RenderPreview(SDL_Renderer *des, TTF_Font *game_font, MainObject &player, Gun &gun);

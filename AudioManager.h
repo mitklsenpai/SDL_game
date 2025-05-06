@@ -13,6 +13,7 @@ public:
     void PlaySound(const std::string& name);
     void PlayMusic();
     void ToggleMute(bool &isMuted);
+    void MuteMusic();
 
 private:
     int soundVolume = MIX_MAX_VOLUME * 0.4;

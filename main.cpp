@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
             }
             if(!game.Is_Paused())
             {
-                game.HandleMouseHover(g_event);
+                game.HandleMouseHover(g_event, audioManager);
                 if(player_event)
                 {
                     p_player.HandleInputAction(g_event,g_screen);
@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
             }
             else
             {
-                game.HandleMouseHover(g_event);
+                game.HandleMouseHover(g_event, audioManager);
             }
         }
         if(game.Is_Menu())
@@ -192,7 +192,7 @@ int main(int argc, char* argv[])
                 }
                 nukemanager.updateBomb(p_player.GetLEVEL());
                 game.RenderPaused(g_screen);
-                game.ApplyBuff(p_player, gun);
+                game.ApplyBuff(p_player, gun, audioManager);
             }
             else
             {
@@ -213,9 +213,10 @@ int main(int argc, char* argv[])
                     game.RenderNoteTB(g_screen, g_font);
                 }
             }
-
             if(p_player.Dead())
             {
+                audioManager.MuteMusic();
+                audioManager.PlaySound("youLose");
                 game.Replay(g_screen, g_font, player_event, is_quit, p_player, SmallSpawner, Exp_List, nuke_list);
             }
         }

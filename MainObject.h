@@ -47,6 +47,7 @@ public:
 //buff
     void IncreaseSpeed();
     void IncreaseMaxHealth();
+    void Healing();
 
     int G_EXP;
     int MAX_EXP;

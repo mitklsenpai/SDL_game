@@ -97,11 +97,9 @@ void SmallEnemy::Show(SDL_Renderer* screen)
 
 void SmallEnemy::Follow(MainObject &player, float deltaTime)
 {
-    // set vi tri cua nguoi choi
     int player_x_ = player.Get_x_pos();
     int player_y_ = player.Get_y_pos();
     float diff_x,diff_y,distance,normalize_x,normalize_y,enemy_move_x,enemy_move_y;
-    // quai chay theo nhan vat
     diff_x = player_x_ - x_pos;
     diff_y = player_y_ - y_pos;
 

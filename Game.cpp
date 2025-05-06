@@ -48,6 +48,7 @@ Game::Game(SDL_Renderer *des, Gun &gun, MainObject &player) : gun_(gun), player_
     Buffs["speed"] = "images//Speed.png";
     Buffs["bullet_speed"] = "images//Bullet_speed.png";
     Buffs["max_health"] = "images//health.png";
+    Buffs["healing"] = "images//healing.png";
 
     p_frame = {512, 235};
     p_info = {131, 209};
@@ -78,7 +79,7 @@ bool Game::CheckButton(SDL_Point &point, int wid, int hei)
     return false;
 }
 
-void Game::HandleMouseHover(SDL_Event event)
+void Game::HandleMouseHover(SDL_Event event, AudioManager &audio)
 {
     switch(event.type)
     {
@@ -295,7 +296,9 @@ void Game::HandleMouseHover(SDL_Event event)
     }
     if(Press["first"] || Press["second"] || Press["third"])
     {
-        ApplyBuff(player_, gun_);
+        audio.PlaySound("buff");
+        SDL_Delay(100);
+        ApplyBuff(player_, gun_, audio);
         buff = false;
         paused = false;
         buff_active = false;
@@ -393,7 +396,6 @@ void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_q
     if(pressed[2] == true)
     {
         is_quit = true;
-        player.Free();
 
     }
 }
@@ -452,11 +454,12 @@ void Game::RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event, 
     }
 }
 
-void Game::ApplyBuff(MainObject &player, Gun &gun)
+void Game::ApplyBuff(MainObject &player, Gun &gun, AudioManager &audio)
 {
     if(player.G_EXP >= player.MAX_EXP)
     {
         paused = true;
+        audio.PlaySound("levelUp");
         buff = true;
         buff_active = true;
         RandomPick();
@@ -466,30 +469,34 @@ void Game::ApplyBuff(MainObject &player, Gun &gun)
     }
     if(buff_active && !selected_buff.empty())
     {
-        if(selected_buff == "images//Dame.png")
+        if(selected_buff == Buffs["dame"])
         {
             gun.IncreaseDame();
             NoteText[0] = gun.GetDame();
         }
-        else if(selected_buff == "images//total_bullets.png")
+        else if(selected_buff == Buffs["total_bullets"])
         {
             gun.IncreaseTotalBullets();
             NoteText[1] = gun.GetTotalBullets();
         }
-        else if(selected_buff == "images//Speed.png")
+        else if(selected_buff == Buffs["speed"])
         {
             player.IncreaseSpeed();
             NoteText[2] = player.GetSpeed();
         }
-        else if(selected_buff == "images//Bullet_speed.png")
+        else if(selected_buff == Buffs["bullet_speed"])
         {
             gun.IncreaseBulletSpeed();
             NoteText[3] = gun.GetBulletSpeed();
         }
-        else if(selected_buff == "images//health.png")
+        else if(selected_buff == Buffs["max_health"])
         {
             player.IncreaseMaxHealth();
             NoteText[4] = player.GetMaxHp();
+        }
+        else if(selected_buff == Buffs["healing"])
+        {
+            player.Healing();
         }
         for(int i=0;i<MAIN_BUFFS;i++)
         {
@@ -504,7 +511,7 @@ void Game::ApplyBuff(MainObject &player, Gun &gun)
 void Game::RandomPick()
 {
     std::vector<char*> availableBuffs = {
-        "dame", "total_bullets", "speed", "bullet_speed", "max_health"
+        "dame", "total_bullets", "speed", "bullet_speed", "max_health", "healing"
     };
     std::srand(std::time(0));
     std::random_shuffle(availableBuffs.begin(), availableBuffs.end());

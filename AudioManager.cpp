@@ -8,6 +8,9 @@ AudioManager::AudioManager()
 
     soundEffects["gun"] = Mix_LoadWAV("sfx/sfx_gun_sound_effect.wav");
     soundEffects["hit"] = Mix_LoadWAV("sfx/sfx_damage_hit.wav");
+    soundEffects["levelUp"] = Mix_LoadWAV("sfx/level_up.wav");
+    soundEffects["buff"] = Mix_LoadWAV("sfx/choose_buff.wav");
+    soundEffects["youLose"] = Mix_LoadWAV("sfx/you_lose.wav");
     bgMusic = Mix_LoadMUS("sfx/8_bit_dungeon.mp3");
 
     Mix_VolumeMusic(MIX_MAX_VOLUME * 0.3);
@@ -18,7 +21,7 @@ AudioManager::AudioManager()
 AudioManager::~AudioManager()
 {
     for(auto& sfx : soundEffects) {
-    Mix_FreeChunk(sfx.second);
+        Mix_FreeChunk(sfx.second);
     }
     Mix_FreeMusic(bgMusic);
     Mix_CloseAudio();
@@ -46,4 +49,9 @@ void AudioManager::ToggleMute(bool &isMusic)
         Mix_Volume(-1, soundVolume);
         Mix_VolumeMusic(musicVolume);
     }
+}
+
+void AudioManager::MuteMusic()
+{
+    Mix_VolumeMusic(0);
 }
