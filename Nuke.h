@@ -1,8 +1,9 @@
 
 #ifndef NUKE_H_
 #define NUKE_H_
-#define NUKE_DAME 50
+#define NUKE_DAME 10
 #include "commonFunc.h"
+#include "MainObject.h"
 
 class Nuke
 {
@@ -11,7 +12,7 @@ public:
     ~Nuke();
 
     void RenderAnimation(SDL_Renderer* des);
-    void Set_Position();
+    void Set_Position(SDL_Point pos);
     void set_clips();
 //    void Follow();
     void update();
@@ -48,8 +49,8 @@ class NukeManager
 public:
     NukeManager(SDL_Renderer* des);
 
-    void SpawnBomb(int number);
-    void updateBomb(int LEVEL);
+    void SpawnBomb(int number, SDL_Point pos);
+    void updateBomb(MainObject &player);
     void Render(SDL_Renderer *des);
     std::vector<Nuke*> Get_Nuke_List() {return Nuke_List;}
 private:

@@ -75,10 +75,7 @@ void SmallEnemy::set_clips()
     {
         for(int i=0;i<6;i++)
         {
-            frame_clips[i].x = i*width_frame_;
-            frame_clips[i].y = 0;
-            frame_clips[i].h = height_frame_;
-            frame_clips[i].w = width_frame_;
+            frame_clips[i] = {i*width_frame_, 0, width_frame_, height_frame_};
         }
     }
 }

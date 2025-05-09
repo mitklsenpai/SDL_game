@@ -7,7 +7,7 @@ Gun::Gun(SDL_Renderer *des)
     x_target = 0;
     y_target = 0;
     last_shot = 0;
-    bullet_delay = 100;
+    bullet_delay = 200;
     last_bullet = 0;
     is_shot = false;
 

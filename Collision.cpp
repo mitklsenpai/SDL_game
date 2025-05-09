@@ -176,3 +176,27 @@ void Collision::Col_enemy_nuke(std::vector<SmallEnemy*> &SmallSpawner, const std
         }
     }
 }
+
+void Collision::Col_bullet_bomber(Gun &gun, Bomber &bomber)
+{
+    std::vector<BulletBase*> bullet_list = gun.Get_Bullets();
+    for(int i=0; i<(int)bullet_list.size(); i++)
+    {
+        BulletBase* bullet = bullet_list.at(i);
+        if(bullet != nullptr)
+        {
+            SDL_Rect r_bullet; SDL_Rect r_bomber;
+            r_bullet = bullet->GetRect();
+            r_bomber = bomber.GetRect();
+
+            bool bullet_bomber = CheckCollision(r_bullet, r_bomber);
+            if(bullet_bomber)
+            {
+                gun.RemoveBullet(i);
+//                if(!bomber.isTeleporting()){
+                    bomber.MinusHP(gun.BULLET_DAME);
+//                }
+            }
+        }
+    }
+}

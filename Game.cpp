@@ -196,8 +196,8 @@ void Game::HandleMouseHover(SDL_Event event, AudioManager &audio)
                 if(CheckButton(p_replay, WIDTH_BUTTON, HEIGH_BUTTON))
                 {
                     isResume = true;
-                   replay_button_frame++;
-                   if(replay_button_frame == 3)
+                    replay_button_frame++;
+                    if(replay_button_frame == 3)
                         replay_button_frame = 2;
                 }
                 else if(CheckButton(p_quit, WIDTH_BUTTON, HEIGH_BUTTON))
@@ -303,6 +303,7 @@ void Game::HandleMouseHover(SDL_Event event, AudioManager &audio)
         paused = false;
         buff_active = false;
     }
+    audio.ToggleMute(music);
 }
 
 void Game::RenderStartMenu(SDL_Renderer *des)
@@ -357,7 +358,8 @@ SDL_Texture* Game::Render_Text(SDL_Renderer *des, TTF_Font *font, const char *te
     return textTexture;
 }
 
-void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner, std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list)
+void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner
+                  , std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list, Bomber &bomber)
 {
     SDL_Texture* Youlose = Render_Text(des, font, "YOU LOSE", P_YouLose, textColor);
     Setclip_and_Render(des, p_replay, Replay_button, replay_button_frame,3, "images//Replay_button.png", WIDTH_BUTTON, HEIGH_BUTTON);
@@ -392,6 +394,7 @@ void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_q
         player.Reset_status();
         game_event = true;
         menu = true;
+        bomber.Reset();
     }
     if(pressed[2] == true)
     {
@@ -405,7 +408,7 @@ void Game::RenderPaused(SDL_Renderer *des)
     Setclip_and_Render(des, p_pause_button, Pause_button, paused_frame,2, "images//Paused_button.png", 32, 32);
 }
 
-void Game::RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event, AudioManager &audio)
+void Game::RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event)
 {
 
     SDL_SetRenderDrawBlendMode(des, SDL_BLENDMODE_BLEND);
@@ -446,7 +449,7 @@ void Game::RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event, 
     {
         target = isHovermusic ? Sound_button[3] : Sound_button[2];
     }
-    audio.ToggleMute(music);
+//    audio.ToggleMute(music);
     if(target != NULL)
     {
         SDL_Rect RenderQuad = {p_music_button.x, p_music_button.y, WIDTH_BUTTON_SETTING, HEIGH_BUTTON_SETTING};

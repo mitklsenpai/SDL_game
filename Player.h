@@ -20,7 +20,8 @@ public:
     virtual bool LoadImg(std::string path, SDL_Renderer* screen);
     SDL_Texture* Loadimg(std::string path, SDL_Renderer* screen);
     void Free();
-
+    void PlayAnimation(SDL_Renderer *des, SDL_Rect clips[], int currentFrame, SDL_Rect renderQuad, SDL_Texture *texture);
+    void setClips(SDL_Rect clips[], int clips_size, int wid, int hei);
 
     SDL_Texture* p_object_;
     SDL_Rect rect_;

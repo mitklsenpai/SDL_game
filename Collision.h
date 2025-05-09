@@ -9,6 +9,7 @@
 #include "MainObject.h"
 #include "Nuke.h"
 #include "AudioManager.h"
+#include "Bomber.h"
 
 
 class Collision
@@ -23,6 +24,7 @@ public:
     void Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &player, SDL_Renderer *des);
     void Col_player_nuke(MainObject &p_player,const std::vector<Nuke*> &nukes);
     void Col_enemy_nuke(std::vector<SmallEnemy*> &SmallSpawner,const std::vector<Nuke*> &nukes);
+    void Col_bullet_bomber(Gun &gun, Bomber &bomber);
 };
 
 #endif // COLLISION_H_

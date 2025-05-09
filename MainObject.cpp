@@ -358,6 +358,15 @@ void MainObject::IncreaseMaxHealth()
 
 void MainObject::Healing()
 {
-    float healHp = 0.15*MAX_HP;
-    hp += healHp;
+    if(hp == MAX_HP)
+    {
+        hp = MAX_HP;
+    }
+    else
+    {
+        float healHp = 0.15*MAX_HP;
+        int newHp = hp + healHp;
+
+        hp = std::min(newHp, MAX_HP);
+    }
 }

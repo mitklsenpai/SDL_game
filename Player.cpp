@@ -43,7 +43,7 @@ SDL_Texture* Player::Loadimg(std::string path, SDL_Renderer* screen)
     SDL_Surface* load_surface = IMG_Load(path.c_str());         // tao anh tu duong dan
     if(load_surface != NULL)
     {
-        SDL_SetColorKey(load_surface,SDL_TRUE ,SDL_MapRGB(load_surface->format, 167, 175, 180)); //xoa phong buc anh
+        SDL_SetColorKey(load_surface,SDL_TRUE ,SDL_MapRGBA(load_surface->format, 247,118,122,255)); //xoa phong buc anh
         new_texture = SDL_CreateTextureFromSurface(screen, load_surface);
 
         SDL_FreeSurface(load_surface); // xoa anh cu
@@ -60,6 +60,21 @@ void Player::Render(SDL_Renderer *des, const SDL_Rect* clips)
 void Player::Render(SDL_Renderer *des, SDL_Texture* texture, const SDL_Rect &rect)
 {
     SDL_RenderCopy(des, texture, NULL, &rect);
+}
+
+void Player::PlayAnimation(SDL_Renderer *des, SDL_Rect clips[], int currentFrame, SDL_Rect renderQuad, SDL_Texture *texture)
+{
+    SDL_Rect *current = &clips[currentFrame];
+
+    SDL_RenderCopy(des, texture, current, &renderQuad);
+}
+
+void Player::setClips(SDL_Rect clips[], int clips_size, int wid, int hei)
+{
+    for(int i=0;i<clips_size;i++)
+    {
+        clips[i] = {i*wid, 0, wid, hei};
+    }
 }
 
 void Player::Free()

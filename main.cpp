@@ -1,4 +1,3 @@
-
 #include "commonFunc.h"
 #include "Player.h"
 #include "MainObject.h"
@@ -10,6 +9,7 @@
 #include "Game.h"
 #include "Nuke.h"
 #include "AudioManager.h"
+#include "Bomber.h"
 
 Player g_background;
 bool InitData()
@@ -94,6 +94,7 @@ int main(int argc, char* argv[])
     SmallEnemy smallenemy;
     std::vector<SmallEnemy*> SmallSpawner;
     std::vector<Exp*> Exp_List;
+    Bomber bomber(g_screen);
     GameMap game_map;
     game_map.LoadMap("map/map01.dat");
     game_map.LoadTiles(g_screen);
@@ -106,6 +107,8 @@ int main(int argc, char* argv[])
 
     Uint32 lastTime = 0;
     Uint32 lastFrameTime = SDL_GetTicks();
+
+    Player tes;
     while(!is_quit)
     {
         fps_timer.start(); // chay dong ho
@@ -158,9 +161,12 @@ int main(int argc, char* argv[])
                 if(exp != nullptr)
                     exp->Render(g_screen, exp->exp_orb, exp->r_exp);
             }
-            nukemanager.Render(g_screen);
+//            nukemanager.Render(g_screen);
+            bomber.Activate(g_screen, nukemanager, p_player);
             if(!game.Is_Paused())
             {
+//                bomber.Spawn(p_player, nukemanager);
+                bomber.UpdateSkill(nukemanager, p_player);
                 p_player.DoPlayer();
                 gun.update(audioManager);
 
@@ -177,6 +183,7 @@ int main(int argc, char* argv[])
                 collision.Col_player_exp(Exp_List, p_player, g_screen);
                 collision.Col_enemy_nuke(SmallSpawner, nukemanager.Get_Nuke_List());
                 collision.Col_player_nuke(p_player, nukemanager.Get_Nuke_List());
+                collision.Col_bullet_bomber(gun, bomber);
 
 //                Uint32 currentTime = SDL_GetTicks();
                 if(!p_player.Dead() && currentTime - lastTime >= 500 && SmallSpawner.size() < smallenemy.MAX_SMALL_ENEMIES)
@@ -186,11 +193,11 @@ int main(int argc, char* argv[])
 //                    int numToAdd = std::min((int)newSpawner.size(), maxSpawn);
 //
 //                    SmallSpawner.insert(SmallSpawner.end(), newSpawner.begin(), newSpawner.begin() + numToAdd);
-                        SmallEnemy* newEnemy = smallenemy.SpawnNewEnemy();
-                        SmallSpawner.push_back(newEnemy);
-                        lastTime = currentTime;
+//////                        SmallEnemy* newEnemy = smallenemy.SpawnNewEnemy();
+//////                        SmallSpawner.push_back(newEnemy);
+//////                        lastTime = currentTime;
                 }
-                nukemanager.updateBomb(p_player.GetLEVEL());
+//                nukemanager.updateBomb(p_player.GetLEVEL());
                 game.RenderPaused(g_screen);
                 game.ApplyBuff(p_player, gun, audioManager);
             }
@@ -209,7 +216,7 @@ int main(int argc, char* argv[])
                 }
                 else
                 {
-                    game.RenderPausedList(g_screen, is_quit, player_event, audioManager);
+                    game.RenderPausedList(g_screen, is_quit, player_event);
                     game.RenderNoteTB(g_screen, g_font);
                 }
             }
@@ -217,7 +224,7 @@ int main(int argc, char* argv[])
             {
                 audioManager.MuteMusic();
                 audioManager.PlaySound("youLose");
-                game.Replay(g_screen, g_font, player_event, is_quit, p_player, SmallSpawner, Exp_List, nuke_list);
+                game.Replay(g_screen, g_font, player_event, is_quit, p_player, SmallSpawner, Exp_List, nuke_list, bomber);
             }
         }
 
@@ -234,7 +241,6 @@ int main(int argc, char* argv[])
                 SDL_Delay(delay_time);
         }
     }
-
     close();
 
     return 0;

@@ -9,6 +9,7 @@
 #include "SmallEnemy.h"
 #include "Nuke.h"
 #include "AudioManager.h"
+#include "Bomber.h"
 
 class Gun;
 class MainObject;
@@ -34,10 +35,11 @@ public:
     void RenderStartMenu(SDL_Renderer *des);
     //setting
     void RenderPaused(SDL_Renderer *des);
-    void RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event, AudioManager &audio);
+    void RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event);
     // replay & quit
     void YouLose(SDL_Renderer *des, TTF_Font *font);
-    void Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner, std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list);
+    void Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner,
+                std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list, Bomber &bomber);
     //buff
     void RenderBuff(SDL_Renderer *des);
     void ApplyBuff(MainObject &player, Gun &gun, AudioManager &audio);

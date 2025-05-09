@@ -13,10 +13,9 @@ class SmallEnemy : public Player
 public:
     SmallEnemy();
     ~SmallEnemy();
-    SDL_Point Make_random_point()
+    SDL_Point Make_random_point(int min_radius, int max_radius)
     {
         SDL_Point p;
-        int min_radius = 400; int max_radius = 500;
         float angle = static_cast<float>(rand() % 360) * (M_PI / 180.0f);
         float radius = min_radius + static_cast<float>(rand() % (max_radius - min_radius));
 
@@ -61,7 +60,7 @@ public:
     SmallEnemy* SpawnNewEnemy()
     {
         SmallEnemy* newEnemy = new SmallEnemy();
-        SDL_Point p = Make_random_point();
+        SDL_Point p = Make_random_point(400, 500);
         newEnemy->LoadImg("images//Run_Right.png", g_screen);
         newEnemy->set_clips();
         newEnemy->SetSpawnPoint(p);
@@ -74,7 +73,7 @@ public:
     int SMALL_ENEMY_DAME = 2;
     int MAX_SMALL_ENEMIES = 20;
 
-private:
+protected:
 
     float x_pos;
     float y_pos;

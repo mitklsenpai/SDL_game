@@ -16,7 +16,6 @@ Nuke::Nuke(SDL_Renderer *des)
     target = IMG_LoadTexture(des, "images//Target.png");
 
     set_clips();
-    Set_Position();
 }
 
 Nuke::~Nuke()
@@ -24,15 +23,6 @@ Nuke::~Nuke()
     SDL_DestroyTexture(nuke_texture);
     SDL_DestroyTexture(boom_texture);
     SDL_DestroyTexture(target);
-}
-
-void Nuke::Set_Position()
-{
-    x_target = rand()%1280;
-    y_target = rand()%640;
-
-    x_pos = x_target;
-    y_pos = y_target - 200;
 }
 
 SDL_Rect Nuke::GetRect()
@@ -44,6 +34,15 @@ SDL_Rect Nuke::GetRect()
     r.h = 27;
 
     return r;
+}
+
+void Nuke::Set_Position(SDL_Point pos)
+{
+    x_target = pos.x;
+    y_target = pos.y;
+
+    x_pos = x_target;
+    y_pos = y_target - 100;
 }
 
 void Nuke::update()
@@ -111,28 +110,29 @@ void Nuke::RenderAnimation(SDL_Renderer* des)
 NukeManager::NukeManager(SDL_Renderer* des)
 {
     renderer = des;
-    spawnInterval = 5000;
+    spawnInterval = 600;
     lastSpawnTime = 0;
 }
 
-void NukeManager::SpawnBomb(int number)
+void NukeManager::SpawnBomb(int number, SDL_Point pos)
 {
-    for(int i=0;i<number;i++)
-    {
-        Nuke_List.push_back(new Nuke(renderer));
-    }
+//    for(int i=0;i<number;i++)
+//    {
+        Nuke* newNuke = new Nuke(renderer);
+        newNuke->Set_Position(pos);
+        Nuke_List.push_back(newNuke);
+//    }
 }
 
-void NukeManager::updateBomb(int LEVEL)
+void NukeManager::updateBomb(MainObject &player)
 {
     Uint32 currentTime = SDL_GetTicks();
-    if(LEVEL != 0 && LEVEL % 2 == 0)
-    {
-        if (currentTime - lastSpawnTime >= spawnInterval) {
-            SpawnBomb(MAX_NUKES);
-            lastSpawnTime = currentTime;
-        }
-    }
+    SDL_Point pos = {player.GetRect().x, player.GetRect().y};
+//    if (currentTime - lastSpawnTime >= spawnInterval) {
+//        SpawnBomb(MAX_NUKES, pos);
+//        lastSpawnTime = currentTime;
+//    }
+//    SpawnBomb(MAX_NUKES, pos);
     for(int i = Nuke_List.size() - 1; i >= 0; i--)
     {
         Nuke *nuke = Nuke_List.at(i);
