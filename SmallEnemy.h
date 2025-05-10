@@ -6,7 +6,6 @@
 #include "Player.h"
 #include "MainObject.h"
 
-#define EXP 2
 
 class SmallEnemy : public Player
 {
@@ -72,6 +71,8 @@ public:
     float SMALL_ENEMY_SPEED = 0.5;
     int SMALL_ENEMY_DAME = 2;
     int MAX_SMALL_ENEMIES = 20;
+    const int SMALL_EXP = 2;
+
 
 protected:
 
@@ -97,9 +98,12 @@ class Exp : public Player
 {
 public:
     bool Load(std::string path, SDL_Renderer *des);
+    void Show(SDL_Renderer *des, SDL_Texture *texture, SDL_Rect rect);
     void Set_Position(int x, int y) {r_exp.x = x; r_exp.y = y;}
+    void Set_EXP(int exp) {EXP = exp;}
     SDL_Rect GetRect() {return r_exp;}
 
+    int EXP;
     SDL_Rect r_exp;
     SDL_Texture* exp_orb;
 };

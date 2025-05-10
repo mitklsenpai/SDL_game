@@ -1,12 +1,18 @@
 
-#include "Bomber.h"
+#include "Lich.h"
 
-Bomber::Bomber(SDL_Renderer *des)
+Lich::Lich(SDL_Renderer *des)
 {
     // main
     x_pos = 0;
     y_pos = 0;
-    Hp = 10;
+    Hp = 100;
+    renderer = des;
+
+    isDeathStarted = false;
+    isDeathAnimationFinished = false;
+    hasDroppedExp = false;
+
     LitchTexture = Loadimg("images//The Summoner.png", des);
     LitchDeathTexture = Loadimg("images//The Summoner Death.png", des);
     tele_skill = IMG_LoadTexture(des, "images//Tele effect.png");
@@ -24,28 +30,48 @@ Bomber::Bomber(SDL_Renderer *des)
 
 }
 
-Bomber::~Bomber()
+Lich::~Lich()
 {
     SDL_DestroyTexture(LitchTexture);
     SDL_DestroyTexture(tele_skill);
+
+    for (Exp* exp : Exp_list) {
+        if (exp) {
+            SDL_DestroyTexture(exp->exp_orb);
+            delete exp;
+        }
+    }
+    Exp_list.clear();
 }
 
-SDL_Rect Bomber::GetRect()
+SDL_Rect Lich::GetRect()
 {
-    SDL_Rect res = {x_pos, y_pos, 80, 80};
+    SDL_Rect res = {x_pos + 31, y_pos + 19, 17, 43};
     return res;
 }
 
-void Bomber::Reset()
+void Lich::Reset()
 {
-    Hp = 10;
+    Hp = 100;
+    currentState = IDLE;
 }
 
-void Bomber::UpdateSkill(NukeManager &nukemanager, MainObject &player)
+bool Lich::IsTelePorting()
+{
+    if(currentState == TELEPORTING){
+        return true;
+    }
+    return false;
+}
+
+void Lich::UpdateSkill(NukeManager &nukemanager, MainObject &player)
 {
     Uint32 currentTime = SDL_GetTicks();
     if(IsDead()){
         UpdateDeadFrame(currentTime);
+        if(isDeathAnimationFinished && !hasDroppedExp && LitchDeathTexture == nullptr){
+            DropExp();
+        }
     }
     else{
         nukemanager.updateBomb(player);
@@ -79,7 +105,7 @@ void Bomber::UpdateSkill(NukeManager &nukemanager, MainObject &player)
     }
 }
 
-void Bomber::UpdateTeleSkill(Uint32 currentTime)
+void Lich::UpdateTeleSkill(Uint32 currentTime)
 {
     SkillData *TelePorting = Combo[0];
     if(currentTime - TelePorting->casting_time >= TelePorting->frame_duration){
@@ -99,7 +125,7 @@ void Bomber::UpdateTeleSkill(Uint32 currentTime)
     }
 }
 
-void Bomber::UpdateCastingSkill(Uint32 currentTime, NukeManager &nukemanager, MainObject &player)
+void Lich::UpdateCastingSkill(Uint32 currentTime, NukeManager &nukemanager, MainObject &player)
 {
     SkillData* Casting = Combo[1];
     if(currentTime - Casting->casting_time >= Casting->frame_duration){
@@ -116,20 +142,48 @@ void Bomber::UpdateCastingSkill(Uint32 currentTime, NukeManager &nukemanager, Ma
     }
 }
 
-void Bomber::UpdateDeadFrame(Uint32 currentTime)
+void Lich::UpdateDeadFrame(Uint32 currentTime)
 {
     SkillData* Death = Combo[2];
+
     if(currentTime - Death->casting_time >= Death->frame_duration){
-        Death->currentFrame ++;
+        if(Death->currentFrame < 8)
+            Death->currentFrame ++;
+        else{
+            isDeathAnimationFinished = true;
+            SDL_DestroyTexture(LitchDeathTexture);
+            LitchDeathTexture = nullptr;
+        }
         Death->casting_time = currentTime;
     }
 }
 
-void Bomber::Activate(SDL_Renderer *des, NukeManager &nukemanager, MainObject &player)
+void Lich::DropExp()
+{
+    if(!hasDroppedExp){
+        std::cout  << "lich da chet tao 10 orb" <<std::endl;
+        for(int i=0;i < 10; i++)
+        {
+            Exp* exp = new Exp;
+            exp->Load("images//lich_exp_orb.png", renderer);
+            exp->Set_EXP(LICH_EXP);
+            int x = x_pos + (rand() % 80 - 40);
+            int y = y_pos + (rand() % 80 - 40);
+            exp->Set_Position(x, y);
+            std::cout << "Exp created at (" << x << ", " << y << ")" << std::endl;
+            Exp_list.push_back(exp);
+        }
+        hasDroppedExp = true;
+    }
+}
+
+void Lich::Activate(SDL_Renderer *des, NukeManager &nukemanager, MainObject &player)
 {
     SDL_Rect pos = {x_pos, y_pos, 80, 80};
     if(IsDead()){
-        PlayAnimation(des, LitchDeathClips, Combo[2]->currentFrame, pos, LitchDeathTexture);
+        int deathFrame = Combo[2]->currentFrame;
+        deathFrame = std::min(deathFrame, 8);
+        PlayAnimation(des, LitchDeathClips, deathFrame, pos, LitchDeathTexture);
     }
     else
     {
@@ -151,20 +205,20 @@ void Bomber::Activate(SDL_Renderer *des, NukeManager &nukemanager, MainObject &p
     }
 }
 
-void Bomber::MinusHP(int dame)
+void Lich::MinusHP(int dame)
 {
     Hp-=dame;
 }
 
-void Bomber::ShowHpBar(SDL_Renderer *des)
+void Lich::ShowHpBar(SDL_Renderer *des)
 {
-    double progress = Hp*1.6;
-    SDL_Rect rect2 = {x_pos + 17, y_pos + 34, progress, 2};
+    double progress = Hp*0.16;
+    SDL_Rect rect2 = {x_pos + 30, y_pos + 65, int(progress), 2};
     SDL_SetRenderDrawColor(des, 144, 238, 144, 255);
     SDL_RenderDrawRect(des, &rect2);
 }
 
-bool Bomber::IsDead()
+bool Lich::IsDead()
 {
     if(Hp <= 0){
         return true;

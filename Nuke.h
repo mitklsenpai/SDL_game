@@ -29,8 +29,8 @@ private:
 
     const int nuke_wid_frame = 96;
     const int nuke_hei_frame = 96;
-    const int boom_wid_frame = 48;
-    const int boom_hei_frame = 48;
+    const int boom_wid_frame = 96;
+    const int boom_hei_frame = 96;
 
     int nuke_frame;
     int boom_frame;

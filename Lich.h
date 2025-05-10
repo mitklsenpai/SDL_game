@@ -1,6 +1,6 @@
 
-#ifndef BOMBER_H_
-#define BOMBER_H_
+#ifndef LICH_H_
+#define LICH_H_
 #include "commonFunc.h"
 #include "SmallEnemy.h"
 #include "MainObject.h"
@@ -25,23 +25,26 @@ public:
     int currentFrame;
 };
 
-class Bomber : public SmallEnemy
+class Lich : public SmallEnemy
 {
 public:
-    Bomber(SDL_Renderer *des);
-    ~Bomber();
+    Lich(SDL_Renderer *des);
+    ~Lich();
 
     void UpdateSkill(NukeManager &nukemanager, MainObject &player);
     void UpdateCastingSkill(Uint32 currentTime, NukeManager &nukemanager, MainObject &player);
     void UpdateTeleSkill(Uint32 currentTime);
     void UpdateDeadFrame(Uint32 currentTime);
+    void DropExp();
     void Activate(SDL_Renderer *des, NukeManager &nukemanager, MainObject &player);
     bool IsDead();
     void ShowHpBar(SDL_Renderer *des);
     void MinusHP(int dame);
     SDL_Rect GetRect();
     void Reset();
+    bool IsTelePorting();
 
+    std::vector<Exp*>& GetExpList() {return Exp_list;}
     enum SkillType
     {
         IDLE,
@@ -51,12 +54,20 @@ public:
         DEAD,
     };
 
+    const int LICH_EXP = 5;
+
 private:
+    SDL_Renderer *renderer;
+
     float x_pos;
     float y_pos;
-    int Hp;
-    SkillType currentState = IDLE;
+    float Hp;
 
+    int isDeathStarted;
+    int isDeathAnimationFinished;
+    int hasDroppedExp;
+
+    SkillType currentState = IDLE;
     Uint32 CoolDownStart = 0;
     Uint32 CoolDownBetweenSkills = 2000;
 
@@ -67,8 +78,9 @@ private:
     SDL_Texture *tele_skill = nullptr;
     SDL_Rect TeleClips[13];
     std::vector<SkillData*> Combo;
+    std::vector<Exp*> Exp_list;
 };
 
 
 
-#endif // BOMBER_H_
+#endif

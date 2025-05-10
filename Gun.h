@@ -52,7 +52,7 @@ public:
     void IncreaseBulletSpeed() {FIRERATE += round(FIRERATE*0.1);}
     bool IsShot() {return is_shot;}
 
-    int BULLET_DAME = 2;
+    int BULLET_DAME = 2000;
     int FIRERATE = 20;
     int MAX_BULLETS_PER_BURST = 3;
 private:

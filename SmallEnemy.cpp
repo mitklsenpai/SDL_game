@@ -131,14 +131,28 @@ void SmallEnemy::Follow(MainObject &player, float deltaTime)
     }
 }
 
-bool Exp::Load(std::string path, SDL_Renderer *des)
-{
-    if(exp_orb == NULL)
-    {
-        exp_orb = Loadimg("images//exp_orb.png", des);
-        r_exp.h = 7;
-        r_exp.w = 7;
-        return true;
+bool Exp::Load(std::string path, SDL_Renderer* des) {
+    SDL_Surface* surface = IMG_Load(path.c_str());
+    if (!surface) {
+        std::cerr << "Lỗi tải ảnh Exp: " << IMG_GetError() << std::endl;
+        return false;
     }
-    return false;
+    exp_orb = SDL_CreateTextureFromSurface(des, surface);
+    if (!exp_orb) {
+        std::cerr << "Lỗi tạo texture: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    // Thiết lập kích thước rect
+    r_exp.w = 7;
+    r_exp.h = 7;
+    SDL_FreeSurface(surface);
+    return true;
+}
+
+
+void Exp::Show(SDL_Renderer *des, SDL_Texture *texture, SDL_Rect rect)
+{
+    if(texture != nullptr && rect.w != 0 && rect.h != 0){
+        SDL_RenderCopy(des, texture, NULL, &rect);
+    }
 }

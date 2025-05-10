@@ -359,7 +359,7 @@ SDL_Texture* Game::Render_Text(SDL_Renderer *des, TTF_Font *font, const char *te
 }
 
 void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner
-                  , std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list, Bomber &bomber)
+                  , std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list, Lich &lich)
 {
     SDL_Texture* Youlose = Render_Text(des, font, "YOU LOSE", P_YouLose, textColor);
     Setclip_and_Render(des, p_replay, Replay_button, replay_button_frame,3, "images//Replay_button.png", WIDTH_BUTTON, HEIGH_BUTTON);
@@ -394,7 +394,7 @@ void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_q
         player.Reset_status();
         game_event = true;
         menu = true;
-        bomber.Reset();
+        lich.Reset();
     }
     if(pressed[2] == true)
     {

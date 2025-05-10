@@ -9,7 +9,7 @@
 #include "SmallEnemy.h"
 #include "Nuke.h"
 #include "AudioManager.h"
-#include "Bomber.h"
+#include "Lich.h"
 
 class Gun;
 class MainObject;
@@ -39,7 +39,7 @@ public:
     // replay & quit
     void YouLose(SDL_Renderer *des, TTF_Font *font);
     void Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner,
-                std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list, Bomber &bomber);
+                std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list, Lich &lich);
     //buff
     void RenderBuff(SDL_Renderer *des);
     void ApplyBuff(MainObject &player, Gun &gun, AudioManager &audio);

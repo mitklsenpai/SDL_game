@@ -28,10 +28,10 @@ Nuke::~Nuke()
 SDL_Rect Nuke::GetRect()
 {
     SDL_Rect r;
-    r.x = x_target;
-    r.y = y_target;
-    r.w = 30;
-    r.h = 27;
+    r.x = x_target - 30;
+    r.y = y_target - 30;
+    r.w = 96;
+    r.h = 96;
 
     return r;
 }
@@ -101,7 +101,7 @@ void Nuke::RenderAnimation(SDL_Renderer* des)
     }
     else
     {
-        SDL_Rect r_ = {x_target, y_target, 48, 48};
+        SDL_Rect r_ = {x_target - 30, y_target - 30, 96, 96};
         SDL_Rect *current_ = &boom_clips[boom_frame];
         SDL_RenderCopy(des, boom_texture, current_, &r_);
     }

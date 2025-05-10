@@ -42,7 +42,7 @@ void Collision::Col_bullet_enemy(MainObject &player, std::vector<SmallEnemy*> &S
         {
             for(int j=0; j<(int)SmallSpawner.size(); j++)
             {
-                Exp* exp = new Exp;
+
                 SmallEnemy* smallenemy = SmallSpawner.at(j);
                 SDL_Rect r_bullet, r_small_enemy;
                 r_small_enemy = smallenemy->GetRect();
@@ -54,15 +54,16 @@ void Collision::Col_bullet_enemy(MainObject &player, std::vector<SmallEnemy*> &S
                     smallenemy->MinusHP(gun.BULLET_DAME);
                     if(smallenemy->IsDead())
                     {
-                        smallenemy->Free();
-                        SmallSpawner.erase(SmallSpawner.begin() + j);
-                        smallenemy = NULL;
-
+                        Exp* exp = new Exp;
                         exp->Load("images//exp_orb.png", des);
+                        exp->Set_EXP(smallenemy->SMALL_EXP);
                         exp->Set_Position(r_small_enemy.x+31, r_small_enemy.y+31);
                         Exp_List.push_back(exp);
                         player.Set_score();
-                        break;
+
+                        smallenemy->Free();
+                        SmallSpawner.erase(SmallSpawner.begin() + j);
+                        smallenemy = NULL;
                     }
                 }
             }
@@ -94,13 +95,13 @@ void Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObj
     }
 }
 
-void Collision::Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &p_player, SDL_Renderer *des)
+void Collision::Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &p_player)
 {
     for(int i=Exp_List.size()-1;i>=0;i--)
     {
         Exp* exp = Exp_List.at(i);
 
-        if(exp!=NULL)
+        if(exp!=nullptr)
         {
 
             SDL_Rect r_player; SDL_Rect r_exp;
@@ -112,7 +113,7 @@ void Collision::Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &p_player
             bool player_exp = CheckCollision(r_player, r_exp);
             if(player_exp)
             {
-                p_player.SetExp(EXP);
+                p_player.SetExp(exp->EXP);
                 exp->Free();
                 delete exp;
                 exp = NULL;
@@ -177,25 +178,30 @@ void Collision::Col_enemy_nuke(std::vector<SmallEnemy*> &SmallSpawner, const std
     }
 }
 
-void Collision::Col_bullet_bomber(Gun &gun, Bomber &bomber)
+void Collision::Col_bullet_lich(Gun &gun, Lich &lich, SDL_Renderer *des)
 {
-    std::vector<BulletBase*> bullet_list = gun.Get_Bullets();
-    for(int i=0; i<(int)bullet_list.size(); i++)
-    {
-        BulletBase* bullet = bullet_list.at(i);
-        if(bullet != nullptr)
-        {
-            SDL_Rect r_bullet; SDL_Rect r_bomber;
-            r_bullet = bullet->GetRect();
-            r_bomber = bomber.GetRect();
+    if(lich.IsDead()) return;
+    if(!lich.IsDead()){
+        std::vector<BulletBase*> bullet_list = gun.Get_Bullets();
 
-            bool bullet_bomber = CheckCollision(r_bullet, r_bomber);
-            if(bullet_bomber)
+        for(int i=0; i<(int)bullet_list.size(); i++)
+        {
+            BulletBase* bullet = bullet_list.at(i);
+            if(bullet != nullptr)
             {
-                gun.RemoveBullet(i);
-//                if(!bomber.isTeleporting()){
-                    bomber.MinusHP(gun.BULLET_DAME);
-//                }
+                SDL_Rect r_bullet; SDL_Rect r_lich;
+                r_bullet = bullet->GetRect();
+                r_lich = lich.GetRect();
+
+                bool bullet_lich = CheckCollision(r_bullet, r_lich);
+                if(bullet_lich)
+                {
+
+                    gun.RemoveBullet(i);
+                    if(!lich.IsTelePorting()){
+                        lich.MinusHP(gun.BULLET_DAME);
+                    }
+                }
             }
         }
     }
