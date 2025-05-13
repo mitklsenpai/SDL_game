@@ -96,7 +96,7 @@ void Nuke::RenderAnimation(SDL_Renderer* des)
         SDL_Rect *current = &nuke_clips[nuke_frame];
         SDL_RenderCopy(des, nuke_texture, current, &renderQuad);
 
-        SDL_Rect r = {x_target, y_target, 30, 27};
+        SDL_Rect r = {x_target, y_target, 48, 43};
         SDL_RenderCopy(des, target, NULL, &r);
     }
     else
@@ -116,12 +116,28 @@ NukeManager::NukeManager(SDL_Renderer* des)
 
 void NukeManager::SpawnBomb(int number, SDL_Point pos)
 {
-//    for(int i=0;i<number;i++)
-//    {
+    const int radius = 48;
+    const double PI = 3.14159265;
+
+    for(int i = 0; i < number; i++)
+    {
         Nuke* newNuke = new Nuke(renderer);
-        newNuke->Set_Position(pos);
+        SDL_Point bombPos;
+
+        if (i == 0)
+        {
+            bombPos = pos;
+        }
+        else
+        {
+            double angle = (i - 1) * (2 * PI / (number - 1));
+            bombPos.x = pos.x + static_cast<int>(radius * cos(angle));
+            bombPos.y = pos.y + static_cast<int>(radius * sin(angle));
+        }
+
+        newNuke->Set_Position(bombPos);
         Nuke_List.push_back(newNuke);
-//    }
+    }
 }
 
 void NukeManager::updateBomb(MainObject &player)

@@ -5,6 +5,17 @@
 #include "commonFunc.h"
 #include "Player.h"
 
+struct Boost_Bar
+{
+    SDL_Rect clips[50];
+    int currentFrame;
+    SDL_Texture *Texture;
+    SDL_Texture *progress;
+    SDL_Rect Position;
+    Uint32 FrameDuration;
+    Uint32 LastTime = 0;
+};
+
 class MainObject : public Player
 {
 public:
@@ -25,6 +36,7 @@ public:
     void DoPlayer();
     void Normalize_Motion(float &x_val_, float &y_val_);
     void ShowBar(SDL_Renderer *des);
+    void UpdateBoostFrame(bool &player_nuke, bool &player_enemy, bool &bullet_enemy, bool &bullet_lich);
 
     float Get_x_pos(){return x_pos_;}
     float Get_y_pos(){return y_pos_;}
@@ -53,7 +65,6 @@ public:
     int MAX_EXP;
     int LEVEL;
 private:
-
     float x_val_;
     float y_val_;
 
@@ -64,6 +75,8 @@ private:
     int height_frame_;
 
     bool is_dead;
+    bool IsReverse;
+    bool InProgress;
 
     SDL_Rect frame_clip_[4];
     Input input_type_;
@@ -90,6 +103,10 @@ private:
         SDL_Rect Exp_Inner;
         const SDL_Rect Exp_Outer = {0,30,254,8};
     }Exp_Bar;
+
+
+    Boost_Bar Adrenaline;
+    Boost_Bar Endophine;
 };
 
 

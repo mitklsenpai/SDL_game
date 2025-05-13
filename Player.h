@@ -22,6 +22,7 @@ public:
     void Free();
     void PlayAnimation(SDL_Renderer *des, SDL_Rect clips[], int currentFrame, SDL_Rect renderQuad, SDL_Texture *texture);
     void setClips(SDL_Rect clips[], int clips_size, int wid, int hei);
+    void setClips(SDL_Rect clips[], int clips_size, int wid, int hei, int row, int col);
 
     SDL_Texture* p_object_;
     SDL_Rect rect_;

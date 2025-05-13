@@ -58,8 +58,6 @@ private:
     std::vector<Nuke*> Nuke_List;
     Uint32 lastSpawnTime;
     Uint32 spawnInterval;
-
-    const int MAX_NUKES = 5;
 };
 
 #endif // NUKE_H_

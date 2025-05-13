@@ -32,7 +32,7 @@ bool Collision::CheckCollision(const SDL_Rect &a, const SDL_Rect &b)
     return true;
 }
 
-void Collision::Col_bullet_enemy(MainObject &player, std::vector<SmallEnemy*> &SmallSpawner, Gun &gun, std::vector<Exp*> &Exp_List, SDL_Renderer *des)
+bool Collision::Col_bullet_enemy(MainObject &player, std::vector<SmallEnemy*> &SmallSpawner, Gun &gun, std::vector<Exp*> &Exp_List, SDL_Renderer *des)
 {
     std::vector<BulletBase*> bullet_list = gun.Get_Bullets();
     for(int i=0; i<(int)bullet_list.size(); i++)
@@ -64,14 +64,17 @@ void Collision::Col_bullet_enemy(MainObject &player, std::vector<SmallEnemy*> &S
                         smallenemy->Free();
                         SmallSpawner.erase(SmallSpawner.begin() + j);
                         smallenemy = NULL;
+
+                        return true;
                     }
                 }
             }
         }
     }
+    return false;
 }
 
-void Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObject &p_player, AudioManager &audio)
+bool Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObject &p_player, AudioManager &audio)
 {
     for(int i=0;i<(int) SmallSpawner.size(); i++)
     {
@@ -91,8 +94,10 @@ void Collision::Col_player_enemy(std::vector<SmallEnemy*> &SmallSpawner, MainObj
         {
             p_player.Minus_Hp_When_Hit(smallenemy->SMALL_ENEMY_DAME);
             audio.PlaySound("hit");
+            return true;
         }
     }
+    return false;
 }
 
 void Collision::Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &p_player)
@@ -123,7 +128,7 @@ void Collision::Col_player_exp(std::vector<Exp*> &Exp_List, MainObject &p_player
     }
 }
 
-void Collision::Col_player_nuke(MainObject &p_player, const std::vector<Nuke*> &nukes)
+bool Collision::Col_player_nuke(MainObject &p_player, const std::vector<Nuke*> &nukes)
 {
     for(auto *nuke : nukes)
     {
@@ -143,9 +148,11 @@ void Collision::Col_player_nuke(MainObject &p_player, const std::vector<Nuke*> &
             if(col_player_nuke && is_done)
             {
                 p_player.Minus_Hp_When_Hit(NUKE_DAME);
+                return true;
             }
         }
     }
+    return false;
 }
 
 void Collision::Col_enemy_nuke(std::vector<SmallEnemy*> &SmallSpawner, const std::vector<Nuke*> &nukes)
@@ -178,9 +185,9 @@ void Collision::Col_enemy_nuke(std::vector<SmallEnemy*> &SmallSpawner, const std
     }
 }
 
-void Collision::Col_bullet_lich(Gun &gun, Lich &lich, SDL_Renderer *des)
+bool Collision::Col_bullet_lich(Gun &gun, Lich &lich, SDL_Renderer *des)
 {
-    if(lich.IsDead()) return;
+    if(lich.IsDead()) return false;
     if(!lich.IsDead()){
         std::vector<BulletBase*> bullet_list = gun.Get_Bullets();
 
@@ -200,9 +207,11 @@ void Collision::Col_bullet_lich(Gun &gun, Lich &lich, SDL_Renderer *des)
                     gun.RemoveBullet(i);
                     if(!lich.IsTelePorting()){
                         lich.MinusHP(gun.BULLET_DAME);
+                        return true;
                     }
                 }
             }
         }
     }
+    return false;
 }

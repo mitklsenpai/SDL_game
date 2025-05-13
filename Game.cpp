@@ -367,19 +367,26 @@ void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_q
     game_event = false;
     for(auto *smallenemy : Spawner)
     {
-        if(smallenemy != nullptr) delete smallenemy;
+        if(smallenemy != nullptr) {
+            delete smallenemy;
+        }
     }
 
     for(auto *exp : exp_list)
     {
-        if(exp != nullptr) delete exp;
+        if(exp != nullptr){
+            delete exp;
+        }
     }
 
     for(auto *nuke : nuke_list)
     {
-        if(nuke != nullptr)
+        if(nuke != nullptr){
             delete nuke;
+        }
     }
+
+    lich.GetExpList().clear();
 
     Spawner.clear();
     exp_list.clear();

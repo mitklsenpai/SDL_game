@@ -10,8 +10,11 @@ Gun::Gun(SDL_Renderer *des)
     bullet_delay = 200;
     last_bullet = 0;
     is_shot = false;
+    frame = 0;
 
     bullet_texture = IMG_LoadTexture(des,"images//bullet.png");
+    LoadImg("images//gun.png", des);
+    setClips(clips, 9, 48, 48);
 }
 
 Gun::~Gun()
@@ -25,10 +28,14 @@ void Gun::HandleMouseEvents(SDL_Event event, SDL_Renderer* screen)
     if(event.type == SDL_MOUSEMOTION)
     {
         SDL_GetMouseState(&x_target, &y_target);
+        x_target -= 15;
+        y_target -= 15;
     }
     else if(event.type == SDL_MOUSEBUTTONDOWN)
     {
         SDL_GetMouseState(&x_target, &y_target);
+        x_target -= 15;
+        y_target -= 15;
         if(!is_shot)
         {
             is_shot = true;
@@ -82,8 +89,24 @@ void Gun::Rotation(MainObject& player, SDL_Renderer* des)
 
     float diff_x = x_target - x_pos;
     float diff_y = y_target - y_pos;
+    float angle;
 
-    float angle = atan2(diff_y,diff_x)*180 / M_PI;
+    SDL_RendererFlip flip = SDL_FLIP_NONE;
+    bool isFlip = false;
+    if (diff_x < 0) {
+        flip = SDL_FLIP_HORIZONTAL;
+        isFlip = true;
+        angle = atan2(diff_y, -diff_x) * 180.0f / M_PI;
+    }
+    else{
+        angle = atan2(-diff_y, diff_x) * 180.0f / M_PI;
+    }
+    angle = std::clamp(angle, -90.0f, 90.0f);
+    int frame = static_cast<int>((angle + 90.0f) / 22.5f);
+    frame = std::clamp(frame, 0, 8);
+    if (isFlip) {
+        frame = 8 - frame;
+    }
 
     x_pos = center.x;
     y_pos = center.y;
@@ -93,7 +116,8 @@ void Gun::Rotation(MainObject& player, SDL_Renderer* des)
 
     SDL_Rect renderQuad = {rect_.x, rect_.y, 48, 48};
 
-    SDL_RenderCopyEx(des,p_object_,NULL,&renderQuad,angle,NULL,SDL_FLIP_NONE);
+//    SDL_RenderCopyEx(des,p_object_,NULL,&renderQuad,angle,NULL,SDL_FLIP_NONE);
+    SDL_RenderCopyEx(des, p_object_, &clips[frame], &renderQuad, 0.0, NULL, flip);
 }
 
 void Gun::SetBullet()

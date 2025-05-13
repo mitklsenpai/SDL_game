@@ -4,7 +4,6 @@
 
 MainObject::MainObject(SDL_Renderer *des)
 {
-
     score = 0;
     frame_ = 0;
     x_pos_ = 570;
@@ -21,10 +20,26 @@ MainObject::MainObject(SDL_Renderer *des)
     LEVEL = 0;
     MAX_EXP = 10;
     G_EXP = 0;
+    IsReverse = false;
+    InProgress = true;
 
+    LoadImg("images//4_direct_move.png", des);
+    set_clips();
     HP_Bar_Inner = IMG_LoadTexture(des, "images//hp_bar_inner.png");
     HP_Bar_Outer = IMG_LoadTexture(des, "images//hp_bar_outer.png");
     Exp_Bar_Outer = IMG_LoadTexture(des, "images//experience_bar_background.png");
+
+    Adrenaline.Texture = IMG_LoadTexture(des, "images//Adrenaline.png");
+    Adrenaline.currentFrame = 0;
+    Adrenaline.FrameDuration = 80;
+    Adrenaline.Position = {-30, 30, 154, 68};
+    setClips(Adrenaline.clips, 50, 154, 68, 10, 5);
+
+    Endophine.Texture = IMG_LoadTexture(des, "images//Rage.png");
+    Endophine.currentFrame = 0;
+    Endophine.FrameDuration = 1000;
+    Endophine.Position = {100, 41, 138, 36};
+    setClips(Endophine.clips, 50, 138, 36, 10, 5);
 }
 
 MainObject::~MainObject()
@@ -69,25 +84,9 @@ void MainObject::set_clips()
 {
     if(width_frame_>0 && height_frame_ >0)
     {
-        frame_clip_[0].x = 0;
-        frame_clip_[0].y = 0;
-        frame_clip_[0].h = height_frame_;
-        frame_clip_[0].w = width_frame_;
-
-        frame_clip_[1].x = width_frame_;
-        frame_clip_[1].y = 0;
-        frame_clip_[1].h = height_frame_;
-        frame_clip_[1].w = width_frame_;
-
-        frame_clip_[2].x = 2*width_frame_;
-        frame_clip_[2].y = 0;
-        frame_clip_[2].h = height_frame_;
-        frame_clip_[2].w = width_frame_;
-
-        frame_clip_[3].x = 3*width_frame_;
-        frame_clip_[3].y = 0;
-        frame_clip_[3].h = height_frame_;
-        frame_clip_[3].w = width_frame_;
+        for(int i=0;i<4;i++){
+            frame_clip_[i] = {i*width_frame_, 0, width_frame_, height_frame_};
+        }
     }
 }
 
@@ -265,33 +264,113 @@ void MainObject::DoPlayer()
 void MainObject::ShowBar(SDL_Renderer *des)
 {
     SDL_RenderCopy(des, Exp_Bar_Outer, NULL, &Exp_Bar.Exp_Outer);
+//    SDL_RenderCopy(des, Adrenaline.Texture, &Adrenaline.clips[0], &Adrenaline.Position);
+//    SDL_RenderCopy(des, Endophine.Texture, &Endophine.clips[0], &Endophine.Position);
 
-    HP_Bar.HP_Inner.x = 40;
-    HP_Bar.HP_Inner.y = 10;
-    HP_Bar.HP_Inner.h = 12;
-    HP_Bar.HP_Inner.w = hp*2.1;
+    HP_Bar.HP_Inner = {40, 10, hp*2.1, 12};
     HP_Bar.HP_Outer = {0, 0, MAX_HP*2.1 + 44, 32};
 
     double percent_progress = (double)G_EXP/MAX_EXP;
     double progress = 254.0*percent_progress;
-
-    Exp_Bar.Exp_Inner.x = 0;
-    Exp_Bar.Exp_Inner.y = 31;
-    Exp_Bar.Exp_Inner.w = (int)progress;
-    Exp_Bar.Exp_Inner.h = 6;
+    Exp_Bar.Exp_Inner = {0, 31, (int) progress, 6};
 
     SDL_SetRenderDrawColor(des, 255, 255, 0, 255);
     SDL_RenderFillRect(des, &Exp_Bar.Exp_Inner);
 
+    SDL_RenderCopy(des, Adrenaline.Texture, &Adrenaline.clips[Adrenaline.currentFrame], &Adrenaline.Position);
+    SDL_RenderCopy(des, Endophine.Texture, &Endophine.clips[Endophine.currentFrame], &Endophine.Position);
     SDL_RenderCopy(des, HP_Bar_Outer, NULL, &HP_Bar.HP_Outer);
     SDL_RenderCopy(des, HP_Bar_Inner, NULL, &HP_Bar.HP_Inner);
-//    SDL_RenderCopy(des, Exp_Bar_Inner, NULL, &Exp_Bar.Exp_Inner);
-//    if(G_EXP >= MAX_EXP)
-//    {
-//        LEVEL++;
-//        G_EXP = 0;
-//        MAX_EXP = MAX_EXP * pow(1.5f, LEVEL - 1);
-//    }
+}
+
+void MainObject::UpdateBoostFrame(bool &player_nuke, bool &player_enemy, bool &bullet_enemy, bool &bullet_lich)
+{
+    Uint32 currentTime = SDL_GetTicks();
+    // Endophine
+    if(!player_enemy && !player_nuke){
+        if(currentTime - Endophine.LastTime >= Endophine.FrameDuration){
+            if(!IsReverse){
+                Endophine.currentFrame ++;
+                if(Endophine.currentFrame == 40){
+                    Endophine.FrameDuration = 80;
+                }
+                else if(Endophine.currentFrame >= 49){
+                    Endophine.currentFrame = 40;
+                    IsReverse = true;
+                }
+            }
+            else{
+                Endophine.currentFrame --;
+                if(Endophine.currentFrame <= 0){
+                    Endophine.currentFrame = 0;
+                    Endophine.FrameDuration = 1000;
+                    IsReverse = false;
+                }
+            }
+            Endophine.LastTime = currentTime;
+        }
+    }
+    else{
+        Endophine.currentFrame -= 3;
+        if(Endophine.currentFrame <= 0){
+            Endophine.currentFrame = 0;
+        }
+    }
+    // Adrenaline
+    if(bullet_enemy || bullet_lich){
+        if(InProgress){
+            if(Adrenaline.currentFrame >= 0 && Adrenaline.currentFrame <= 38){
+                Adrenaline.currentFrame ++;
+            }
+        }
+    }
+    else{
+        if(currentTime - Adrenaline.LastTime >= 5000){
+            Adrenaline.currentFrame --;
+            if(Adrenaline.currentFrame <= 0){
+                Adrenaline.currentFrame = 0;
+            }
+            Adrenaline.LastTime = currentTime;
+        }
+    }
+
+    if(InProgress && Adrenaline.currentFrame >= 39 && Adrenaline.currentFrame <= 49){
+        if(currentTime - Adrenaline.LastTime >= Adrenaline.FrameDuration){
+            Adrenaline.currentFrame++;
+            if(Adrenaline.currentFrame >= 49){
+                Adrenaline.currentFrame = 39;
+                InProgress = false;
+            }
+            Adrenaline.LastTime = currentTime;
+        }
+    }
+    if(!InProgress){
+        Adrenaline.currentFrame --;
+        if(Adrenaline.currentFrame <= 0){
+            Adrenaline.currentFrame = 0;
+            InProgress = true;
+        }
+    }
+}
+
+void TriggerAdrenaline()
+{
+
+}
+
+void TriggerEndophine()
+{
+
+}
+
+void ReleaseAdrenaline()
+{
+
+}
+
+void ReleaseEndophine()
+{
+
 }
 
 bool MainObject::Dead()

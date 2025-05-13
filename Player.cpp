@@ -77,6 +77,16 @@ void Player::setClips(SDL_Rect clips[], int clips_size, int wid, int hei)
     }
 }
 
+void Player::setClips(SDL_Rect clips[], int clips_size, int wid, int hei, int row, int col)
+{
+    for(int r=0;r<row;r++){
+        for(int c=0;c<col;c++){
+            int i = r * col + c;
+            clips[i] = {c*wid, r*hei, wid, hei};
+        }
+    }
+}
+
 void Player::Free()
 {
     if(p_object_!=NULL)

@@ -63,9 +63,9 @@ private:
 
     int x_target;
     int y_target;
+    int frame;
 
-
-
+    SDL_Rect clips[9];
     SDL_Texture *bullet_texture;
     std::vector<BulletBase*> bullets;
     SDL_Rect BulletRect_;

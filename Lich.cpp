@@ -4,8 +4,8 @@
 Lich::Lich(SDL_Renderer *des)
 {
     // main
-    x_pos = 0;
-    y_pos = 0;
+    x_pos = rand() % 1280;
+    y_pos = rand() % 640;
     Hp = 100;
     renderer = des;
 
@@ -133,7 +133,7 @@ void Lich::UpdateCastingSkill(Uint32 currentTime, NukeManager &nukemanager, Main
         if(Casting->currentFrame >= 11){
             SDL_Rect pos = player.GetRect();
             SDL_Point target = {pos.x, pos.y};
-            nukemanager.SpawnBomb(5, target);
+            nukemanager.SpawnBomb(9, target);
 
             currentState = TELEPORTING;
             Casting->currentFrame = 0;
@@ -164,11 +164,12 @@ void Lich::DropExp()
         std::cout  << "lich da chet tao 10 orb" <<std::endl;
         for(int i=0;i < 10; i++)
         {
+            float angle = (2 * M_PI * i) / 10;
             Exp* exp = new Exp;
             exp->Load("images//lich_exp_orb.png", renderer);
             exp->Set_EXP(LICH_EXP);
-            int x = x_pos + (rand() % 80 - 40);
-            int y = y_pos + (rand() % 80 - 40);
+            float x = x_pos + 40 + static_cast<int>(10* 2 * cos(angle));
+            float y = y_pos + 60 + static_cast<int>(10 * sin(angle));
             exp->Set_Position(x, y);
             std::cout << "Exp created at (" << x << ", " << y << ")" << std::endl;
             Exp_list.push_back(exp);
@@ -187,16 +188,17 @@ void Lich::Activate(SDL_Renderer *des, NukeManager &nukemanager, MainObject &pla
     }
     else
     {
-        ShowHpBar(des);
         switch(currentState)
         {
             case TELEPORTING:
             {
+                ShowHpBar(des);
                 PlayAnimation(des, TeleClips, Combo[0]->currentFrame, pos, tele_skill);
                 break;
             }
             case CASTING_SKILL:
             {
+                ShowHpBar(des);
                 PlayAnimation(des, LitchClips, Combo[1]->currentFrame, pos, LitchTexture);
                 break;
             }

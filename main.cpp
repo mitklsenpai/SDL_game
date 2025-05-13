@@ -86,10 +86,7 @@ int main(int argc, char* argv[])
     AudioManager audioManager;
     audioManager.PlayMusic();
     MainObject p_player(g_screen);
-    p_player.LoadImg("images//4_direct_move.png", g_screen);
-    p_player.set_clips();
     Gun gun(g_screen);
-    gun.LoadImg("images//shot_gun.png", g_screen);
     Game game(g_screen, gun, p_player);
     SmallEnemy smallenemy;
     std::vector<SmallEnemy*> SmallSpawner;
@@ -104,10 +101,10 @@ int main(int argc, char* argv[])
     // Vong lap game
     bool is_quit = false;
     bool player_event = true;
-
+    bool bullet_lich = false;
+    bool can_spawn_ = true;
     Uint32 lastTime = 0;
     Uint32 lastFrameTime = SDL_GetTicks();
-
     while(!is_quit)
     {
         fps_timer.start(); // chay dong ho
@@ -153,7 +150,9 @@ int main(int argc, char* argv[])
                         smallenemy->ShowHpBar(g_screen);
                 }
             }
-            lich.Activate(g_screen, nukemanager, p_player);
+            if(p_player.GetLEVEL() >= 3){
+                lich.Activate(g_screen, nukemanager, p_player);
+            }
             for(auto *exp : Exp_List){
                 if(exp != nullptr)
                     exp->Render(g_screen, exp->exp_orb, exp->r_exp);
@@ -164,7 +163,17 @@ int main(int argc, char* argv[])
             }
             if(!game.Is_Paused())
             {
-                lich.UpdateSkill(nukemanager, p_player);
+                if(p_player.GetLEVEL() >= 3){
+                    lich.UpdateSkill(nukemanager, p_player);
+                    bullet_lich = collision.Col_bullet_lich(gun, lich, g_screen);
+                    can_spawn_ = false;
+                    for(auto *obj : SmallSpawner){
+                        if(obj != nullptr) obj->Free();
+                    }
+                    SmallSpawner.clear();
+                    if(!lich.IsDead())
+                        can_spawn_ = true;
+                }
                 p_player.DoPlayer();
                 gun.update(audioManager);
 
@@ -176,20 +185,23 @@ int main(int argc, char* argv[])
                 {
                     if(smallenemy != nullptr) smallenemy->Follow(p_player, deltaTime);
                 }
-                collision.Col_bullet_enemy(p_player, SmallSpawner,gun, Exp_List, g_screen);
-                collision.Col_player_enemy(SmallSpawner,p_player, audioManager);
-                collision.Col_player_exp(Exp_List, p_player);
-                collision.Col_player_exp(lich.GetExpList(), p_player);
-                collision.Col_enemy_nuke(SmallSpawner, nukemanager.Get_Nuke_List());
-                collision.Col_player_nuke(p_player, nukemanager.Get_Nuke_List());
-                collision.Col_bullet_lich(gun, lich, g_screen);
 
-                if(!p_player.Dead() && currentTime - lastTime >= 500 && SmallSpawner.size() < smallenemy.MAX_SMALL_ENEMIES)
+                bool bullet_enemy = collision.Col_bullet_enemy(p_player, SmallSpawner,gun, Exp_List, g_screen);
+                bool player_enemy = collision.Col_player_enemy(SmallSpawner,p_player, audioManager);
+                collision.Col_player_exp(Exp_List, p_player);
+                collision.Col_enemy_nuke(SmallSpawner, nukemanager.Get_Nuke_List());
+                bool player_nuke = collision.Col_player_nuke(p_player, nukemanager.Get_Nuke_List());
+                collision.Col_player_exp(lich.GetExpList(), p_player);
+
+                p_player.UpdateBoostFrame(player_enemy, player_nuke, bullet_enemy, bullet_lich);
+
+                if(can_spawn_ && !p_player.Dead() && currentTime - lastTime >= 500 && SmallSpawner.size() < smallenemy.MAX_SMALL_ENEMIES)
                 {
-                        SmallEnemy* newEnemy = smallenemy.SpawnNewEnemy();
-                        SmallSpawner.push_back(newEnemy);
-                        lastTime = currentTime;
+                    SmallEnemy* newEnemy = smallenemy.SpawnNewEnemy();
+                    SmallSpawner.push_back(newEnemy);
+                    lastTime = currentTime;
                 }
+
                 game.RenderPaused(g_screen);
                 game.ApplyBuff(p_player, gun, audioManager);
             }
