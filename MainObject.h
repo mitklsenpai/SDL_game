@@ -4,22 +4,29 @@
 
 #include "commonFunc.h"
 #include "Player.h"
+#include "Gun.h"
+
+class Gun;
 
 struct Boost_Bar
 {
     SDL_Rect clips[50];
+    SDL_Rect progress_clips[9];
     int currentFrame;
+    int currentProgressFrame;
     SDL_Texture *Texture;
     SDL_Texture *progress;
     SDL_Rect Position;
     Uint32 FrameDuration;
     Uint32 LastTime = 0;
+    Uint32 Last = 0;
 };
 
 class MainObject : public Player
 {
 public:
-    MainObject(SDL_Renderer *des);
+    MainObject(SDL_Renderer *des, Gun &gunRef);
+
     ~MainObject();
 
     enum WalkType
@@ -29,6 +36,7 @@ public:
         GO_UP = 2,
         GO_DOWN = 3
     };
+
     bool LoadImg(std::string path, SDL_Renderer* screen);
     void Show(SDL_Renderer* des);
     void HandleInputAction(SDL_Event svents, SDL_Renderer* screen);
@@ -50,13 +58,16 @@ public:
     void Reset_status();
     void ResetInput();
     void SetExp(int x) {G_EXP += x;}
-    int GetLEVEL() {return LEVEL;}
-    int GetExp() {return G_EXP;}
-    int GetMaxExp() {return MAX_EXP;}
+    int &GetLEVEL() {return LEVEL;}
+    int &GetExp() {return G_EXP;}
+    int &GetMaxExp() {return MAX_EXP;}
 
-    int GetSpeed() {return PLAYER_SPEED;}
-    int GetMaxHp() {return MAX_HP;}
+    int &GetSpeed() {return PLAYER_SPEED;}
+    int &GetMaxHp() {return MAX_HP;}
 //buff
+    void RenderBoost(SDL_Renderer *des);
+    void TriggerAdrenaline();
+    void TriggerEndophine();
     void IncreaseSpeed();
     void IncreaseMaxHealth();
     void Healing();
@@ -65,6 +76,8 @@ public:
     int MAX_EXP;
     int LEVEL;
 private:
+    Gun &gun;
+
     float x_val_;
     float y_val_;
 
@@ -77,6 +90,10 @@ private:
     bool is_dead;
     bool IsReverse;
     bool InProgress;
+    bool IsAdrenaline;
+    bool IsEndophine;
+    bool wasEndophineActive;
+    bool wasAdrenalineActive;
 
     SDL_Rect frame_clip_[4];
     Input input_type_;
@@ -87,6 +104,9 @@ private:
     int PLAYER_SPEED = 5;
     int hp = 100;
     int MAX_HP = 100;
+
+    int original_dame;
+    int original_hp;
 
     SDL_Texture *HP_Bar_Inner;
     SDL_Texture *HP_Bar_Outer;

@@ -2,7 +2,7 @@
 #include "MainObject.h"
 #include "commonFunc.h"
 
-MainObject::MainObject(SDL_Renderer *des)
+MainObject::MainObject(SDL_Renderer *des, Gun &gunRef) : gun(gunRef)
 {
     score = 0;
     frame_ = 0;
@@ -22,6 +22,12 @@ MainObject::MainObject(SDL_Renderer *des)
     G_EXP = 0;
     IsReverse = false;
     InProgress = true;
+    IsAdrenaline = false;
+    IsEndophine = false;
+    wasEndophineActive = false;
+    wasAdrenalineActive = false;
+    original_dame = 0;
+    original_hp = 0;
 
     LoadImg("images//4_direct_move.png", des);
     set_clips();
@@ -30,17 +36,24 @@ MainObject::MainObject(SDL_Renderer *des)
     Exp_Bar_Outer = IMG_LoadTexture(des, "images//experience_bar_background.png");
 
     Adrenaline.Texture = IMG_LoadTexture(des, "images//Adrenaline.png");
+    Adrenaline.progress = IMG_LoadTexture(des, "images//Adrenaline_boost.png");
     Adrenaline.currentFrame = 0;
+    Adrenaline.currentProgressFrame = 0;
     Adrenaline.FrameDuration = 80;
     Adrenaline.Position = {-30, 30, 154, 68};
     setClips(Adrenaline.clips, 50, 154, 68, 10, 5);
+    setClips(Adrenaline.progress_clips, 9, 64, 64);
 
     Endophine.Texture = IMG_LoadTexture(des, "images//Rage.png");
+    Endophine.progress = IMG_LoadTexture(des, "images//Endophine_boost.png");
     Endophine.currentFrame = 0;
-    Endophine.FrameDuration = 1000;
+    Endophine.currentProgressFrame = -1;
+    Endophine.FrameDuration = 1500;
     Endophine.Position = {100, 41, 138, 36};
     setClips(Endophine.clips, 50, 138, 36, 10, 5);
+    setClips(Endophine.progress_clips, 9, 64, 64);
 }
+
 
 MainObject::~MainObject()
 {
@@ -286,6 +299,33 @@ void MainObject::ShowBar(SDL_Renderer *des)
 void MainObject::UpdateBoostFrame(bool &player_nuke, bool &player_enemy, bool &bullet_enemy, bool &bullet_lich)
 {
     Uint32 currentTime = SDL_GetTicks();
+    //boost Endophine
+    if(IsEndophine != wasEndophineActive) {
+        if (IsEndophine) {
+            original_dame = gun.GetDame();
+            original_hp = hp;
+            gun.GetDame() += 5;
+            hp += 20;
+        } else {
+            gun.GetDame() = original_dame;
+            hp = original_hp;
+        }
+        wasEndophineActive = IsEndophine;
+    }
+    //boost Adrenaline
+    if(IsAdrenaline != wasAdrenalineActive){
+        if(IsAdrenaline){
+            original_dame = gun.GetDame();
+            original_hp = hp;
+            gun.GetDame() ++;
+            hp += 5;
+        }
+        else{
+            gun.GetDame() = original_dame;
+            hp = original_hp;
+        }
+        wasAdrenalineActive = IsAdrenaline;
+    }
     // Endophine
     if(!player_enemy && !player_nuke){
         if(currentTime - Endophine.LastTime >= Endophine.FrameDuration){
@@ -293,6 +333,7 @@ void MainObject::UpdateBoostFrame(bool &player_nuke, bool &player_enemy, bool &b
                 Endophine.currentFrame ++;
                 if(Endophine.currentFrame == 40){
                     Endophine.FrameDuration = 80;
+                    IsEndophine = true;
                 }
                 else if(Endophine.currentFrame >= 49){
                     Endophine.currentFrame = 40;
@@ -303,8 +344,9 @@ void MainObject::UpdateBoostFrame(bool &player_nuke, bool &player_enemy, bool &b
                 Endophine.currentFrame --;
                 if(Endophine.currentFrame <= 0){
                     Endophine.currentFrame = 0;
-                    Endophine.FrameDuration = 1000;
+                    Endophine.FrameDuration = 1500;
                     IsReverse = false;
+                    IsEndophine = false;
                 }
             }
             Endophine.LastTime = currentTime;
@@ -314,9 +356,27 @@ void MainObject::UpdateBoostFrame(bool &player_nuke, bool &player_enemy, bool &b
         Endophine.currentFrame -= 3;
         if(Endophine.currentFrame <= 0){
             Endophine.currentFrame = 0;
+            if (IsEndophine) {
+                IsEndophine = false;
+                gun.GetDame() = original_dame;
+                hp = original_hp;
+            }
         }
     }
-    // Adrenaline
+    //Endophine progress
+    if(IsEndophine){
+        if(currentTime - Endophine.Last >= 80){
+            Endophine.currentProgressFrame ++;
+            if(Endophine.currentProgressFrame >= 8){
+                Endophine.currentProgressFrame = 0;
+            }
+            Endophine.Last = currentTime;
+        }
+    }
+    else{
+        Endophine.currentProgressFrame = -1;
+    }
+    //Adrenaline
     if(bullet_enemy || bullet_lich){
         if(InProgress){
             if(Adrenaline.currentFrame >= 0 && Adrenaline.currentFrame <= 38){
@@ -340,6 +400,7 @@ void MainObject::UpdateBoostFrame(bool &player_nuke, bool &player_enemy, bool &b
             if(Adrenaline.currentFrame >= 49){
                 Adrenaline.currentFrame = 39;
                 InProgress = false;
+                IsAdrenaline = true;
             }
             Adrenaline.LastTime = currentTime;
         }
@@ -348,29 +409,38 @@ void MainObject::UpdateBoostFrame(bool &player_nuke, bool &player_enemy, bool &b
         Adrenaline.currentFrame --;
         if(Adrenaline.currentFrame <= 0){
             Adrenaline.currentFrame = 0;
+            IsAdrenaline = false;
             InProgress = true;
         }
     }
+    //Adrenaline progress
+    if(IsAdrenaline){
+        if(currentTime - Adrenaline.Last >= 80){
+            Adrenaline.currentProgressFrame ++;
+            if(Adrenaline.currentProgressFrame >= 8){
+                Adrenaline.currentProgressFrame = 0;
+            }
+            Adrenaline.Last = currentTime;
+        }
+    }
+    else{
+        Adrenaline.currentProgressFrame = -1;
+    }
 }
 
-void TriggerAdrenaline()
+void MainObject::RenderBoost(SDL_Renderer *des)
 {
-
-}
-
-void TriggerEndophine()
-{
-
-}
-
-void ReleaseAdrenaline()
-{
-
-}
-
-void ReleaseEndophine()
-{
-
+    if(!IsAdrenaline && !IsEndophine){
+        return;
+    }
+    else if(IsAdrenaline){
+        SDL_Rect Adrenaline_Position = {x_pos_, y_pos_ + 10, 64, 64};
+        SDL_RenderCopy(des, Adrenaline.progress, &Adrenaline.progress_clips[Adrenaline.currentProgressFrame], &Adrenaline_Position);
+    }
+    else if(IsEndophine){
+        SDL_Rect Endophine_Position = {x_pos_ , y_pos_ - 30, 64, 64};
+        SDL_RenderCopy(des, Endophine.progress, &Endophine.progress_clips[Endophine.currentProgressFrame], &Endophine_Position);
+    }
 }
 
 bool MainObject::Dead()
@@ -401,12 +471,16 @@ void MainObject::Reset_status()
     LEVEL = 0;
     MAX_EXP = 10;
     G_EXP = 0;
+    IsAdrenaline = false;
+    IsEndophine = false;
+    wasAdrenalineActive = false;
+    wasEndophineActive = false;
 }
 
 void MainObject::Score(SDL_Renderer *des, TTF_Font *font)
 {
     std::string s = std::to_string(score);
-    SDL_Color textColor = { 0, 0, 0 }; // Màu đỏ
+    SDL_Color textColor = { 0, 0, 0 };
     SDL_Surface* textSurface = TTF_RenderText_Solid(font, "KILLS: ", textColor);
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(des, textSurface);
 

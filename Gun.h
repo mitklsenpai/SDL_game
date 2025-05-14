@@ -6,6 +6,8 @@
 #include "MainObject.h"
 #include "AudioManager.h"
 
+class MainObject;
+
 #define GUN_OFFSET 20
 
 class BulletBase
@@ -43,16 +45,16 @@ public:
     SDL_Rect GetRect() {return BulletRect_;}
     void update(AudioManager &audio);
 
-    int GetDame() {return BULLET_DAME;}
-    int GetTotalBullets() {return MAX_BULLETS_PER_BURST;}
-    int GetBulletSpeed() {return FIRERATE;}
+    int &GetDame() {return BULLET_DAME;}
+    int &GetTotalBullets() {return MAX_BULLETS_PER_BURST;}
+    int &GetBulletSpeed() {return FIRERATE;}
 
     void IncreaseDame() {BULLET_DAME++;}
     void IncreaseTotalBullets() {MAX_BULLETS_PER_BURST++;}
     void IncreaseBulletSpeed() {FIRERATE += round(FIRERATE*0.1);}
     bool IsShot() {return is_shot;}
 
-    int BULLET_DAME = 2000;
+    int BULLET_DAME = 2;
     int FIRERATE = 20;
     int MAX_BULLETS_PER_BURST = 3;
 private:

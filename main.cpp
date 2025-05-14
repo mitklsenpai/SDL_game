@@ -85,8 +85,8 @@ int main(int argc, char* argv[])
         return -1;
     AudioManager audioManager;
     audioManager.PlayMusic();
-    MainObject p_player(g_screen);
     Gun gun(g_screen);
+    MainObject p_player(g_screen, gun);
     Game game(g_screen, gun, p_player);
     SmallEnemy smallenemy;
     std::vector<SmallEnemy*> SmallSpawner;
@@ -138,6 +138,7 @@ int main(int argc, char* argv[])
             SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
             SDL_RenderClear(g_screen);
             game_map.DrawMap(g_screen);
+            p_player.RenderBoost(g_screen);
             p_player.Show(g_screen);
             p_player.ShowBar(g_screen);
             p_player.Score(g_screen, g_font);
@@ -150,7 +151,7 @@ int main(int argc, char* argv[])
                         smallenemy->ShowHpBar(g_screen);
                 }
             }
-            if(p_player.GetLEVEL() >= 3){
+            if(p_player.GetLEVEL() == 3){
                 lich.Activate(g_screen, nukemanager, p_player);
             }
             for(auto *exp : Exp_List){
@@ -163,16 +164,22 @@ int main(int argc, char* argv[])
             }
             if(!game.Is_Paused())
             {
-                if(p_player.GetLEVEL() >= 3){
+                if(p_player.GetLEVEL() == 3){
                     lich.UpdateSkill(nukemanager, p_player);
                     bullet_lich = collision.Col_bullet_lich(gun, lich, g_screen);
-                    can_spawn_ = false;
-                    for(auto *obj : SmallSpawner){
-                        if(obj != nullptr) obj->Free();
-                    }
-                    SmallSpawner.clear();
-                    if(!lich.IsDead())
+                    if(lich.IsDead()){
                         can_spawn_ = true;
+                        bullet_lich = false;
+                    }
+                    else{
+                        can_spawn_ = false;
+                        for(auto *obj : SmallSpawner){
+                        if(obj != nullptr)
+                            obj->Free();
+                            delete obj;
+                        }
+                        SmallSpawner.clear();
+                    }
                 }
                 p_player.DoPlayer();
                 gun.update(audioManager);

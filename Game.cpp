@@ -611,6 +611,7 @@ void Game::RenderPreview(SDL_Renderer *des, TTF_Font *game_font, MainObject& pla
     }
     if (preview) {
         SDL_DestroyTexture(preview);
+        text.clear();
     }
 }
 

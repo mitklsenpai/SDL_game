@@ -70,7 +70,7 @@ public:
 
     float SMALL_ENEMY_SPEED = 0.5;
     int SMALL_ENEMY_DAME = 2;
-    int MAX_SMALL_ENEMIES = 20;
+    int MAX_SMALL_ENEMIES = 40;
     const int SMALL_EXP = 2;
 
 
