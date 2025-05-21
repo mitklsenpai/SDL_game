@@ -16,7 +16,7 @@ public:
     void set_clips();
 //    void Follow();
     void update();
-    bool is_explosive() {return explosive_active;}
+    bool &is_explosive() {return explosive_active;}
     SDL_Rect GetRect();
     int get_boom_frame() const {return boom_frame;}
 private:

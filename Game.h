@@ -39,7 +39,7 @@ public:
     // replay & quit
     void YouLose(SDL_Renderer *des, TTF_Font *font);
     void Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner,
-                std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list, Lich &lich);
+                std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list, Lich &lich, bool &can_spawn);
     //buff
     void RenderBuff(SDL_Renderer *des);
     void ApplyBuff(MainObject &player, Gun &gun, AudioManager &audio);
@@ -76,6 +76,7 @@ private:
     int quit_button_frame = 0;
 
     bool menu = true;
+    bool IsReplay = false;
 	bool pressed[3] = {false};
 
 	// settings

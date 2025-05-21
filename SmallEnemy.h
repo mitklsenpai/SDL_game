@@ -56,21 +56,20 @@ public:
         return SmallSpawner;
     }
 
-    SmallEnemy* SpawnNewEnemy()
+    static SmallEnemy* SpawnNewEnemy()
     {
         SmallEnemy* newEnemy = new SmallEnemy();
-        SDL_Point p = Make_random_point(400, 500);
+        SDL_Point p = newEnemy->Make_random_point(400, 500);
         newEnemy->LoadImg("images//Run_Right.png", g_screen);
         newEnemy->set_clips();
         newEnemy->SetSpawnPoint(p);
 
         return newEnemy;
-
     }
 
     float SMALL_ENEMY_SPEED = 0.5;
     int SMALL_ENEMY_DAME = 2;
-    int MAX_SMALL_ENEMIES = 40;
+    static const int MAX_SMALL_ENEMIES = 40;
     const int SMALL_EXP = 2;
 
 
@@ -84,7 +83,10 @@ protected:
     int width_frame_;
     int MAX_HP;
     int Hp;
+    int isRight;
 
+    SDL_Texture *Run_Right = nullptr;
+    SDL_Texture *Run_Left = nullptr;
     SDL_Rect frame_clips[6];
 
     Uint32 last_spawn_time = 0;

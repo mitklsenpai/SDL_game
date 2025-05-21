@@ -5,7 +5,7 @@
 1739422843 source:c:\users\dell_pc\desktop\dev\sdl_game\graphic.cpp
 	"graphic.h"
 
-1747231221 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
+1747284824 source:c:\users\dell_pc\desktop\dev\sdl_game\main.cpp
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
@@ -25,7 +25,7 @@
 	"commonFunc.h"
 	"logic.h"
 
-1746499715 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
+1747277302 c:\users\dell_pc\desktop\dev\sdl_game\commonfunc.h
 	<iostream>
 	<string>
 	<cmath>
@@ -51,12 +51,12 @@
 	"commonFunc.h"
 	"Player.h"
 
-1747229578 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
+1747277364 c:\users\dell_pc\desktop\dev\sdl_game\mainobject.h
 	"commonFunc.h"
 	"Player.h"
 	"Gun.h"
 
-1747230702 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
+1747281660 source:c:\users\dell_pc\desktop\dev\sdl_game\mainobject.cpp
 	"MainObject.h"
 	"commonFunc.h"
 
@@ -76,11 +76,11 @@
 1741314498 c:\users\dell_pc\desktop\dev\sdl_game\small_enemy.h
 	"commonFunc.h"
 
-1746888718 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
+1747276860 source:c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.cpp
 	"SmallEnemy.h"
 	"commonFunc.h"
 
-1747231250 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
+1747277243 c:\users\dell_pc\desktop\dev\sdl_game\smallenemy.h
 	"commonFunc.h"
 	"Player.h"
 	"MainObject.h"
@@ -125,7 +125,7 @@
 	"Player.h"
 	"commonFunc.h"
 
-1746880764 c:\users\dell_pc\desktop\dev\sdl_game\game.h
+1747282741 c:\users\dell_pc\desktop\dev\sdl_game\game.h
 	"commonFunc.h"
 	"MainObject.h"
 	"Gun.h"
@@ -135,13 +135,13 @@
 	"AudioManager.h"
 	"Lich.h"
 
-1747230894 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
+1747281660 source:c:\users\dell_pc\desktop\dev\sdl_game\game.cpp
 	"Game.h"
 
 1747063966 source:c:\users\dell_pc\desktop\dev\sdl_game\nuke.cpp
 	"Nuke.h"
 
-1747064212 c:\users\dell_pc\desktop\dev\sdl_game\nuke.h
+1747796147 c:\users\dell_pc\desktop\dev\sdl_game\nuke.h
 	"commonFunc.h"
 	"MainObject.h"
 
@@ -160,7 +160,7 @@
 	"MainObject.h"
 	"Nuke.h"
 
-1746892043 c:\users\dell_pc\desktop\dev\sdl_game\lich.h
+1747282147 c:\users\dell_pc\desktop\dev\sdl_game\lich.h
 	"commonFunc.h"
 	"SmallEnemy.h"
 	"MainObject.h"

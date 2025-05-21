@@ -40,7 +40,7 @@ const int COLOR_KEY_G = 175;
 const int COLOR_KEY_B = 180;
 
 // set timer, fps, ...
-const int FRAME_PER_SECOND = 35;
+const int FRAME_PER_SECOND = 40;
 
 // set thong so map
 #define TILE_SIZE 64

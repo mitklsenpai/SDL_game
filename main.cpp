@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
     Gun gun(g_screen);
     MainObject p_player(g_screen, gun);
     Game game(g_screen, gun, p_player);
-    SmallEnemy smallenemy;
+    SmallEnemy smallenemy();
     std::vector<SmallEnemy*> SmallSpawner;
     std::vector<Exp*> Exp_List;
     Lich lich(g_screen);
@@ -147,8 +147,11 @@ int main(int argc, char* argv[])
             for(auto *smallenemy : SmallSpawner){
                 if(smallenemy != nullptr){
                     smallenemy->Show(g_screen);
-                    if(!smallenemy->IsDead())
+                    if(!smallenemy->IsDead()){
                         smallenemy->ShowHpBar(g_screen);
+                    }else{
+                        delete smallenemy;
+                    }
                 }
             }
             if(p_player.GetLEVEL() == 3){
@@ -202,9 +205,9 @@ int main(int argc, char* argv[])
 
                 p_player.UpdateBoostFrame(player_enemy, player_nuke, bullet_enemy, bullet_lich);
 
-                if(can_spawn_ && !p_player.Dead() && currentTime - lastTime >= 500 && SmallSpawner.size() < smallenemy.MAX_SMALL_ENEMIES)
+                if(can_spawn_ && !p_player.Dead() && currentTime - lastTime >= 1000 && SmallSpawner.size() < SmallEnemy::MAX_SMALL_ENEMIES)
                 {
-                    SmallEnemy* newEnemy = smallenemy.SpawnNewEnemy();
+                    SmallEnemy* newEnemy = SmallEnemy::SpawnNewEnemy();
                     SmallSpawner.push_back(newEnemy);
                     lastTime = currentTime;
                 }
@@ -218,7 +221,7 @@ int main(int argc, char* argv[])
                 {
                     if(smallenemy != nullptr) smallenemy->SetMove(false);
                 }
-                p_player.ResetInput();
+
                 if(game.is_buff())
                 {
                     game.RenderBuff(g_screen);
@@ -235,7 +238,8 @@ int main(int argc, char* argv[])
             {
                 audioManager.MuteMusic();
                 audioManager.PlaySound("youLose");
-                game.Replay(g_screen, g_font, player_event, is_quit, p_player, SmallSpawner, Exp_List, nuke_list, lich);
+                game.Replay(g_screen, g_font, player_event, is_quit, p_player, SmallSpawner, Exp_List, nuke_list, lich, can_spawn_);
+                p_player.ResetInput();
             }
         }
 

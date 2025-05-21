@@ -13,6 +13,7 @@ SmallEnemy::SmallEnemy()
     Hp = 10;
 
     is_move = false;
+
 }
 
 SmallEnemy::~SmallEnemy()
@@ -82,12 +83,20 @@ void SmallEnemy::set_clips()
 
 void SmallEnemy::Show(SDL_Renderer* screen)
 {
+    if(Run_Left == nullptr && Run_Right == nullptr){
+        Run_Left = IMG_LoadTexture(screen, "images//Run_Left.png");
+        Run_Right = IMG_LoadTexture(screen, "images//Run_Right.png");
+    }
+
+    if(isRight){
+            p_object_ = Run_Right;
+    }
+    else{
+            p_object_ = Run_Left;
+    }
     rect_.x = x_pos;
     rect_.y = y_pos;
-
     SDL_Rect* current_clip = &frame_clips[frame_];
-
-//    SDL_Rect renderQuad = {rect_.x, rect_.y, width_frame_, height_frame_};
     SDL_Rect renderQuad = {rect_.x, rect_.y, 48, 48};
     SDL_RenderCopy(screen, p_object_, current_clip, &renderQuad);
 }
@@ -100,6 +109,12 @@ void SmallEnemy::Follow(MainObject &player, float deltaTime)
     diff_x = player_x_ - x_pos;
     diff_y = player_y_ - y_pos;
 
+    if(diff_x > 0){
+        isRight = 1;
+    }
+    else{
+        isRight = 0;
+    }
     distance = sqrt((diff_x*diff_x + diff_y*diff_y));
 
     if(distance != 0)
@@ -142,13 +157,11 @@ bool Exp::Load(std::string path, SDL_Renderer* des) {
         std::cerr << "Lỗi tạo texture: " << SDL_GetError() << std::endl;
         return false;
     }
-    // Thiết lập kích thước rect
     r_exp.w = 7;
     r_exp.h = 7;
     SDL_FreeSurface(surface);
     return true;
 }
-
 
 void Exp::Show(SDL_Renderer *des, SDL_Texture *texture, SDL_Rect rect)
 {

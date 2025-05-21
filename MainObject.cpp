@@ -48,7 +48,7 @@ MainObject::MainObject(SDL_Renderer *des, Gun &gunRef) : gun(gunRef)
     Endophine.progress = IMG_LoadTexture(des, "images//Endophine_boost.png");
     Endophine.currentFrame = 0;
     Endophine.currentProgressFrame = -1;
-    Endophine.FrameDuration = 1500;
+    Endophine.FrameDuration = 1000;
     Endophine.Position = {100, 41, 138, 36};
     setClips(Endophine.clips, 50, 138, 36, 10, 5);
     setClips(Endophine.progress_clips, 9, 64, 64);
@@ -344,7 +344,7 @@ void MainObject::UpdateBoostFrame(bool &player_nuke, bool &player_enemy, bool &b
                 Endophine.currentFrame --;
                 if(Endophine.currentFrame <= 0){
                     Endophine.currentFrame = 0;
-                    Endophine.FrameDuration = 1500;
+                    Endophine.FrameDuration = 1000;
                     IsReverse = false;
                     IsEndophine = false;
                 }
@@ -380,7 +380,7 @@ void MainObject::UpdateBoostFrame(bool &player_nuke, bool &player_enemy, bool &b
     if(bullet_enemy || bullet_lich){
         if(InProgress){
             if(Adrenaline.currentFrame >= 0 && Adrenaline.currentFrame <= 38){
-                Adrenaline.currentFrame ++;
+                Adrenaline.currentFrame +=5;
             }
         }
     }
@@ -461,8 +461,6 @@ void MainObject::Reset_status()
     y_pos_ = 270;
     x_val_ = 0;
     y_val_ = 0;
-    width_frame_ = 0;
-    height_frame_ = 0;
     status_ = -1;
     input_type_.left_ = 0;
     input_type_.rigth_ = 0;

@@ -7,14 +7,17 @@ Game::Game(SDL_Renderer *des, Gun &gun, MainObject &player) : gun_(gun), player_
 
     p_play = {544, 400};
     p_replay = {544, 272};
-    p_quit = {544, 388};
-    P_YouLose = {544, 100};
+    p_quit = {544, 450};
     P_YouLose = {580,200};
     p_pause_button = {SCREEN_WIDTH-WIDTH_BUTTON_SETTING, 0};
-    p_music_button = {544, 300};
+    p_music_button = {585, 300};
+
+    p_resume_button = {SCREEN_WIDTH/2 - 64, SCREEN_HEIGHT/2 -64};
+    p_quit_button_setting = {585, 340};
 
     frame = IMG_LoadTexture(des, "images//Buff_window.png");
     info = IMG_LoadTexture(des, "images//Info_table.png");
+    Logo = IMG_LoadTexture(des, "images//Logo.png");
 
     Sound_button[0] = IMG_LoadTexture(des,"images//music_off.png");
     Sound_button[1] = IMG_LoadTexture(des,"images//music_off_hover.png");
@@ -64,7 +67,16 @@ Game::Game(SDL_Renderer *des, Gun &gun, MainObject &player) : gun_(gun), player_
 
 Game::~Game()
 {
-
+    SDL_DestroyTexture(Logo);
+    Logo = nullptr;
+    SDL_DestroyTexture(frame);
+    frame = nullptr;
+    SDL_DestroyTexture(info);
+    info = nullptr;
+    for(int i=0;i<4;i++){
+        SDL_DestroyTexture(Sound_button[i]);
+        Sound_button[i] = nullptr;
+    }
 }
 
 bool Game::CheckButton(SDL_Point &point, int wid, int hei)
@@ -309,7 +321,6 @@ void Game::HandleMouseHover(SDL_Event event, AudioManager &audio)
 void Game::RenderStartMenu(SDL_Renderer *des)
 {
     Setclip_and_Render(des, p_play, play_button, play_button_frame,3, "images//Play_button.png", WIDTH_BUTTON, HEIGH_BUTTON);
-    Logo = IMG_LoadTexture(des, "images//Logo.png");
     SDL_RenderCopy(des,Logo,NULL,&r_logo);
 }
 
@@ -359,7 +370,7 @@ SDL_Texture* Game::Render_Text(SDL_Renderer *des, TTF_Font *font, const char *te
 }
 
 void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_quit, MainObject &player, std::vector<SmallEnemy*> &Spawner
-                  , std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list, Lich &lich)
+                  , std::vector<Exp*> &exp_list, std::vector<Nuke*> &nuke_list, Lich &lich, bool &can_spawn)
 {
     SDL_Texture* Youlose = Render_Text(des, font, "YOU LOSE", P_YouLose, textColor);
     Setclip_and_Render(des, p_replay, Replay_button, replay_button_frame,3, "images//Replay_button.png", WIDTH_BUTTON, HEIGH_BUTTON);
@@ -369,6 +380,7 @@ void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_q
     {
         if(smallenemy != nullptr) {
             delete smallenemy;
+            smallenemy = nullptr;
         }
     }
 
@@ -376,13 +388,16 @@ void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_q
     {
         if(exp != nullptr){
             delete exp;
+            exp = nullptr;
         }
     }
 
     for(auto *nuke : nuke_list)
     {
         if(nuke != nullptr){
+            nuke-> is_explosive() = false;
             delete nuke;
+            nuke = nullptr;
         }
     }
 
@@ -392,6 +407,7 @@ void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_q
     exp_list.clear();
     nuke_list.clear();
 
+
     if(pressed[1] == true)
     {
         FreeButton(Replay_button);
@@ -399,8 +415,11 @@ void Game::Replay(SDL_Renderer*des, TTF_Font* font, bool &game_event, bool &is_q
         SDL_DestroyTexture(Youlose);
         Youlose = NULL;
         player.Reset_status();
-        game_event = true;
+        player.LoadImg("images//4_direct_move.png", des);
         menu = true;
+        IsReplay = true;
+        game_event = true;
+        can_spawn = true;
         lich.Reset();
     }
     if(pressed[2] == true)
@@ -422,11 +441,6 @@ void Game::RenderPausedList(SDL_Renderer *des, bool &is_quit, bool &game_event)
     SDL_SetRenderDrawColor(des, 0, 0, 0, 100);
     SDL_Rect overlay = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
     SDL_RenderFillRect(des, &overlay);
-
-    p_resume_button.x = SCREEN_WIDTH/2 - 64;
-    p_resume_button.y = SCREEN_HEIGHT/2 -64;
-    p_quit_button_setting.x = SCREEN_WIDTH/2 - 64;
-    p_quit_button_setting.y = SCREEN_HEIGHT/2 ;
 
     Setclip_and_Render(des, p_resume_button, Resume_button, resume_frame,2, "images//Resume_button.png", 32, 32);
     Setclip_and_Render(des, p_quit_button_setting, Quit_button_setting, quit_frame,2, "images//quit_button_setting.png", 32, 32);
@@ -560,10 +574,21 @@ void Game::RenderNoteTB(SDL_Renderer *des, TTF_Font *game_font)
     SDL_Rect renderquad2 = {p_info.x, p_info.y, 237, 223};
     SDL_RenderCopy(des, info, NULL, &renderquad2);
     std::string name[5] = {"DAMAGE: ", "BULLET/BURST: ", "MOVE SPEED: ", "BULLET SPEED: ", "HP: "};
-    for(int i=0;i<TOTAL_BUFFS;i++)
-    {
-        std::string text = name[i] + std::to_string(NoteText[i]);
-        NoteTB[i] = Render_Text(des, game_font, text.c_str(), NotePos[i], gameColor);
+    if(!IsReplay){
+        for(int i=0;i<TOTAL_BUFFS;i++)
+        {
+            std::string text = name[i] + std::to_string(NoteText[i]);
+            NoteTB[i] = Render_Text(des, game_font, text.c_str(), NotePos[i], gameColor);
+        }
+    }
+    else{
+        std::vector<int> Base_info = {2,3,5,20,100};
+        for(int i=0;i<TOTAL_BUFFS;i++)
+        {
+            std::string text = name[i] + std::to_string(Base_info[i]);
+            NoteTB[i] = Render_Text(des, game_font, text.c_str(), NotePos[i], gameColor);
+        }
+        IsReplay = false;
     }
 }
 
@@ -608,6 +633,9 @@ void Game::RenderPreview(SDL_Renderer *des, TTF_Font *game_font, MainObject& pla
         if (!text.empty()) {
             preview = Render_Text(des, game_font, text.c_str(), position, textColor);
         }
+    }
+    else{
+        return;
     }
     if (preview) {
         SDL_DestroyTexture(preview);

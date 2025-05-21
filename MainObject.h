@@ -101,7 +101,7 @@ private:
     int status_;
     int score;
 
-    int PLAYER_SPEED = 5;
+    int PLAYER_SPEED = 3;
     int hp = 100;
     int MAX_HP = 100;
 
