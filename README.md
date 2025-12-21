@@ -32,6 +32,7 @@ Quản lý quái trên Vector: dễ truy nhập, xử lý các chức năng
 
 4. Nguồn tham khảo
 Ý tưởng Code, hỗ trợ
+
 https://www.youtube.com/watch?v=q1WzniyeGTU&list=PLR7NDiX0QsfQQ2iFXsXepwH46wf3D4Y4C
 https://www.youtube.com/watch?v=KsG6dJlLBDw
 https://lazyfoo.net/tutorials/SDL/02_getting_an_image_on_the_screen/index.php
