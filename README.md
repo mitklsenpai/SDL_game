@@ -5,7 +5,7 @@ MSV: 24021670
 2.	Giới thiệu Game (Tuyển VS SDL2)
 Đây là một game bắn súng góc nhìn thứ 3 được xây dựng và phát triển qua thư viện SDL2. Game đưa bạn vào một thế giới, nơi mà thế giới con người đã bị tàn phá bởi các quái vật đến từ ngoài không gian. Chỉ còn bạn là người sống sót cuối cùng, hãy bước lên Robot và sống sót lâu nhất có thể.
 
-3.Ngưỡng điểm tự đánh giá và những lý do để bảo vệ ngưỡng điểm trên
+3.  Ngưỡng điểm tự đánh giá và những lý do để bảo vệ ngưỡng điểm trên
 - Em tự đánh giá đây là một Game em đã rất đầu tư và tâm huyết, em đánh giá mình có thể nhận được mức điểm từ 9,5 – 10.
 - Bảo vệ điểm:
 Code sạch, dễ đọc, debug.
@@ -30,7 +30,7 @@ Cơ chế Boss gồm 2 chiêu: Thả bom và dịch chuyển (có thể phát tr
 
 Quản lý quái trên Vector: dễ truy nhập, xử lý các chức năng
 
-4. Nguồn tham khảo
+4.  Nguồn tham khảo
 Ý tưởng Code, hỗ trợ
 
 https://www.youtube.com/watch?v=q1WzniyeGTU&list=PLR7NDiX0QsfQQ2iFXsXepwH46wf3D4Y4C
